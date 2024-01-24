@@ -1,5 +1,5 @@
 {
-    "name": "Input",
+    "name": "InputScheme",
     "maps": [
         {
             "name": "2DTopDown",
@@ -70,6 +70,74 @@
                     "action": "Move",
                     "isComposite": false,
                     "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "PCG",
+            "id": "2e296aeb-fec8-44cc-a312-60529657ae32",
+            "actions": [
+                {
+                    "name": "Generate",
+                    "type": "Button",
+                    "id": "5b8dc3a5-7234-4e7f-83c7-a095382029fe",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Spawn Player",
+                    "type": "Button",
+                    "id": "b5db4592-60ec-43ed-be03-07bac741246a",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Clear",
+                    "type": "Button",
+                    "id": "127d2d0c-8a44-4256-8f04-73a435cfc2e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "9f2806b4-040c-471a-a5b1-edf6f58b81fa",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Generate",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "fd43a2e5-971b-4555-9d5a-9f73320d69f8",
+                    "path": "<Keyboard>/h",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Spawn Player",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ac8674ba-ec53-4eb5-b36c-9a67379f52e8",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Clear",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }

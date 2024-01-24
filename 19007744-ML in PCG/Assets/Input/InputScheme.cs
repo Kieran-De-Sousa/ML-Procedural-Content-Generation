@@ -94,6 +94,74 @@ public partial class @InputScheme: IInputActionCollection2, IDisposable
                     ""isPartOfComposite"": true
                 }
             ]
+        },
+        {
+            ""name"": ""PCG"",
+            ""id"": ""2e296aeb-fec8-44cc-a312-60529657ae32"",
+            ""actions"": [
+                {
+                    ""name"": ""Generate"",
+                    ""type"": ""Button"",
+                    ""id"": ""5b8dc3a5-7234-4e7f-83c7-a095382029fe"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Spawn Player"",
+                    ""type"": ""Button"",
+                    ""id"": ""b5db4592-60ec-43ed-be03-07bac741246a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Clear"",
+                    ""type"": ""Button"",
+                    ""id"": ""127d2d0c-8a44-4256-8f04-73a435cfc2e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                }
+            ],
+            ""bindings"": [
+                {
+                    ""name"": """",
+                    ""id"": ""9f2806b4-040c-471a-a5b1-edf6f58b81fa"",
+                    ""path"": ""<Keyboard>/g"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Generate"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""fd43a2e5-971b-4555-9d5a-9f73320d69f8"",
+                    ""path"": ""<Keyboard>/h"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Spawn Player"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""ac8674ba-ec53-4eb5-b36c-9a67379f52e8"",
+                    ""path"": ""<Keyboard>/f"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Clear"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                }
+            ]
         }
     ],
     ""controlSchemes"": []
@@ -101,6 +169,11 @@ public partial class @InputScheme: IInputActionCollection2, IDisposable
         // 2DTopDown
         m__2DTopDown = asset.FindActionMap("2DTopDown", throwIfNotFound: true);
         m__2DTopDown_Move = m__2DTopDown.FindAction("Move", throwIfNotFound: true);
+        // PCG
+        m_PCG = asset.FindActionMap("PCG", throwIfNotFound: true);
+        m_PCG_Generate = m_PCG.FindAction("Generate", throwIfNotFound: true);
+        m_PCG_SpawnPlayer = m_PCG.FindAction("Spawn Player", throwIfNotFound: true);
+        m_PCG_Clear = m_PCG.FindAction("Clear", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -204,8 +277,76 @@ public partial class @InputScheme: IInputActionCollection2, IDisposable
         }
     }
     public _2DTopDownActions @_2DTopDown => new _2DTopDownActions(this);
+
+    // PCG
+    private readonly InputActionMap m_PCG;
+    private List<IPCGActions> m_PCGActionsCallbackInterfaces = new List<IPCGActions>();
+    private readonly InputAction m_PCG_Generate;
+    private readonly InputAction m_PCG_SpawnPlayer;
+    private readonly InputAction m_PCG_Clear;
+    public struct PCGActions
+    {
+        private @InputScheme m_Wrapper;
+        public PCGActions(@InputScheme wrapper) { m_Wrapper = wrapper; }
+        public InputAction @Generate => m_Wrapper.m_PCG_Generate;
+        public InputAction @SpawnPlayer => m_Wrapper.m_PCG_SpawnPlayer;
+        public InputAction @Clear => m_Wrapper.m_PCG_Clear;
+        public InputActionMap Get() { return m_Wrapper.m_PCG; }
+        public void Enable() { Get().Enable(); }
+        public void Disable() { Get().Disable(); }
+        public bool enabled => Get().enabled;
+        public static implicit operator InputActionMap(PCGActions set) { return set.Get(); }
+        public void AddCallbacks(IPCGActions instance)
+        {
+            if (instance == null || m_Wrapper.m_PCGActionsCallbackInterfaces.Contains(instance)) return;
+            m_Wrapper.m_PCGActionsCallbackInterfaces.Add(instance);
+            @Generate.started += instance.OnGenerate;
+            @Generate.performed += instance.OnGenerate;
+            @Generate.canceled += instance.OnGenerate;
+            @SpawnPlayer.started += instance.OnSpawnPlayer;
+            @SpawnPlayer.performed += instance.OnSpawnPlayer;
+            @SpawnPlayer.canceled += instance.OnSpawnPlayer;
+            @Clear.started += instance.OnClear;
+            @Clear.performed += instance.OnClear;
+            @Clear.canceled += instance.OnClear;
+        }
+
+        private void UnregisterCallbacks(IPCGActions instance)
+        {
+            @Generate.started -= instance.OnGenerate;
+            @Generate.performed -= instance.OnGenerate;
+            @Generate.canceled -= instance.OnGenerate;
+            @SpawnPlayer.started -= instance.OnSpawnPlayer;
+            @SpawnPlayer.performed -= instance.OnSpawnPlayer;
+            @SpawnPlayer.canceled -= instance.OnSpawnPlayer;
+            @Clear.started -= instance.OnClear;
+            @Clear.performed -= instance.OnClear;
+            @Clear.canceled -= instance.OnClear;
+        }
+
+        public void RemoveCallbacks(IPCGActions instance)
+        {
+            if (m_Wrapper.m_PCGActionsCallbackInterfaces.Remove(instance))
+                UnregisterCallbacks(instance);
+        }
+
+        public void SetCallbacks(IPCGActions instance)
+        {
+            foreach (var item in m_Wrapper.m_PCGActionsCallbackInterfaces)
+                UnregisterCallbacks(item);
+            m_Wrapper.m_PCGActionsCallbackInterfaces.Clear();
+            AddCallbacks(instance);
+        }
+    }
+    public PCGActions @PCG => new PCGActions(this);
     public interface I_2DTopDownActions
     {
         void OnMove(InputAction.CallbackContext context);
+    }
+    public interface IPCGActions
+    {
+        void OnGenerate(InputAction.CallbackContext context);
+        void OnSpawnPlayer(InputAction.CallbackContext context);
+        void OnClear(InputAction.CallbackContext context);
     }
 }

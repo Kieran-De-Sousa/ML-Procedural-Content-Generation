@@ -4,17 +4,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.MLAgents;
 
-public class MLAgent : Agent
+namespace ML
 {
-    // Start is called before the first frame update
-    void Start()
+    public class MLAgent : Agent
     {
-        
-    }
+        // Start is called before the first frame update
+        void Start()
+        {
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
     }
 }
