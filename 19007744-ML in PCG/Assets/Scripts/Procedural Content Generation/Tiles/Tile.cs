@@ -9,18 +9,26 @@ namespace PCG
 {
     namespace Tilemaps
     {
-        public enum TileType
+        /// <summary>
+        ///
+        /// </summary>
+        public enum TileType : int
         {
-            NONE,
-            FLOOR,
-            WALL,
+            FLOOR = 0,
+            PIT   = 1,
+            WALL  = 2,
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        [RequireComponent(typeof(Rigidbody2D), typeof(TilemapCollider2D),
+            typeof(CompositeCollider2D))]
         public class Tile : MonoBehaviour
         {
             [Header("Base Properties")]
             public TileBase tile;
-            protected TileType tileType = TileType.NONE;
+            protected TileType tileType = TileType.FLOOR;
             protected bool isCollidable = false;
 
             protected Rigidbody2D _rigidbody2D;
@@ -49,6 +57,7 @@ namespace PCG
                         _tilemapCollider2D = gameObject.AddComponent<TilemapCollider2D>();
                     }
 
+                    // Disable by default
                     _tilemapCollider2D.enabled = false;
                 }
 
@@ -65,10 +74,8 @@ namespace PCG
 
             protected virtual void Start()
             {
-                if (isCollidable)
-                {
-                    // TODO: COLLISION LOGIC HERE
-                }
+                // Enable / Disable the tilemap collider based on collidable state.
+                _tilemapCollider2D.enabled = isCollidable;
             }
 
             /// <summary>
@@ -76,25 +83,32 @@ namespace PCG
             /// </summary>
             /// <param name="type"></param>
             /// <returns></returns>
-            public static Tile CreateTile(TileType type)
+            public static GameObject CreateTile(TileType type)
             {
-                Tile tileObject = null;
+                GameObject tileObject = new GameObject("Tile");
+                Tile tileComponent = null;
 
                 switch (type)
                 {
                     case TileType.FLOOR:
                     {
-                        tileObject = new TileFloor();
+                        tileComponent = tileObject.AddComponent<TileFloor>(); // Add TileFloor component
                         break;
                     }
                     case TileType.WALL:
                     {
-                        tileObject = new TileWall();
+                        tileComponent = tileObject.AddComponent<TileWall>(); // Add TileWall component
                         break;
                     }
+                    case TileType.PIT:
+                    {
+                        tileComponent = tileObject.AddComponent<TilePit>(); // Add TilePit component
+                        break;
+                    }
+
                     default:
                     {
-                        tileObject = new Tile();
+                        Debug.LogError("ERROR: TILE COULD NOT BE CREATED THROUGH CreateTile METHOD!");
                         break;
                     }
                 }
@@ -118,7 +132,11 @@ namespace PCG
             ///
             /// </summary>
             /// <param name="collidable"></param>
-            public void SetIsCollidable(bool collidable) => isCollidable = collidable;
+            public void SetIsCollidable(bool collidable)
+            {
+                isCollidable = collidable;
+                _tilemapCollider2D.enabled = true;
+            }
         }
     }
 }

@@ -10,6 +10,8 @@ namespace PCG
     public class PCGSystem : MonoBehaviour
     {
         [Header("Tilemaps")]
+        public List<Tilemap> tilemaps;
+
         public Tilemap tilemap;
         public Tilemap collidable;
         public Tilemap entities;
@@ -97,7 +99,7 @@ namespace PCG
                 case GenerationMethod.RANDOM:
                 {
                     map = PCGMethods.GenerateMap(width, height);
-                    map = PCGMethods.RandomGeneration(map, 0);
+                    map = PCGMethods.RandomGeneration(map, seed);
                     break;
                 }
 

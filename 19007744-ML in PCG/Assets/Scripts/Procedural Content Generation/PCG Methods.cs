@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-
+using PCG.Tilemaps;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Tile = UnityEngine.Tilemaps.Tile;
 
 namespace PCG
 {
@@ -133,6 +134,11 @@ namespace PCG
 
                     else
                     {
+                        var tempTileObject = PCG.Tilemaps.Tile.CreateTile((TileType)map[x,y]);
+                        Debug.LogAssertion($"{tempTileObject}");
+                        var tempTile = tempTileObject.GetComponent<PCG.Tilemaps.Tile>().tile;
+                        Debug.LogAssertion($"{tempTile}");
+
                         // 1 = Floor, 0 = Collidable / Pit
                         tilemap.SetTile(new Vector3Int(x + offset.x, y + offset.y, 0), map[x, y] == 1 ? floor : collidable);
                     }
