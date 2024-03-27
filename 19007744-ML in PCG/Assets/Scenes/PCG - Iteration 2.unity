@@ -490,7 +490,25 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1688646762}
+    m_ColliderPaths:
+    - - X: 90000000
+        Y: 50000000
+      - X: -80000000
+        Y: 50000000
+      - X: -80000000
+        Y: -40000000
+      - X: 90000000
+        Y: -40000000
+    - - X: -70000000
+        Y: -30000000
+      - X: -70000000
+        Y: 40000000
+      - X: 80000000
+        Y: 40000000
+      - X: 80000000
+        Y: -30000000
   m_CompositePaths:
     m_Paths:
     - - {x: 8.99997, y: -4}
@@ -535,6 +553,11 @@ Rigidbody2D:
 --- !u!1839735485 &1688646760 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 6207548908559325983, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
+  m_PrefabInstance: {fileID: 1209372030264079087}
+  m_PrefabAsset: {fileID: 0}
+--- !u!19719996 &1688646762 stripped
+TilemapCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
   m_PrefabInstance: {fileID: 1209372030264079087}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1970707225 stripped
@@ -606,7 +629,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1158078571703322724, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
       propertyPath: m_ExtrusionFactor
