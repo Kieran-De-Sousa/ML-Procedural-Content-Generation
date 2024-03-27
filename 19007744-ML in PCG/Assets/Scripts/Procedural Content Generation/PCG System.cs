@@ -1,9 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
 using UnityEngine.Tilemaps;
-
 
 namespace PCG
 {
@@ -35,10 +35,29 @@ namespace PCG
 
         private InputScheme _inputScheme;
 
+        /// <summary>
+        /// Add the tilemaps to the list whenever we change the PCG System in Editor.
+        /// </summary>
+        private void OnValidate()
+        {
+            AddTilemapToList(tilemap);
+            AddTilemapToList(collidable);
+            AddTilemapToList(entities);
+        }
+
+        private void AddTilemapToList(Tilemap tilemapToAdd)
+        {
+            if (tilemapToAdd != null && !tilemaps.Contains(tilemapToAdd))
+            {
+                tilemaps.Add(tilemapToAdd);
+            }
+        }
 
         /// Start is called before the first frame update
         private void Start()
         {
+            DontDestroyOnLoad(gameObject);
+
             InitialiseInput();
         }
 
@@ -117,7 +136,7 @@ namespace PCG
                 }
             }
 
-            PCGMethods.RenderRoomOffset(map, tilemap, bases, pit, offset);
+            PCGMethods.RenderRoomOffset(map, tilemap, collidable, bases, pit, offset);
         }
 
         /// <summary>
@@ -125,7 +144,10 @@ namespace PCG
         /// </summary>
         public void ClearRoom()
         {
-            tilemap.ClearAllTiles();
+            foreach (var map in tilemaps)
+            {
+                map.ClearAllTiles();
+            }
         }
     }
 }

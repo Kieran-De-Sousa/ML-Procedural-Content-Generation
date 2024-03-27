@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -138,5 +138,33 @@ namespace PCG
                 _tilemapCollider2D.enabled = true;
             }
         }
+    }
+}
+
+/// <summary>
+/// Useful extension method for getting minimum / maximum values from an enum.
+/// </summary>
+/// <reference>https://stackoverflow.com/a/1665930</reference>
+public static class EnumExtension
+{
+    /// <summary>
+    /// Get minimum int value from an enum type.
+    /// </summary>
+    /// <param name="enumType">Enum type to check.</param>
+    /// <returns>Minimum int from enum.</returns>
+    /// <reference>https://stackoverflow.com/a/1665930</reference>
+    public static int Min(this Enum enumType)
+    {
+        return Enum.GetValues(enumType.GetType()).Cast<int>().Min();
+    }
+    /// <summary>
+    /// Get maximum int value from an enum type.
+    /// </summary>
+    /// <param name="enumType">Enum type to check.</param>
+    /// <returns>Maximum int from enum.</returns>
+    /// <reference>https://stackoverflow.com/a/1665930</reference>
+    public static int Max(this Enum enumType)
+    {
+        return Enum.GetValues(enumType.GetType()).Cast<int>().Max();
     }
 }

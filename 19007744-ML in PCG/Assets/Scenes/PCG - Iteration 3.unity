@@ -167,14 +167,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be36b4501be8e164e8cddc995626ec39, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tilemaps: []
+  tilemaps:
+  - {fileID: 2035892542}
+  - {fileID: 1688646760}
+  - {fileID: 1521323819}
   tilemap: {fileID: 2035892542}
   collidable: {fileID: 1688646760}
   entities: {fileID: 1521323819}
   bases: {fileID: 11400000, guid: 7951e04f543fe9247803a8bb42f75f0a, type: 2}
   pit: {fileID: 11400000, guid: 6c45b851fa3a5604a91e49f75cdf843a, type: 2}
-  width: 15
-  height: 7
+  width: 17
+  height: 9
   generation: 2
 --- !u!1001 &818011705
 PrefabInstance:
@@ -491,9 +494,35 @@ CompositeCollider2D:
   m_GeometryType: 0
   m_GenerationType: 0
   m_EdgeRadius: 0
-  m_ColliderPaths: []
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1688646762}
+    m_ColliderPaths:
+    - - X: 90000000
+        Y: 50000000
+      - X: -80000000
+        Y: 50000000
+      - X: -80000000
+        Y: -40000000
+      - X: 90000000
+        Y: -40000000
+    - - X: -70000000
+        Y: -30000000
+      - X: -70000000
+        Y: 40000000
+      - X: 80000000
+        Y: 40000000
+      - X: 80000000
+        Y: -30000000
   m_CompositePaths:
-    m_Paths: []
+    m_Paths:
+    - - {x: 8.99997, y: -4}
+      - {x: 8.99997, y: 5}
+      - {x: -8, y: 4.999971}
+      - {x: -7.9999704, y: -4}
+    - - {x: 8, y: -2.9999707}
+      - {x: -7, y: -2.9999707}
+      - {x: -6.9999704, y: 4}
+      - {x: 8, y: 3.9999704}
   m_VertexDistance: 0.0005
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
@@ -528,6 +557,11 @@ Rigidbody2D:
 --- !u!1839735485 &1688646760 stripped
 Tilemap:
   m_CorrespondingSourceObject: {fileID: 6207548908559325983, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
+  m_PrefabInstance: {fileID: 1209372030264079087}
+  m_PrefabAsset: {fileID: 0}
+--- !u!19719996 &1688646762 stripped
+TilemapCollider2D:
+  m_CorrespondingSourceObject: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
   m_PrefabInstance: {fileID: 1209372030264079087}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1970707225 stripped
@@ -603,7 +637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
       propertyPath: m_ExtrusionFactor
