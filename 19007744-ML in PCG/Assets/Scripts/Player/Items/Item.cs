@@ -5,20 +5,20 @@ using System.Collections.Generic;
 // Unity
 using UnityEngine;
 
-public class Item : MonoBehaviour
+// Procedural Content Generation
+using PCG.Tilemaps;
+
+public enum ItemType : int
 {
+    COIN = 1,
+    BOMB = 2,
+    KEY  = 3,
+}
 
-
-
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+public abstract class Item : TileInteractable
+{
+    /// The items type.
+    public ItemType itemType;
+    /// Value of the item picked up.
+    public int value;
 }

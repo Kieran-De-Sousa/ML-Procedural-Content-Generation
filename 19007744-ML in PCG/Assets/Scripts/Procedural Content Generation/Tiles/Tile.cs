@@ -17,9 +17,10 @@ namespace PCG
         /// </summary>
         public enum TileType : int
         {
-            FLOOR = 0,
-            PIT   = 1,
-            WALL  = 2,
+            FLOOR  = 0,
+            PIT    = 1,
+            WALL   = 2,
+            ENTITY = 3,
         }
 
         /// <summary>
@@ -31,6 +32,7 @@ namespace PCG
             public TileBase tile;
             protected TileType tileType = TileType.FLOOR;
             protected bool isCollidable = false;
+            protected bool isInteractable = false;
 
             protected virtual void Start() {}
 

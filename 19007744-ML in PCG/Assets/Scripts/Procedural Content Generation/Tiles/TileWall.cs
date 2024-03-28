@@ -53,5 +53,11 @@ namespace PCG.Tilemaps
         /// </summary>
         /// <returns></returns>
         public WallDirection GetWallDirection() { return wallDirection; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="direction"></param>
+        public void SetWallDirection(WallDirection direction) => wallDirection = direction;
     }
 }
