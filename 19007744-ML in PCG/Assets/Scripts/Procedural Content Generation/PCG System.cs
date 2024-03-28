@@ -1,7 +1,9 @@
+// Base
 using System;
 using System.Collections;
 using System.Collections.Generic;
 
+// Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -45,6 +47,10 @@ namespace PCG
             AddTilemapToList(entities);
         }
 
+        /// <summary>
+        /// Adds the tilemap to the list of <c>tilemaps</c> if not already.
+        /// </summary>
+        /// <param name="tilemapToAdd">Tilemap to be added to list.</param>
         private void AddTilemapToList(Tilemap tilemapToAdd)
         {
             if (tilemapToAdd != null && !tilemaps.Contains(tilemapToAdd))
@@ -101,7 +107,6 @@ namespace PCG
         /// </summary>
         public void GenerateRoom()
         {
-
             ClearRoom();
 
             int[,] map = new int[width, height];

@@ -1,7 +1,10 @@
+// Base
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+
+// Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -10,7 +13,7 @@ namespace PCG
     namespace Tilemaps
     {
         /// <summary>
-        ///
+        /// The different tile types a Tile can be.
         /// </summary>
         public enum TileType : int
         {
@@ -20,7 +23,7 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Extended implementation of Unity's <c>TileBase</c> class providing additional properties and methods.
         /// </summary>
         [RequireComponent(typeof(Rigidbody2D), typeof(TilemapCollider2D),
             typeof(CompositeCollider2D))]
@@ -35,6 +38,9 @@ namespace PCG
             protected TilemapCollider2D _tilemapCollider2D;
             protected CompositeCollider2D _compositeCollider2D;
 
+            /// <summary>
+            /// Assign components if not already set.
+            /// </summary>
             protected void OnEnable()
             {
                 // Add Rigidbody2D component if not attached.
@@ -79,10 +85,10 @@ namespace PCG
             }
 
             /// <summary>
-            ///
+            /// Creates a new GameObject with an extended functionality <c>tile</c> component.
             /// </summary>
-            /// <param name="type"></param>
-            /// <returns></returns>
+            /// <param name="type">The tile type to create.</param>
+            /// <returns>GameObject with the tile component attached.</returns>
             public static GameObject CreateTile(TileType type)
             {
                 GameObject tileObject = new GameObject("Tile");
@@ -92,17 +98,20 @@ namespace PCG
                 {
                     case TileType.FLOOR:
                     {
-                        tileComponent = tileObject.AddComponent<TileFloor>(); // Add TileFloor component
+                        // Add TileFloor component
+                        tileComponent = tileObject.AddComponent<TileFloor>();
                         break;
                     }
                     case TileType.WALL:
                     {
-                        tileComponent = tileObject.AddComponent<TileWall>(); // Add TileWall component
+                        // Add TileWall component
+                        tileComponent = tileObject.AddComponent<TileWall>();
                         break;
                     }
                     case TileType.PIT:
                     {
-                        tileComponent = tileObject.AddComponent<TilePit>(); // Add TilePit component
+                        // Add TilePit component
+                        tileComponent = tileObject.AddComponent<TilePit>();
                         break;
                     }
 
@@ -117,21 +126,21 @@ namespace PCG
             }
 
             /// <summary>
-            ///
+            /// Sets the tile asset of this tile.
             /// </summary>
-            /// <param name="tileBase"></param>
+            /// <param name="tileBase">The TleBase asset to set.</param>
             public void SetTile(TileBase tileBase) => tile = tileBase;
 
             /// <summary>
-            ///
+            /// Sets the type of this tile.
             /// </summary>
-            /// <param name="type"></param>
+            /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
 
             /// <summary>
-            ///
+            /// Sets whether this tile is collidable.
             /// </summary>
-            /// <param name="collidable"></param>
+            /// <param name="collidable"><c>true</c> if the tile is collidable, otherwise; <c>false</c>.</param>
             public void SetIsCollidable(bool collidable)
             {
                 isCollidable = collidable;

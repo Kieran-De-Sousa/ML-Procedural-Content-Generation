@@ -1,10 +1,15 @@
+// Base
 using System.Collections;
 using System.Collections.Generic;
 
+// Unity
 using UnityEngine;
 
 namespace PCG.Tilemaps
 {
+    /// <summary>
+    ///
+    /// </summary>
     public class TileWall : Tile
     {
         public TileWall()

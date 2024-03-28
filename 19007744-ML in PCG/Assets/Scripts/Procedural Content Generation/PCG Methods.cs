@@ -1,6 +1,8 @@
+// Base
 using System.Collections;
 using System.Collections.Generic;
-using PCG.Tilemaps;
+
+// Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using Tile = UnityEngine.Tilemaps.Tile;
@@ -8,7 +10,7 @@ using Tile = UnityEngine.Tilemaps.Tile;
 namespace PCG
 {
     /// <summary>
-    ///
+    /// The different generation methods of Procedural Content Generation (PCG).
     /// </summary>
     public enum GenerationMethod
     {
@@ -18,16 +20,16 @@ namespace PCG
     }
 
     /// <summary>
-    /// 
+    /// A collection of different methods for Procedural Content Generation (PCG).
     /// </summary>
     public class PCGMethods : MonoBehaviour
     {
         /// <summary>
-        ///
+        /// Generates a new int map array with the passed width and height.
         /// </summary>
-        /// <param name="width"></param>
-        /// <param name="height"></param>
-        /// <returns></returns>
+        /// <param name="width">Width of the map.</param>
+        /// <param name="height">Height of the map.</param>
+        /// <returns>2D array of generated map.</returns>
         public static int[,] GenerateMap(int width, int height)
         {
             int[,] map = new int[width + 1, height + 1];
@@ -85,6 +87,7 @@ namespace PCG
             {
                 for (int y = 0; y < map.GetUpperBound(1); y++)
                 {
+                    // TODO: Use enum upperbound / lowerbound here...
                     map[x, y] = Random.Range(0, 2);
                 }
             }
@@ -95,10 +98,10 @@ namespace PCG
         /// <summary>
         /// Extension method with collidable / void tile creation.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="tilemap"></param>
-        /// <param name="floor"></param>
-        /// <param name="collidable"></param>
+        /// <param name="map">The map containing values to be mapped to tilemaps.</param>
+        /// <param name="tilemap">The tilemap without collisions (e.g. floor).</param>
+        /// <param name="floor">The floor tile.</param>
+        /// <param name="collidable">The collidable tile.</param>
         public static void RenderRoom(int[,] map, Tilemap tilemap, TileBase floor, TileBase collidable)
         {
             tilemap.ClearAllTiles();
@@ -115,14 +118,14 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Extension method with collidable / void tile creation.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="tilemap"></param>
-        /// <param name="collidableTilemap"></param>
-        /// <param name="floor"></param>
-        /// <param name="collidable"></param>
-        /// <param name="offset"></param>
+        /// <param name="map">The map containing values to be mapped to tilemaps.</param>
+        /// <param name="tilemap">The tilemap without collisions (e.g. floor).</param>
+        /// <param name="collidableTilemap">The tilemap with collidable elements.</param>
+        /// <param name="floor">The floor tile.</param>
+        /// <param name="collidable">The collidable tile.</param>
+        /// <param name="offset">The offset to move the tilemap.</param>
         public static void RenderRoomOffset(int[,] map, Tilemap tilemap, Tilemap collidableTilemap, TileBase floor, TileBase collidable, Vector2Int offset)
         {
             tilemap.ClearAllTiles();
@@ -170,6 +173,13 @@ namespace PCG
             }
         }
 
+        /// <summary>
+        /// Checks if the position on the map is the location of a door.
+        /// </summary>
+        /// <param name="x">X position of tile.</param>
+        /// <param name="y">Y position of tile.</param>
+        /// <param name="map">2D int array representing the map.</param>
+        /// <returns><c>true</c> if the position is a door location, otherwise; <c>false</c>.</returns>
         private static bool CheckDoor(int x, int y, int[,] map)
         {
             int minX = map.GetLowerBound(0);
@@ -202,7 +212,7 @@ namespace PCG
                 return true;
             }
 
-
+            // Return false if this was not a door location.
             return false;
         }
 
