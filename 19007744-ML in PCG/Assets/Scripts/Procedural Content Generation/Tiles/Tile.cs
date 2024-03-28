@@ -25,64 +25,14 @@ namespace PCG
         /// <summary>
         /// Extended implementation of Unity's <c>TileBase</c> class providing additional properties and methods.
         /// </summary>
-        [RequireComponent(typeof(Rigidbody2D), typeof(TilemapCollider2D),
-            typeof(CompositeCollider2D))]
-        public class Tile : MonoBehaviour
+        public abstract class Tile : MonoBehaviour
         {
             [Header("Base Properties")]
             public TileBase tile;
             protected TileType tileType = TileType.FLOOR;
             protected bool isCollidable = false;
 
-            protected Rigidbody2D _rigidbody2D;
-            protected TilemapCollider2D _tilemapCollider2D;
-            protected CompositeCollider2D _compositeCollider2D;
-
-            /// <summary>
-            /// Assign components if not already set.
-            /// </summary>
-            protected void OnEnable()
-            {
-                // Add Rigidbody2D component if not attached.
-                if (!_rigidbody2D)
-                {
-                    _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-                    if (!_rigidbody2D)
-                    {
-                        _rigidbody2D = gameObject.AddComponent<Rigidbody2D>();
-                        _rigidbody2D.bodyType = RigidbodyType2D.Static;
-                    }
-                }
-
-                // Add TilemapCollider2D component if not attached.
-                if (!_tilemapCollider2D)
-                {
-                    _tilemapCollider2D = gameObject.GetComponent<TilemapCollider2D>();
-                    if (!_tilemapCollider2D)
-                    {
-                        _tilemapCollider2D = gameObject.AddComponent<TilemapCollider2D>();
-                    }
-
-                    // Disable by default
-                    _tilemapCollider2D.enabled = false;
-                }
-
-                // Add CompositeCollider2D component if not attached.
-                if (!_compositeCollider2D)
-                {
-                    _compositeCollider2D = gameObject.GetComponent<CompositeCollider2D>();
-                    if (!_compositeCollider2D)
-                    {
-                        _compositeCollider2D = gameObject.AddComponent<CompositeCollider2D>();
-                    }
-                }
-            }
-
-            protected virtual void Start()
-            {
-                // Enable / Disable the tilemap collider based on collidable state.
-                _tilemapCollider2D.enabled = isCollidable;
-            }
+            protected virtual void Start() {}
 
             /// <summary>
             /// Creates a new GameObject with an extended functionality <c>tile</c> component.
@@ -126,10 +76,22 @@ namespace PCG
             }
 
             /// <summary>
+            ///
+            /// </summary>
+            /// <returns>Tile base asset</returns>
+            public TileBase GetTile() { return tile; }
+
+            /// <summary>
             /// Sets the tile asset of this tile.
             /// </summary>
-            /// <param name="tileBase">The TleBase asset to set.</param>
+            /// <param name="tileBase">The TileBase asset to set.</param>
             public void SetTile(TileBase tileBase) => tile = tileBase;
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <returns>Tile type</returns>
+            public TileType GetTileType() { return tileType; }
 
             /// <summary>
             /// Sets the type of this tile.
@@ -138,14 +100,17 @@ namespace PCG
             public void SetTileType(TileType type) => tileType = type;
 
             /// <summary>
+            ///
+            /// </summary>
+            /// <returns>IsCollidable</returns>
+            public bool GetIsCollidable() { return isCollidable; }
+
+            /// <summary>
             /// Sets whether this tile is collidable.
             /// </summary>
             /// <param name="collidable"><c>true</c> if the tile is collidable, otherwise; <c>false</c>.</param>
-            public void SetIsCollidable(bool collidable)
-            {
-                isCollidable = collidable;
-                _tilemapCollider2D.enabled = true;
-            }
+            public void SetIsCollidable(bool collidable) => isCollidable = collidable;
+
         }
     }
 }

@@ -10,8 +10,29 @@ namespace PCG.Tilemaps
     /// <summary>
     ///
     /// </summary>
+    public enum WallDirection : int
+    {
+        // Wall faces
+        TOP = 0,
+        BOTTOM = 1,
+        LEFT = 2,
+        RIGHT = 3,
+
+        // Corners
+        TOPLEFT = 4,
+        TOPRIGHT = 5,
+        BOTTOMLEFT = 6,
+        BOTTOMRIGHT = 7,
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
     public class TileWall : Tile
     {
+        [Header("Tile Wall Properties")]
+        public WallDirection wallDirection;
+
         public TileWall()
         {
             // Set base class properties...
@@ -26,5 +47,11 @@ namespace PCG.Tilemaps
 
             // TODO: OTHER LOGIC HERE
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public WallDirection GetWallDirection() { return wallDirection; }
     }
 }

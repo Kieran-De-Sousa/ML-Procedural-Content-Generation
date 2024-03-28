@@ -174,6 +174,10 @@ MonoBehaviour:
   tilemap: {fileID: 2035892542}
   collidable: {fileID: 1688646760}
   entities: {fileID: 1521323819}
+  tileFloors: []
+  tilePits: []
+  tileWalls:
+  - {fileID: 6347008004295223929, guid: f7ffabb04ced8e6418cf0685733105c0, type: 3}
   bases: {fileID: 11400000, guid: 7951e04f543fe9247803a8bb42f75f0a, type: 2}
   pit: {fileID: 11400000, guid: 6c45b851fa3a5604a91e49f75cdf843a, type: 2}
   width: 17
@@ -564,6 +568,51 @@ TilemapCollider2D:
   m_CorrespondingSourceObject: {fileID: 2781694160380623438, guid: 8a065480c9058d54da9c1dbb41a2ed3a, type: 3}
   m_PrefabInstance: {fileID: 1209372030264079087}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1774943707
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1774943709}
+  - component: {fileID: 1774943708}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1774943708
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774943707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5649a197c0c6b344b7f96a2df4b3e23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tile: {fileID: 0}
+--- !u!4 &1774943709
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1774943707}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1970707225 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 10148789995759073, guid: eb075e55be6023443b79975e53623451, type: 3}
@@ -751,3 +800,4 @@ SceneRoots:
   - {fileID: 1209372030264079087}
   - {fileID: 521582045}
   - {fileID: 1050293067}
+  - {fileID: 1774943709}

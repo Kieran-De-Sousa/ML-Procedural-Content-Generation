@@ -7,20 +7,30 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// PCG
+using PCG.Tilemaps;
+
 namespace PCG
 {
-    public class PCGSystem : MonoBehaviour
+    public class PCGSystem : Singleton<PCGSystem>
     {
         [Header("Tilemaps")]
         public List<Tilemap> tilemaps;
 
         public Tilemap tilemap;
+        // Rigidbody, Composite collider, tilemap collider (NOT TRIGGERS)
         public Tilemap collidable;
+        // Rigidbody, Composite collider, tilemap collider (TRIGGERS)
         public Tilemap entities;
 
         [Space]
 
         [Header("Tiles")]
+        public List<TileFloor> tileFloors;
+        public List<TilePit> tilePits;
+        public List<TileWall> tileWalls;
+
+        [Header("Tiles - OLD IMPLEMENTATION")]
         public TileBase bases;
         public TileBase pit;
 
@@ -59,11 +69,16 @@ namespace PCG
             }
         }
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // Additional initialisation logic here...
+        }
+
         /// Start is called before the first frame update
         private void Start()
         {
-            DontDestroyOnLoad(gameObject);
-
             InitialiseInput();
         }
 
