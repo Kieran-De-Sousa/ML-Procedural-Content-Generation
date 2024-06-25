@@ -22,6 +22,12 @@ namespace PCG.Tilemaps
         // Rigidbody, Composite collider, tilemap collider (TRIGGERS)
         public Tilemap entities;
 
+        protected override void Awake()
+        {
+            base.Awake();
+
+            // Additional initialisation logic here...
+        }
 
         /// <summary>
         /// Add the tilemaps to the list whenever we change the PCG System in Editor.

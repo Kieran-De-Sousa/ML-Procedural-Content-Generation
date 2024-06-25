@@ -16,13 +16,46 @@ namespace ML
         public bool trainingMode;
 
         // The rigidbody of the agent
-        new private Rigidbody rigidbody;
+        new public Rigidbody2D rigidbody;
+
+        [Header("Movement")]
+        public Vector2 movementSpeed = new(5.0f, 5.0f);
+        private Vector2 _inputVector = Vector2.zero;
+        private InputScheme _inputScheme;
+
+        private Inventory inventory;
 
         // Whether the agent is frozen (intentionally not moving)
         private bool frozen = false;
 
 
         // -------------------- Methods -------------------- //
+        private void Awake()
+        {
+            InitialiseInput();
+        }
+
+        private void InitialiseInput()
+        {
+            _inputScheme = new InputScheme();
+            _inputScheme._2DTopDown.Enable();
+        }
+
+        private void OnDestroy()
+        {
+            _inputScheme.Dispose();
+        }
+
+        private void Update()
+        {
+            _inputVector = (_inputScheme._2DTopDown.Move.ReadValue<Vector2>()).normalized;
+        }
+
+        private void FixedUpdate()
+        {
+            rigidbody.MovePosition(rigidbody.position + (_inputVector * movementSpeed *Time.fixedDeltaTime));
+        }
+
         /// <summary>
         /// Initialize the agent.
         /// </summary>
@@ -40,7 +73,9 @@ namespace ML
         /// Index 0: ACTION HERE
         /// </summary>
         /// <param name="actions">The actions to take.</param>
-        public override void OnActionReceived(ActionBuffers actions) {}
+        public override void OnActionReceived(ActionBuffers actions)
+        {
+        }
 
         /// <summary>
         /// Collect vector observations from the environment.
@@ -54,8 +89,9 @@ namespace ML
         /// <see cref="OnActionReceived(ActionBuffers)"/> instead of using the neural network
         /// </summary>
         /// <param name="actionsOut">Output action array.</param>
-        public override void Heuristic(in ActionBuffers actionsOut) {}
-
+        public override void Heuristic(in ActionBuffers actionsOut)
+        {
+        }
 
         /// <summary>
         /// Prevent the agent from moving and taking actions

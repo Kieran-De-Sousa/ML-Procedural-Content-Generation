@@ -11,6 +11,8 @@ public class Movement : MonoBehaviour
     private InputScheme _inputScheme;
     private Vector2 _inputVector = Vector2.zero;
 
+    private Inventory inventory;
+
     private void Awake()
     {
         InitialiseInput();
@@ -28,12 +30,6 @@ public class Movement : MonoBehaviour
     private void OnDestroy()
     {
         _inputScheme.Dispose();
-    }
-
-    // Start is called before the first frame update
-    private void Start()
-    {
-        
     }
 
     // Update is called once per frame

@@ -30,11 +30,37 @@ namespace PCG
         {
             [Header("Base Properties")]
             public TileBase tile;
+
             protected TileType tileType = TileType.FLOOR;
+            protected Tilemap ownerTilemap;
+
+            protected Vector3Int tilePosition;
+            protected Inventory player;
+
             protected bool isCollidable = false;
             protected bool isInteractable = false;
 
-            protected virtual void Start() {}
+            protected virtual void Start()
+            {
+                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
+                foreach (Tilemap tilemap in tilemaps)
+                {
+                    // Iterate through all the positions in the tilemap
+                    BoundsInt bounds = tilemap.cellBounds;
+                    foreach (Vector3Int pos in bounds.allPositionsWithin)
+                    {
+                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tile)
+                        {
+                            // If the tile is found, set protected variables
+                            ownerTilemap = tilemap;
+                            tilePosition = pos;
+                            return;
+                        }
+                    }
+                }
+
+                player = TileUtilities.FindParentWithComponent<Inventory>(transform);
+            }
 
             /// <summary>
             /// Creates a new GameObject with an extended functionality <c>tile</c> component.
@@ -112,7 +138,25 @@ namespace PCG
             /// </summary>
             /// <param name="collidable"><c>true</c> if the tile is collidable, otherwise; <c>false</c>.</param>
             public void SetIsCollidable(bool collidable) => isCollidable = collidable;
+        }
 
+        public static class TileUtilities
+        {
+            // Generic method to find parent with a specific component
+            public static T FindParentWithComponent<T>(Transform childTransform) where T : Component
+            {
+                Transform parent = childTransform;
+                while (parent != null)
+                {
+                    T component = parent.GetComponent<T>();
+                    if (component != null)
+                    {
+                        return component;
+                    }
+                    parent = parent.parent;
+                }
+                return null;
+            }
         }
     }
 }

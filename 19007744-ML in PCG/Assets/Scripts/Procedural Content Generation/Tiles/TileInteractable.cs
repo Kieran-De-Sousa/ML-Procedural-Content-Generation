@@ -11,6 +11,21 @@ namespace PCG.Tilemaps
     /// </summary>
     public abstract class TileInteractable : Tile
     {
+        protected bool isInteracted = false;
+
+        protected TileInteractable()
+        {
+            isInteractable = true;
+        }
+
+        protected override void Start()
+        {
+            // Call base implementation of start...
+            base.Start();
+
+            // TODO: OTHER LOGIC HERE
+        }
+
         /// <summary>
         /// Virtual overridable method inherited by tiles that have "Triggers".
         /// </summary>

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
 public class ItemCoin : Item
@@ -11,12 +12,11 @@ public class ItemCoin : Item
     }
 
     /// <summary>
-    /// Coin was touched by a player. Pick up coin and add to their inventory.
+    /// Coin was touched by a player. Pick up coin and add to their inventory, then delete coin.
     /// </summary>
     public override void Interact()
     {
-        // TODO: Add coin value to players inventory
-
-        // TODO: Delete this coin
+        player.AddCoin(value);
+        ownerTilemap.SetTile(tilePosition, null);
     }
 }
