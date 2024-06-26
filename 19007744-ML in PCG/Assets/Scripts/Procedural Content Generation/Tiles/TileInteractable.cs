@@ -9,14 +9,12 @@ namespace PCG.Tilemaps
     /// Base class for "Interactable" GameObjects (e.g. Doors, pickups) to inherit from.
     /// Derived classes will ideally have the <c>Interact</c> method called when hitting a trigger collider.
     /// </summary>
-    public abstract class TileInteractable : Tile
+    public abstract class TileInteractable : Tile, IInteractable
     {
-        protected bool isInteracted = false;
-
-        protected TileInteractable()
-        {
-            isInteractable = true;
-        }
+        // IInteractable Interface implementation
+        public bool IsInteractable { get; set; } = true;
+        public bool IsInteracted { get; protected set; } = false;
+        public abstract void Interact();
 
         protected override void Start()
         {
@@ -26,9 +24,5 @@ namespace PCG.Tilemaps
             // TODO: OTHER LOGIC HERE
         }
 
-        /// <summary>
-        /// Virtual overridable method inherited by tiles that have "Triggers".
-        /// </summary>
-        public abstract void Interact();
     }
 }

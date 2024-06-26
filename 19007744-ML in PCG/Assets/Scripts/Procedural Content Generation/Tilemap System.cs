@@ -22,6 +22,16 @@ namespace PCG.Tilemaps
         // Rigidbody, Composite collider, tilemap collider (TRIGGERS)
         public Tilemap entities;
 
+        [Space]
+
+        [Header("Tiles")]
+        public List<TileFloor> tileFloors;
+        public List<TilePit> tilePits;
+        public List<TileWall> tileWalls;
+
+        [Header("Entities")]
+        public List<Item> tileItems;
+
         protected override void Awake()
         {
             base.Awake();

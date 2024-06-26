@@ -10,13 +10,15 @@ namespace PCG.Tilemaps
     /// <summary>
     ///
     /// </summary>
-    public class TilePit : Tile
+    public class TilePit : Tile, ICollidable
     {
+        // ICollidable Interface implementation
+        public bool IsCollidable { get; protected set; } = true;
+
         public TilePit()
         {
             // Set base class properties...
             tileType = TileType.PIT;
-            isCollidable = true;
         }
 
         protected override void Start()

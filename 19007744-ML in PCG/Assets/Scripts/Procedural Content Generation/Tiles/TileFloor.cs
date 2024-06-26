@@ -16,7 +16,6 @@ namespace PCG.Tilemaps
         {
             // Set base class properties...
             tileType = TileType.FLOOR;
-            isCollidable = false;
         }
 
         protected override void Start()

@@ -3,20 +3,20 @@ using System.Collections.Generic;
 
 using UnityEngine;
 
-public class ItemCoin : Item
+public class ItemBomb : Item
 {
-    public ItemCoin()
+    public ItemBomb()
     {
         // Set base class properties...
-        itemType = ItemType.COIN;
+        itemType = ItemType.BOMB;
     }
 
     /// <summary>
-    /// Coin was touched by a player. Pick up coin and add to their inventory, then delete coin.
+    /// Bomb was touched by a player. Pick up bomb and add to their inventory, then delete bomb.
     /// </summary>
     public override void Interact()
     {
-        player.AddCoin(value);
+        player.AddBomb(value);
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

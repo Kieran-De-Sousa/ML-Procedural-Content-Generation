@@ -37,9 +37,6 @@ namespace PCG
             protected Vector3Int tilePosition;
             protected Inventory player;
 
-            protected bool isCollidable = false;
-            protected bool isInteractable = false;
-
             protected virtual void Start()
             {
                 Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
@@ -126,18 +123,6 @@ namespace PCG
             /// </summary>
             /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
-
-            /// <summary>
-            ///
-            /// </summary>
-            /// <returns>IsCollidable</returns>
-            public bool GetIsCollidable() { return isCollidable; }
-
-            /// <summary>
-            /// Sets whether this tile is collidable.
-            /// </summary>
-            /// <param name="collidable"><c>true</c> if the tile is collidable, otherwise; <c>false</c>.</param>
-            public void SetIsCollidable(bool collidable) => isCollidable = collidable;
         }
 
         public static class TileUtilities

@@ -28,16 +28,18 @@ namespace PCG.Tilemaps
     /// <summary>
     ///
     /// </summary>
-    public class TileWall : Tile
+    public class TileWall : Tile, ICollidable
     {
         [Header("Tile Wall Properties")]
         public WallDirection wallDirection;
+
+        // ICollidable Interface implementation
+        public bool IsCollidable { get; protected set; } = true;
 
         public TileWall()
         {
             // Set base class properties...
             tileType = TileType.WALL;
-            isCollidable = true;
         }
 
         protected override void Start()
