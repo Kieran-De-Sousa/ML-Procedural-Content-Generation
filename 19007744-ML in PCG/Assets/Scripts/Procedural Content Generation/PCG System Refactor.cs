@@ -1,0 +1,160 @@
+// Base
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+// Unity
+using UnityEngine;
+using UnityEngine.Tilemaps;
+
+// PCG
+using PCG.Tilemaps;
+
+// Helper
+using Utilities;
+using Tile = PCG.Tilemaps.Tile;
+
+namespace PCG
+{
+    public class PCGSystemRefactor : Singleton<PCGSystemRefactor>
+    {
+        [SerializeField] private TilemapSystem tilemapSystem;
+
+        [Header("Tilemap Size")]
+        [Range(13, 100)]
+        public int width = 17;
+        [Range(7, 100)]
+        public int height = 9;
+
+        private RoomData roomData;
+
+        [Space]
+
+        [Header("PCG Generation Method")]
+        public GenerationMethod generation = GenerationMethod.NONE;
+
+        private InputScheme _inputScheme;
+
+        protected override void Awake()
+        {
+            base.Awake();
+
+            roomData = RoomData.GenerateRoom(width, height);
+        }
+
+        /// Start is called before the first frame update
+        private void Start()
+        {
+            InitialiseInput();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        private void InitialiseInput()
+        {
+            _inputScheme = new InputScheme();
+            _inputScheme.PCG.Enable();
+        }
+
+        /// Update is called once per frame
+        private void Update()
+        {
+            PollInputs();
+        }
+
+        private void PollInputs()
+        {
+            InputScheme.PCGActions actions = _inputScheme.PCG;
+
+            if (actions.Generate.WasPressedThisFrame())
+            {
+                GenerateRoom();
+            }
+
+            if (actions.Clear.WasPressedThisFrame())
+            {
+                ClearRoom();
+            }
+
+            if (actions.SpawnPlayer.WasPressedThisFrame())
+            {
+                SpawnPlayer();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public void GenerateRoom()
+        {
+            ClearRoom();
+
+            int[,] map = new int[width, height];
+            float seed = Time.time;
+            Vector2Int offset = new Vector2Int((width / 2) * -1, (height / 2) * -1);
+
+            switch (generation)
+            {
+                case GenerationMethod.NONE:
+                {
+                    break;
+                }
+
+                case GenerationMethod.RANDOM:
+                {
+                    map = PCGMethods.GenerateMap(width, height);
+                    map = PCGMethods.RandomGeneration(map, seed);
+                    break;
+                }
+
+                case GenerationMethod.PERLINNOISE:
+                {
+                    map = PCGMethods.GenerateMap(width, height);
+                    map = PCGMethods.PerlinNoise(map, seed);
+
+                    break;
+                }
+
+                case GenerationMethod.ASTAR:
+                {
+                    Tile[,] tileMap = new Tile[width, height];
+                    // TODO
+                    break;
+                }
+
+                default:
+                {
+                    break;
+                }
+            }
+
+            // TODO
+            /*PCGMethods.RenderRoomOffset(map, tilemapSystem.tilemap,
+                tilemapSystem.collidable,
+                tilemapSystem.bases, tilemapSystem.pit, offset);*/
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public void ClearRoom()
+        {
+            // TODO
+            foreach (var map in tilemapSystem.tilemaps)
+            {
+                map.ClearAllTiles();
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public void SpawnPlayer()
+        {
+            ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
+            // TODO: Fix this as its using the map position and not the in-game position of the map position.
+            player.transform.position = new Vector3(roomData.RoomCentre.x, roomData.RoomCentre.y, player.transform.position.z);
+        }
+    }
+}

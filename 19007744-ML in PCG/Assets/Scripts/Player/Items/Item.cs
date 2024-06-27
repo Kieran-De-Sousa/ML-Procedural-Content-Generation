@@ -21,4 +21,9 @@ public abstract class Item : TileInteractable
     public ItemType itemType;
     /// Value of the item picked up.
     public int value;
+
+    protected Item()
+    {
+        tileType = TileType.ITEM;
+    }
 }

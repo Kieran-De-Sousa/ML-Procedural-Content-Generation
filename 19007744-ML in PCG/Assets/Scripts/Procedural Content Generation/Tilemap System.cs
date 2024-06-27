@@ -13,22 +13,31 @@ namespace PCG.Tilemaps
     /// </summary>
     public class TilemapSystem : Singleton<TilemapSystem>
     {
-        [Header("Tilemaps")]
+        // TODO
+        public TilemapData tilemapData;
+
+        [Header("All Tilemaps")]
         public List<Tilemap> tilemaps;
 
+        [Header("Decoration Tilemap")]
         public Tilemap tilemap;
-        // Rigidbody, Composite collider, tilemap collider (NOT TRIGGERS)
-        public Tilemap collidable;
-        // Rigidbody, Composite collider, tilemap collider (TRIGGERS)
-        public Tilemap entities;
+        [Header("Tiles")]
+        public List<TileFloor> tileFloors;
 
         [Space]
 
-        [Header("Tiles")]
-        public List<TileFloor> tileFloors;
+        [Header("Collidable Tilemap")]
+        [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (NOT TRIGGERS)")]
+        public Tilemap collidable;
+        [Header("Colliders")]
         public List<TilePit> tilePits;
         public List<TileWall> tileWalls;
 
+        [Space]
+
+        [Header("Trigger Tilemap")]
+        [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
+        public Tilemap entities;
         [Header("Entities")]
         public List<Item> tileItems;
 
@@ -36,7 +45,10 @@ namespace PCG.Tilemaps
         {
             base.Awake();
 
-            // Additional initialisation logic here...
+            // NOTE
+            tilemapData.floor = tilemap;
+            tilemapData.collidable = collidable;
+            tilemapData.trigger = entities;
         }
 
         /// <summary>
@@ -59,6 +71,48 @@ namespace PCG.Tilemaps
             {
                 tilemaps.Add(tilemapToAdd);
             }
+        }
+    }
+
+    public struct TilemapData
+    {
+        public Tilemap floor;
+        public Tilemap collidable;
+        public Tilemap trigger;
+    }
+
+    public struct RoomData
+    {
+        public int RoomWidth;
+        public int RoomHeight;
+
+        public (int x, int y) RoomCentre;
+
+        public (int x, int y) TopDoor;
+        public (int x, int y) BottomDoor;
+        public (int x, int y) LeftDoor;
+        public (int x, int y) RightDoor;
+
+        /// <summary>
+        /// Generates a RoomData instance with specified width and height.
+        /// </summary>
+        /// <param name="width">Width of the room.</param>
+        /// <param name="height">Height of the room.</param>
+        /// <returns>RoomData instance with centre and door positions.</returns>
+        public static RoomData GenerateRoom(int width, int height)
+        {
+            RoomData roomData = new RoomData
+            {
+                RoomWidth = width,
+                RoomHeight = height,
+                RoomCentre = (width / 2, height / 2),
+                TopDoor = (width / 2, height - 1),
+                BottomDoor = (width / 2, 0),
+                LeftDoor = (0, height / 2),
+                RightDoor = (width - 1, height / 2)
+            };
+
+            return roomData;
         }
     }
 }

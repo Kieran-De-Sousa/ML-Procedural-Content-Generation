@@ -1,12 +1,7 @@
-// Base
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-
 // Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Utilities;
 
 namespace PCG
 {
@@ -21,6 +16,7 @@ namespace PCG
             PIT    = 1,
             WALL   = 2,
             ENTITY = 3,
+            ITEM   = 4,
         }
 
         /// <summary>
@@ -56,7 +52,7 @@ namespace PCG
                     }
                 }
 
-                player = TileUtilities.FindParentWithComponent<Inventory>(transform);
+                player = HelperUtilities.FindParentOrChildWithComponent<Inventory>(transform);
             }
 
             /// <summary>
@@ -124,52 +120,5 @@ namespace PCG
             /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
         }
-
-        public static class TileUtilities
-        {
-            // Generic method to find parent with a specific component
-            public static T FindParentWithComponent<T>(Transform childTransform) where T : Component
-            {
-                Transform parent = childTransform;
-                while (parent != null)
-                {
-                    T component = parent.GetComponent<T>();
-                    if (component != null)
-                    {
-                        return component;
-                    }
-                    parent = parent.parent;
-                }
-                return null;
-            }
-        }
-    }
-}
-
-/// <summary>
-/// Useful extension method for getting minimum / maximum values from an enum.
-/// </summary>
-/// <reference>https://stackoverflow.com/a/1665930</reference>
-public static class EnumExtension
-{
-    /// <summary>
-    /// Get minimum int value from an enum type.
-    /// </summary>
-    /// <param name="enumType">Enum type to check.</param>
-    /// <returns>Minimum int from enum.</returns>
-    /// <reference>https://stackoverflow.com/a/1665930</reference>
-    public static int Min(this Enum enumType)
-    {
-        return Enum.GetValues(enumType.GetType()).Cast<int>().Min();
-    }
-    /// <summary>
-    /// Get maximum int value from an enum type.
-    /// </summary>
-    /// <param name="enumType">Enum type to check.</param>
-    /// <returns>Maximum int from enum.</returns>
-    /// <reference>https://stackoverflow.com/a/1665930</reference>
-    public static int Max(this Enum enumType)
-    {
-        return Enum.GetValues(enumType.GetType()).Cast<int>().Max();
     }
 }

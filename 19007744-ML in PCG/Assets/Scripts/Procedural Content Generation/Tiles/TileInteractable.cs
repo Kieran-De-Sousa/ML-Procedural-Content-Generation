@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
+// Unity
 using UnityEngine;
 
 namespace PCG.Tilemaps
@@ -15,6 +16,11 @@ namespace PCG.Tilemaps
         public bool IsInteractable { get; set; } = true;
         public bool IsInteracted { get; protected set; } = false;
         public abstract void Interact();
+
+        protected TileInteractable()
+        {
+            tileType = TileType.ENTITY;
+        }
 
         protected override void Start()
         {

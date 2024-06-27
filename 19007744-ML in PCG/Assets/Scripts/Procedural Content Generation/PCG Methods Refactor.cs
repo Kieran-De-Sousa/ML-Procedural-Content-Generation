@@ -5,25 +5,15 @@ using System.Collections.Generic;
 // Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
 using Tile = UnityEngine.Tilemaps.Tile;
 
 namespace PCG
 {
     /// <summary>
-    /// The different generation methods of Procedural Content Generation (PCG).
-    /// </summary>
-    public enum GenerationMethod
-    {
-        NONE,
-        RANDOM,
-        PERLINNOISE,
-        ASTAR,
-    }
-
-    /// <summary>
     /// A collection of different methods for Procedural Content Generation (PCG).
     /// </summary>
-    public class PCGMethods : MonoBehaviour
+    public class PCGMethodsRefactor : MonoBehaviour
     {
         /// <summary>
         /// Generates a new int map array with the passed width and height.
@@ -33,8 +23,16 @@ namespace PCG
         /// <returns>2D array of generated map.</returns>
         public static int[,] GenerateMap(int width, int height)
         {
-            int[,] map = new int[width + 1, height + 1];
+            int[,] map = new int[width + 2, height + 2]; // +2 = one wall on each side of a direction
             return map;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        public static void GenerateDoors()
+        {
+            // TODO
         }
 
         /// <summary>
@@ -96,26 +94,15 @@ namespace PCG
             return map;
         }
 
-        /// <summary>
-        /// Extension method with collidable / void tile creation.
-        /// </summary>
-        /// <param name="map">The map containing values to be mapped to tilemaps.</param>
-        /// <param name="tilemap">The tilemap without collisions (e.g. floor).</param>
-        /// <param name="floor">The floor tile.</param>
-        /// <param name="collidable">The collidable tile.</param>
-        public static void RenderRoom(int[,] map, Tilemap tilemap, TileBase floor, TileBase collidable)
+        // TODO
+        public static Tile[,] AStarPathfindingGeneration(int[,] map, float seed)
         {
-            tilemap.ClearAllTiles();
-            //Loop through the width of the map
-            for (int x = 0; x < map.GetUpperBound(0) ; x++)
-            {
-                //Loop through the height of the map
-                for (int y = 0; y < map.GetUpperBound(1); y++)
-                {
-                    // 1 = Floor, 0 = Collidable / Pit
-                    tilemap.SetTile(new Vector3Int(x, y, 0), map[x, y] == 1 ? floor : collidable);
-                }
-            }
+            // Set the random number generator with seed
+            Random.InitState((int)seed);
+
+
+
+            return new Tile[,] { };
         }
 
         /// <summary>
@@ -127,7 +114,7 @@ namespace PCG
         /// <param name="floor">The floor tile.</param>
         /// <param name="collidable">The collidable tile.</param>
         /// <param name="offset">The offset to move the tilemap.</param>
-        public static void RenderRoomOffset(int[,] map, Tilemap tilemap, Tilemap collidableTilemap, TileBase floor, TileBase collidable, Vector2Int offset)
+        public static void RenderRoom(int[,] map, Tilemap tilemap, Tilemap collidableTilemap, TileBase floor, TileBase collidable, Vector2Int offset)
         {
             tilemap.ClearAllTiles();
             collidableTilemap.ClearAllTiles();
