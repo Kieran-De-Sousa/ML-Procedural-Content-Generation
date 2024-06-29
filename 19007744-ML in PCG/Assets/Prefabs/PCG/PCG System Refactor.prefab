@@ -57,6 +57,42 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9019335531828728677}
     m_Modifications:
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.size
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[0]
+      value: 
+      objectReference: {fileID: 6347008004295223929, guid: f7ffabb04ced8e6418cf0685733105c0, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[1]
+      value: 
+      objectReference: {fileID: 6347008004295223929, guid: 725eaee0001fe8540a789fc6bbd1b5fa, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[2]
+      value: 
+      objectReference: {fileID: 6347008004295223929, guid: 41b3dfe5b40232e45b52ab8e8f1112a1, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[3]
+      value: 
+      objectReference: {fileID: 6347008004295223929, guid: e416b082fb9348943a331777b27b2916, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[4]
+      value: 
+      objectReference: {fileID: -7553357688384655662, guid: 2b75a7aa45d4c1c45844c9e494a241a2, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[5]
+      value: 
+      objectReference: {fileID: -7553357688384655662, guid: bbbb0c73df17f974a9a78ee2ce43f0c2, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[6]
+      value: 
+      objectReference: {fileID: -7553357688384655662, guid: caca40ffa6e1c064694f0d9b29d7f762, type: 3}
+    - target: {fileID: 1116434330479921558, guid: 938c153e3e28d344481a34e468b85907, type: 3}
+      propertyPath: tilemapData.tiles.Array.data[7]
+      value: 
+      objectReference: {fileID: -7553357688384655662, guid: 73874fc533f19c54a87375115a4ca0f0, type: 3}
     - target: {fileID: 4927189265461442394, guid: 938c153e3e28d344481a34e468b85907, type: 3}
       propertyPath: m_Name
       value: Tilemap System

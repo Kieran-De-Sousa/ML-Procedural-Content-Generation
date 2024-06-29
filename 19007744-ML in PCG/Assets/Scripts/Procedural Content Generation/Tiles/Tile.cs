@@ -25,7 +25,7 @@ namespace PCG
         public abstract class Tile : MonoBehaviour
         {
             [Header("Base Properties")]
-            public TileBase tile;
+            public TileBase tileBase;
 
             protected TileType tileType = TileType.FLOOR;
             protected Tilemap ownerTilemap;
@@ -42,7 +42,7 @@ namespace PCG
                     BoundsInt bounds = tilemap.cellBounds;
                     foreach (Vector3Int pos in bounds.allPositionsWithin)
                     {
-                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tile)
+                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
                         {
                             // If the tile is found, set protected variables
                             ownerTilemap = tilemap;
@@ -100,13 +100,13 @@ namespace PCG
             ///
             /// </summary>
             /// <returns>Tile base asset</returns>
-            public TileBase GetTile() { return tile; }
+            public TileBase GetTileBase() { return tileBase; }
 
             /// <summary>
             /// Sets the tile asset of this tile.
             /// </summary>
             /// <param name="tileBase">The TileBase asset to set.</param>
-            public void SetTile(TileBase tileBase) => tile = tileBase;
+            public void SetTileBase(TileBase tile) => tileBase = tile;
 
             /// <summary>
             ///

@@ -181,7 +181,7 @@ namespace PCG
         /// <param name="y">Y position of tile.</param>
         /// <param name="map">2D int array representing the map.</param>
         /// <returns><c>true</c> if the position is a door location, otherwise; <c>false</c>.</returns>
-        private static bool CheckDoor(int x, int y, int[,] map)
+        public static bool CheckDoor(int x, int y, int[,] map)
         {
             int minX = map.GetLowerBound(0);
             int minY = map.GetLowerBound(1);

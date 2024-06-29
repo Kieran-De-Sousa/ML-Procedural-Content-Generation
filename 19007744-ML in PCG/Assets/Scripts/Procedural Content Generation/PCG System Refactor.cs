@@ -118,8 +118,9 @@ namespace PCG
 
                 case GenerationMethod.ASTAR:
                 {
-                    Tile[,] tileMap = new Tile[width, height];
+                    Tile[,] tileMap = PCGMethodsRefactor.GenerateTileMap(width, height);
                     // TODO
+                    PCGMethodsRefactor.GenerateRoom(tileMap, tilemapSystem.tilemapData, default);
                     break;
                 }
 
@@ -128,6 +129,8 @@ namespace PCG
                     break;
                 }
             }
+
+            SpawnPlayer();
 
             // TODO
             /*PCGMethods.RenderRoomOffset(map, tilemapSystem.tilemap,
@@ -140,8 +143,7 @@ namespace PCG
         /// </summary>
         public void ClearRoom()
         {
-            // TODO
-            foreach (var map in tilemapSystem.tilemaps)
+            foreach (var map in tilemapSystem.tilemapData.allTilemaps)
             {
                 map.ClearAllTiles();
             }

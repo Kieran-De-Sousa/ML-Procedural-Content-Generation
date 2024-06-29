@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6712215169652955771}
   - component: {fileID: 6347008004295223929}
   m_Layer: 0
-  m_Name: TileWallTop
+  m_Name: TileWallBottomRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -44,5 +44,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 00cc7581ea13f7745be72548dff3bfb1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBase: {fileID: 11400000, guid: f9fdcf1cd0977fb40aa7ae82d35c3bae, type: 2}
-  wallDirection: 0
+  tileBase: {fileID: 11400000, guid: 2157d5ff4bc44144db2c44fc4ee36c03, type: 2}
+  wallDirection: 7

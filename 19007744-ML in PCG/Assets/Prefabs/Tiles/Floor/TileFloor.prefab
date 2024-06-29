@@ -9,9 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6712215169652955771}
-  - component: {fileID: 6347008004295223929}
+  - component: {fileID: 5888441838231678705}
   m_Layer: 0
-  m_Name: TileWallTop
+  m_Name: TileFloor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6347008004295223929
+--- !u!114 &5888441838231678705
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,8 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 7837234572491396343}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 00cc7581ea13f7745be72548dff3bfb1, type: 3}
+  m_Script: {fileID: 11500000, guid: 79b554b579f199d4d802d6598cf683da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tileBase: {fileID: 11400000, guid: f9fdcf1cd0977fb40aa7ae82d35c3bae, type: 2}
-  wallDirection: 0
+  tileBase: {fileID: 11400000, guid: 7951e04f543fe9247803a8bb42f75f0a, type: 2}

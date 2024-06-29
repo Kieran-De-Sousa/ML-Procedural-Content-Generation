@@ -1,4 +1,6 @@
 // Base
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -13,7 +15,6 @@ namespace PCG.Tilemaps
     /// </summary>
     public class TilemapSystem : Singleton<TilemapSystem>
     {
-        // TODO
         public TilemapData tilemapData;
 
         [Header("All Tilemaps")]
@@ -39,6 +40,7 @@ namespace PCG.Tilemaps
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
         public Tilemap entities;
         [Header("Entities")]
+        public List<TileDoor> tileDoors;
         public List<Item> tileItems;
 
         protected override void Awake()
@@ -59,6 +61,10 @@ namespace PCG.Tilemaps
             AddTilemapToList(tilemap);
             AddTilemapToList(collidable);
             AddTilemapToList(entities);
+
+            tilemapData.floor = tilemap;
+            tilemapData.collidable = collidable;
+            tilemapData.trigger = entities;
         }
 
         /// <summary>
@@ -74,15 +80,33 @@ namespace PCG.Tilemaps
         }
     }
 
-    public struct TilemapData
+    [Serializable]
+    public class TilemapData
     {
-        public Tilemap floor;
-        public Tilemap collidable;
-        public Tilemap trigger;
+        public List<Tilemap> allTilemaps = new();
+
+        public Tilemap floor = new();
+        public Tilemap collidable = new();
+        public Tilemap trigger = new();
+
+        public List<Tile> tiles = new();
+
+        public TilemapData()
+        {
+            allTilemaps.AddRange(new List<Tilemap>
+            {
+                floor,
+                collidable,
+                trigger
+            });
+        }
     }
 
+    [Serializable]
     public struct RoomData
     {
+        public Tile[,] tilemap;
+
         public int RoomWidth;
         public int RoomHeight;
 

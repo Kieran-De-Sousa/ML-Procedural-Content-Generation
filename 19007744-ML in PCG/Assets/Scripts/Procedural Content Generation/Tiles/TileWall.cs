@@ -31,7 +31,7 @@ namespace PCG.Tilemaps
     public class TileWall : Tile, ICollidable
     {
         [Header("Tile Wall Properties")]
-        public WallDirection wallDirection;
+        [SerializeField] private WallDirection wallDirection;
 
         // ICollidable Interface implementation
         public bool IsCollidable { get; protected set; } = true;
