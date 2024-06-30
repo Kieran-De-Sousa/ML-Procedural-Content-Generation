@@ -43,14 +43,14 @@ namespace PCG
 
 
         /// <summary>
-        ///
+        /// Generate a door tile facing the provided direction.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="map"></param>
-        /// <param name="tilemapData"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
+        /// <param name="x">X position of the tile on map.</param>
+        /// <param name="y">Y position of the tile on map.</param>
+        /// <param name="map">2D tile array representing map.</param>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <param name="direction">Direction the door will face.</param>
+        /// <returns>Generated door tile, otherwise, <c>null</c></returns>
         public static Tile GenerateDoors(int x, int y, Tile[,] map,
             TilemapData tilemapData, DoorDirection direction)
         {
@@ -71,14 +71,14 @@ namespace PCG
 
 
         /// <summary>
-        ///
+        /// Generate a wall tile facing the provided direction.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="map"></param>
-        /// <param name="tilemapData"></param>
-        /// <param name="direction"></param>
-        /// <returns></returns>
+        /// <param name="x">X position of the tile on map.</param>
+        /// <param name="y">Y position of the tile on map.</param>
+        /// <param name="map">2D tile array representing map.</param>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <param name="direction">Direction the wall will face.</param>
+        /// <returns>Generated wall tile, otherwise, <c>null</c></returns>
         public static Tile GenerateWalls(int x, int y, Tile[,] map,
             TilemapData tilemapData, WallDirection direction)
         {
@@ -97,6 +97,14 @@ namespace PCG
             return null;
         }
 
+        /// <summary>
+        /// Generate a floor tile.
+        /// </summary>
+        /// <param name="x">X position of the tile on map.</param>
+        /// <param name="y">Y position of the tile on map.</param>
+        /// <param name="map">2D tile array representing map.</param>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <returns>Generated floor tile, otherwise, <c>null</c></returns>
         public static Tile GenerateFloor(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
@@ -158,7 +166,7 @@ namespace PCG
         /// </summary>
         /// <param name="x">X position of tile.</param>
         /// <param name="y">Y position of tile.</param>
-        /// <param name="map">2D int array representing the map.</param>
+        /// <param name="map">2D tile array representing the map.</param>
         /// <returns><c>true</c> if the position is a wall location, otherwise; <c>false</c>.</returns>
         public static (bool, WallDirection) CheckWalls(int x, int y, Tile[,] map)
         {
@@ -221,11 +229,11 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generate a random map based on seed.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="seed"></param>
-        /// <returns></returns>
+        /// <param name="map">2D int array representing the map.</param>
+        /// <param name="seed">Seed value for RNG.</param>
+        /// <returns>Randomly generated int map.</returns>
         public static int[,] RandomGeneration(int[,] map, float seed)
         {
             // Set the random number generator with seed
@@ -244,11 +252,11 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generates a map using perlin noise based on provided seed.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="seed"></param>
-        /// <returns></returns>
+        /// <param name="map">2D int array representing the map.</param>
+        /// <param name="seed">Seed value for RNG.</param>
+        /// <returns>Generated int map with perlin noise.</returns>
         public static int[,] PerlinNoise(int[,] map, float seed)
         {
             int newPoint;
@@ -271,7 +279,12 @@ namespace PCG
             return map;
         }
 
-        // TODO
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="map"></param>
+        /// <param name="seed"></param>
+        /// <returns></returns>
         public static Tile[,] AStarPathfindingGeneration(Tile[,] map, float seed)
         {
             // Set the random number generator with seed
@@ -283,11 +296,11 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generates a room in the map by setting tileBases on corresponding tilemaps through assigned tile in map position.
         /// </summary>
-        /// <param name="map"></param>
-        /// <param name="tilemapData"></param>
-        /// <param name="offset"></param>
+        /// <param name="map">2D array representing map to be generated.</param>
+        /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
+        /// <param name="offset">Optional offset to apply to the tile positions from game space.</param>
         public static void GenerateRoom(Tile[,] map, TilemapData tilemapData, Vector2Int offset = default)
         {
             // Clear current tiles when generating room.
@@ -313,6 +326,7 @@ namespace PCG
                 {
                     int xOffset = x + offset.x;
                     int yOffset = y + offset.y;
+
                     // TODO
                     Tile tile;
 

@@ -1,13 +1,21 @@
+// Base
 using System.Collections;
 using System.Collections.Generic;
 
+// Unity
 using UnityEngine;
+
+// Unity ML Agents
 using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
+// Root namespace for all Machine Learning-related utilities.
 namespace ML
 {
+    /// <summary>
+    /// Handles agent behaviour for 2D, top-down environment using ML-Agents.
+    /// </summary>
     public class MLAgent : Agent
     {
         // -------------------- Member Variables -------------------- //
@@ -46,16 +54,6 @@ namespace ML
             _inputScheme.Dispose();
         }
 
-        private void Update()
-        {
-            _inputVector = (_inputScheme._2DTopDown.Move.ReadValue<Vector2>()).normalized;
-        }
-
-        private void FixedUpdate()
-        {
-            rigidbody.MovePosition(rigidbody.position + (_inputVector * movementSpeed *Time.fixedDeltaTime));
-        }
-
         /// <summary>
         /// Initialize the agent.
         /// </summary>
@@ -70,11 +68,23 @@ namespace ML
         /// Called when an action is received from either the player input or the neural network.
         ///
         /// actions.ContinuousActions[i] represents:
-        /// Index 0: ACTION HERE
+        /// Index 0 (Float): Horizontal Movement (-1 to 1)
+        /// Index 1 (Float): Vertical Movement (-1 to 1)
         /// </summary>
         /// <param name="actions">The actions to take.</param>
         public override void OnActionReceived(ActionBuffers actions)
         {
+            if (frozen) return;
+
+            // Get the continuous actions
+            float horizontal = actions.ContinuousActions[0];
+            float vertical = actions.ContinuousActions[1];
+
+            // Set the input vector based on actions received
+            _inputVector = new Vector2(horizontal, vertical).normalized;
+
+            // Apply movement
+            rigidbody.MovePosition(rigidbody.position + (_inputVector * movementSpeed * Time.fixedDeltaTime));
         }
 
         /// <summary>
@@ -91,6 +101,11 @@ namespace ML
         /// <param name="actionsOut">Output action array.</param>
         public override void Heuristic(in ActionBuffers actionsOut)
         {
+            var input = (_inputScheme._2DTopDown.Move.ReadValue<Vector2>()).normalized;
+
+            var continuousActions = actionsOut.ContinuousActions;
+            continuousActions[0] = input.x;
+            continuousActions[1] = input.y;
         }
 
         /// <summary>

@@ -431,6 +431,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3012251537601196475}
     m_Modifications:
+    - target: {fileID: -4382169288657801457, guid: 47584c110f2087b409b480c62038f71b, type: 3}
+      propertyPath: m_BehaviorName
+      value: Agent
+      objectReference: {fileID: 0}
+    - target: {fileID: -4382169288657801457, guid: 47584c110f2087b409b480c62038f71b, type: 3}
+      propertyPath: m_BrainParameters.VectorActionSize.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -4382169288657801457, guid: 47584c110f2087b409b480c62038f71b, type: 3}
+      propertyPath: m_BrainParameters.m_ActionSpec.m_NumContinuousActions
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 10148789995759073, guid: 47584c110f2087b409b480c62038f71b, type: 3}
       propertyPath: m_Name
       value: MLAgent
