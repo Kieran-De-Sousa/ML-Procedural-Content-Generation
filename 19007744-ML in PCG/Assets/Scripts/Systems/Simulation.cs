@@ -11,6 +11,9 @@ using ML;
 using PCG;
 using PCG.Tilemaps;
 
+/// <summary>
+/// Singleton that overviews all systems present in each room simulation.
+/// </summary>
 public class Simulation : Singleton<Simulation>
 {
     public MLSystem mlSystem;

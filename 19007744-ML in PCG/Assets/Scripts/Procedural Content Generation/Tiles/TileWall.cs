@@ -1,14 +1,11 @@
-// Base
-using System.Collections;
-using System.Collections.Generic;
-
 // Unity
 using UnityEngine;
 
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>
-    ///
+    /// Direction the wall is facing, including corner pieces.
     /// </summary>
     public enum WallDirection : int
     {
@@ -26,7 +23,7 @@ namespace PCG.Tilemaps
     }
 
     /// <summary>
-    ///
+    /// Wall tiles that can be collided with (<c>ICollidable</c>).
     /// </summary>
     public class TileWall : Tile, ICollidable
     {
@@ -46,20 +43,18 @@ namespace PCG.Tilemaps
         {
             // Call base implementation of start...
             base.Start();
-
-            // TODO: OTHER LOGIC HERE
         }
 
         /// <summary>
-        ///
+        /// Gets the direction the wall is facing.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Direction of the wall.</returns>
         public WallDirection GetWallDirection() { return wallDirection; }
 
         /// <summary>
-        ///
+        /// Sets the direction the wall is facing.
         /// </summary>
-        /// <param name="direction"></param>
+        /// <param name="direction">Direction to set for the wall.</param>
         public void SetWallDirection(WallDirection direction) => wallDirection = direction;
     }
 }

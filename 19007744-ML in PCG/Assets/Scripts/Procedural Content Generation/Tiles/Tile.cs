@@ -1,10 +1,14 @@
 // Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
+
+// Helper
 using Utilities;
 
+// Root namespace for all Procedural Content Generation-related utilities.
 namespace PCG
 {
+    // Sub-namespace for tilemap-related utilities.
     namespace Tilemaps
     {
         /// <summary>
@@ -26,15 +30,21 @@ namespace PCG
         {
             [Header("Base Properties")]
             public TileBase tileBase;
-
             protected TileType tileType = TileType.FLOOR;
-            protected Tilemap ownerTilemap;
 
+            // Tilemap
+            protected Tilemap ownerTilemap;
             protected Vector3Int tilePosition;
+
+            // Player
             protected Inventory player;
 
+            /// <summary>
+            /// Initialise member variables of tile upon simulation start.
+            /// </summary>
             protected virtual void Start()
             {
+                // Find the owner tilemap of this tile, and its position in that tilemap.
                 Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
                 foreach (Tilemap tilemap in tilemaps)
                 {
@@ -52,6 +62,7 @@ namespace PCG
                     }
                 }
 
+                // Find player inventory starting from root parent (the simulation).
                 player = HelperUtilities.FindParentOrChildWithComponent<Inventory>(transform);
             }
 
@@ -97,19 +108,19 @@ namespace PCG
             }
 
             /// <summary>
-            ///
+            /// Gets the tile asset of this tile.
             /// </summary>
-            /// <returns>Tile base asset</returns>
+            /// <returns>Tile base asset.</returns>
             public TileBase GetTileBase() { return tileBase; }
 
             /// <summary>
             /// Sets the tile asset of this tile.
             /// </summary>
-            /// <param name="tileBase">The TileBase asset to set.</param>
+            /// <param name="tile">The TileBase asset to set.</param>
             public void SetTileBase(TileBase tile) => tileBase = tile;
 
             /// <summary>
-            ///
+            /// Gets the type of this tile.
             /// </summary>
             /// <returns>Tile type</returns>
             public TileType GetTileType() { return tileType; }

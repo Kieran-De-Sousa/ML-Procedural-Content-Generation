@@ -1,16 +1,12 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using ML;
-
 // Unity
 using UnityEngine;
 
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>
     /// Base class for "Interactable" GameObjects (e.g. Doors, pickups) to inherit from.
-    /// Derived classes will ideally have the <c>Interact</c> method called when hitting a trigger collider.
+    /// Derived classes will have the <c>Interact</c> method called when hitting a trigger collider.
     /// </summary>
     public abstract class TileInteractable : Tile, IInteractable
     {

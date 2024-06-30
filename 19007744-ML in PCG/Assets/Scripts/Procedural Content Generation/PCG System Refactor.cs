@@ -12,10 +12,16 @@ using PCG.Tilemaps;
 
 // Helper
 using Utilities;
+
+// Ambiguous reference prevention (shares name with UnityEngine.Tilemaps.)
 using Tile = PCG.Tilemaps.Tile;
 
+// Root namespace for all Procedural Content Generation-related utilities.
 namespace PCG
 {
+    /// <summary>
+    ///
+    /// </summary>
     public class PCGSystemRefactor : Singleton<PCGSystemRefactor>
     {
         [SerializeField] private TilemapSystem tilemapSystem;
@@ -49,7 +55,7 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Initalise New Unity Input System
         /// </summary>
         private void InitialiseInput()
         {
@@ -63,6 +69,9 @@ namespace PCG
             PollInputs();
         }
 
+        /// <summary>
+        /// Check for all inputs in PCG Action Map.
+        /// </summary>
         private void PollInputs()
         {
             InputScheme.PCGActions actions = _inputScheme.PCG;
@@ -84,7 +93,10 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generate room level based on:
+        /// - Seed (Current time).
+        /// - Room width and height.
+        /// - Selected generation method.
         /// </summary>
         public void GenerateRoom()
         {
@@ -139,7 +151,7 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Clear all tiles in all tilemaps.
         /// </summary>
         public void ClearRoom()
         {
@@ -150,11 +162,12 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Move player position to centre of room.
         /// </summary>
         public void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
+
             // TODO: Fix this as its using the map position and not the in-game position of the map position.
             player.transform.position = new Vector3(roomData.RoomCentre.x, roomData.RoomCentre.y, player.transform.position.z);
         }

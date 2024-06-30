@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
-
-using UnityEngine;
-
+/// <summary>
+/// Derived class of <c>Item</c> which are bomb tiles that are interacted with upon trigger collision.
+/// </summary>
 public class ItemBomb : Item
 {
     public ItemBomb()

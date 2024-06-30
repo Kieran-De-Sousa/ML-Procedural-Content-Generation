@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>

@@ -1,13 +1,9 @@
-// Base
-using System.Collections;
-using System.Collections.Generic;
-
-// Unity
-using UnityEngine;
-
 // Procedural Content Generation
 using PCG.Tilemaps;
 
+/// <summary>
+/// Different types of item this tile can be.
+/// </summary>
 public enum ItemType : int
 {
     COIN = 1,
@@ -15,6 +11,9 @@ public enum ItemType : int
     KEY  = 3,
 }
 
+/// <summary>
+/// Derived class of <c>TileInteractable</c> which are item tiles that are interacted with upon trigger collision.
+/// </summary>
 public abstract class Item : TileInteractable
 {
     /// The items type.

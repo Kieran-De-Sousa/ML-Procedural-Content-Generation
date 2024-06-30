@@ -1,14 +1,8 @@
-// Base
-using System.Collections;
-using System.Collections.Generic;
-
-// Unity
-using UnityEngine;
-
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>
-    ///
+    /// Pit tiles that can be collided with (<c>ICollidable</c>).
     /// </summary>
     public class TilePit : Tile, ICollidable
     {
@@ -25,8 +19,6 @@ namespace PCG.Tilemaps
         {
             // Call base implementation of start...
             base.Start();
-
-            // TODO: OTHER LOGIC HERE
         }
     }
 }

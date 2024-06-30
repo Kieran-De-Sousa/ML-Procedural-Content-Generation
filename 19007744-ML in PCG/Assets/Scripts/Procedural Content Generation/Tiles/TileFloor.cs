@@ -1,14 +1,8 @@
-// Base
-using System.Collections;
-using System.Collections.Generic;
-
-// Unity
-using UnityEngine;
-
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>
-    ///
+    /// Floor tiles that cannot be collided or triggered (decorative).
     /// </summary>
     public class TileFloor : Tile
     {
@@ -22,8 +16,6 @@ namespace PCG.Tilemaps
         {
             // Call base implementation of start...
             base.Start();
-
-            // TODO: OTHER LOGIC HERE
         }
     }
 }

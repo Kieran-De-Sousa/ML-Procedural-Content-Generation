@@ -5,8 +5,12 @@ using System.Linq;
 // Unity
 using UnityEngine;
 
+// Root namespace for all helper classes/methods.
 namespace Utilities
 {
+    /// <summary>
+    /// Set of static helper methods for finding game components, centre positions, etc.
+    /// </summary>
     public static class HelperUtilities
     {
         /// <summary>
