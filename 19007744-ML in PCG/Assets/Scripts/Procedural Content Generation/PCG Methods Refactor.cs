@@ -301,7 +301,7 @@ namespace PCG
         /// <param name="map">2D array representing map to be generated.</param>
         /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
         /// <param name="offset">Optional offset to apply to the tile positions from game space.</param>
-        public static void GenerateRoom(Tile[,] map, TilemapData tilemapData, Vector2Int offset = default)
+        public static Tile[,] GenerateRoom(Tile[,] map, TilemapData tilemapData, Vector2Int offset = default)
         {
             // Clear current tiles when generating room.
             foreach (var tilemap in tilemapData.allTilemaps)
@@ -340,6 +340,8 @@ namespace PCG
                     {
                         tilemapData.trigger.SetTile(new Vector3Int(xOffset , yOffset, 0),
                             GenerateDoors(x, y, map, tilemapData, doorResult.Item2).GetTileBase());
+
+                        map[x, y] = GenerateDoors(x, y, map, tilemapData, doorResult.Item2);
                     }
 
                     // If map position was a wall.
@@ -347,6 +349,9 @@ namespace PCG
                     {
                         tilemapData.collidable.SetTile(new Vector3Int(xOffset, yOffset, 0),
                             GenerateWalls(x, y, map, tilemapData, wallResult.Item2).GetTileBase());
+
+                        map[x, y] = GenerateWalls(x, y, map, tilemapData, wallResult.Item2);
+
                     }
 
                     // If map position was not a boundary (door or wall).
@@ -355,9 +360,13 @@ namespace PCG
                         // TODO
                         tilemapData.floor.SetTile(new Vector3Int(xOffset, yOffset, 0),
                             GenerateFloor(x, y, map, tilemapData).GetTileBase());
+
+                        map[x, y] = GenerateFloor(x, y, map, tilemapData);
                     }
                 }
             }
+
+            return map;
         }
 
         /// <summary>

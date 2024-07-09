@@ -32,7 +32,7 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
-        private RoomData roomData;
+        public RoomData roomData;
 
         [Space]
 
@@ -130,9 +130,11 @@ namespace PCG
 
                 case GenerationMethod.ASTAR:
                 {
-                    Tile[,] tileMap = PCGMethodsRefactor.GenerateTileMap(width, height);
+                    roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
+
                     // TODO
-                    PCGMethodsRefactor.GenerateRoom(tileMap, tilemapSystem.tilemapData, default);
+                    roomData.tilemap = PCGMethodsRefactor.GenerateRoom(roomData.tilemap, tilemapSystem.tilemapData, default);
+
                     break;
                 }
 

@@ -44,26 +44,7 @@ namespace PCG
             /// </summary>
             protected virtual void Start()
             {
-                // Find the owner tilemap of this tile, and its position in that tilemap.
-                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
-                foreach (Tilemap tilemap in tilemaps)
-                {
-                    // Iterate through all the positions in the tilemap
-                    BoundsInt bounds = tilemap.cellBounds;
-                    foreach (Vector3Int pos in bounds.allPositionsWithin)
-                    {
-                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
-                        {
-                            // If the tile is found, set protected variables
-                            ownerTilemap = tilemap;
-                            tilePosition = pos;
-                            return;
-                        }
-                    }
-                }
-
-                // Find player inventory starting from root parent (the simulation).
-                player = HelperUtilities.FindParentOrChildWithComponent<Inventory>(transform);
+                SetBaseMembers();
             }
 
             /// <summary>
@@ -107,6 +88,31 @@ namespace PCG
                 return tileObject;
             }
 
+            public void SetBaseMembers()
+            {
+                // Find the owner tilemap of this tile, and its position in that tilemap.
+                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
+                foreach (Tilemap tilemap in tilemaps)
+                {
+                    // Iterate through all the positions in the tilemap
+                    BoundsInt bounds = tilemap.cellBounds;
+                    foreach (Vector3Int pos in bounds.allPositionsWithin)
+                    {
+                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
+                        {
+                            // If the tile is found, set protected variables
+                            ownerTilemap = tilemap;
+                            tilePosition = pos;
+
+                            return;
+                        }
+                    }
+                }
+
+                // Find player inventory starting from root parent (the simulation).
+                player = HelperUtilities.FindParentOrChildWithComponent<Inventory>(transform);
+            }
+
             /// <summary>
             /// Gets the tile asset of this tile.
             /// </summary>
@@ -130,6 +136,22 @@ namespace PCG
             /// </summary>
             /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
+
+            public Tilemap GetOwnerTilemap()
+            {
+                SetBaseMembers();
+                return ownerTilemap;
+            }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <returns></returns>
+            public Vector3Int GetTilePosition()
+            {
+                SetBaseMembers();
+                return tilePosition;
+            }
         }
     }
 }

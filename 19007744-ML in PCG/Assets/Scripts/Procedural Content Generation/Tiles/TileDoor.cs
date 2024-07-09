@@ -29,6 +29,8 @@ namespace PCG.Tilemaps
         // IInteractable Interface implementation
         public override void Interact()
         {
+            Debug.Log($"Door Triggered: {gameObject}");
+
             if (isDoorOpen)
             {
                 // TODO: GO THROUGH DOOR / END SIMULATION
