@@ -16,10 +16,10 @@ namespace ML
     /// <summary>
     /// Handles agent behaviour for 2D, top-down environment using ML-Agents.
     /// </summary>
+    [RequireComponent(typeof(Inventory))]
     public class MLAgent : Agent
     {
         // -------------------- Member Variables -------------------- //
-
         [Tooltip("Whether this is training mode or gameplay mode")]
         public bool trainingMode;
 
@@ -40,6 +40,7 @@ namespace ML
         // -------------------- Methods -------------------- //
         private void Awake()
         {
+            inventory = GetComponent<Inventory>();
             InitialiseInput();
         }
 
@@ -127,5 +128,11 @@ namespace ML
             frozen = false;
             rigidbody.WakeUp();
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public Inventory GetPlayerInventory() { return inventory; }
     }
 }

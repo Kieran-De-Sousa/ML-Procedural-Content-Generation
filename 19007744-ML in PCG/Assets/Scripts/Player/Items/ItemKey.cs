@@ -14,7 +14,7 @@ public class ItemKey : Item
     /// </summary>
     public override void Interact()
     {
-        player.AddKey(value);
+        player.GetPlayerInventory().AddCoin(value);
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

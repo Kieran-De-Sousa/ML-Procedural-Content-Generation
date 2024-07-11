@@ -44,6 +44,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8e1f587240b846e789887550bdf63dc0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tile: {fileID: 11400000, guid: f367411f6e7aabe408ae87fc5403e975, type: 2}
+  tileBase: {fileID: 11400000, guid: f367411f6e7aabe408ae87fc5403e975, type: 2}
   itemType: 3
   value: 1

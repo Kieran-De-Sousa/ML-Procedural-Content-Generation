@@ -133,8 +133,11 @@ namespace PCG
                     roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
 
                     // TODO
-                    roomData.tilemap = PCGMethodsRefactor.GenerateRoom(roomData.tilemap, tilemapSystem.tilemapData, default);
-
+                    roomData = PCGMethodsRefactor.GenerateRoom(roomData, tilemapSystem.tilemapData, default);
+                    foreach (Tilemap tilemap in tilemapSystem.tilemapData.allTilemaps)
+                    {
+                        tilemap.RefreshAllTiles();
+                    }
                     break;
                 }
 
@@ -169,6 +172,7 @@ namespace PCG
         public void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
+            var origin = tilemapSystem.tilemapData.floor.origin;
 
             // TODO: Fix this as its using the map position and not the in-game position of the map position.
             player.transform.position = new Vector3(roomData.RoomCentre.x, roomData.RoomCentre.y, player.transform.position.z);

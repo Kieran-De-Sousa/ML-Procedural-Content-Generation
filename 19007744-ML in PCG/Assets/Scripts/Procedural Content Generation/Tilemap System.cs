@@ -22,26 +22,18 @@ namespace PCG.Tilemaps
 
         [Header("Decoration Tilemap")]
         public Tilemap tilemap;
-        [Header("Tiles")]
-        public List<TileFloor> tileFloors;
 
         [Space]
 
         [Header("Collidable Tilemap")]
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (NOT TRIGGERS)")]
         public Tilemap collidable;
-        [Header("Colliders")]
-        public List<TilePit> tilePits;
-        public List<TileWall> tileWalls;
 
         [Space]
 
         [Header("Trigger Tilemap")]
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
         public Tilemap entities;
-        [Header("Entities")]
-        public List<TileDoor> tileDoors;
-        public List<Item> tileItems;
 
         protected override void Awake()
         {

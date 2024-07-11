@@ -25,14 +25,5 @@ namespace PCG.Tilemaps
             // Call base implementation of start...
             base.Start();
         }
-
-        protected void OnTriggerEnter(Collider other)
-        {
-            // TODO: CALL INTERACT IF ML AGENT HIT IT
-            /*if (other == MLAgent)
-            {
-                Interact();
-            }*/
-        }
     }
 }

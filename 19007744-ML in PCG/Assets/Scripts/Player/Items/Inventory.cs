@@ -11,7 +11,7 @@ using UnityEngine;
 /// </summary>
 public class Inventory : MonoBehaviour
 {
-    public Items inventory;
+    public Items inventory = new();
 
     /// <summary>
     /// Adds value to inventory coin count.

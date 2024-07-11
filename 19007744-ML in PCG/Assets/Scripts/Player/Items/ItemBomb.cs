@@ -14,7 +14,7 @@ public class ItemBomb : Item
     /// </summary>
     public override void Interact()
     {
-        player.AddBomb(value);
+        player.GetPlayerInventory().AddCoin(value);
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

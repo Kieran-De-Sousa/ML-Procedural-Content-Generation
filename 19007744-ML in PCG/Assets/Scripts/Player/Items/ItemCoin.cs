@@ -1,3 +1,5 @@
+using UnityEngine;
+
 /// <summary>
 /// Derived class of <c>Item</c> which are coin tiles that are interacted with upon trigger collision.
 /// </summary>
@@ -14,7 +16,7 @@ public class ItemCoin : Item
     /// </summary>
     public override void Interact()
     {
-        player.AddCoin(value);
+        player.GetPlayerInventory().AddCoin(value);
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

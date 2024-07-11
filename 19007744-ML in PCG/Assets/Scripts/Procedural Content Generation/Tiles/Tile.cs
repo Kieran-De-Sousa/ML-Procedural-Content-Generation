@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Machine Learning
+using ML;
+
 // Helper
 using Utilities;
 
@@ -37,7 +40,7 @@ namespace PCG
             protected Vector3Int tilePosition;
 
             // Player
-            protected Inventory player;
+            protected MLAgent player;
 
             /// <summary>
             /// Initialise member variables of tile upon simulation start.
@@ -110,7 +113,7 @@ namespace PCG
                 }
 
                 // Find player inventory starting from root parent (the simulation).
-                player = HelperUtilities.FindParentOrChildWithComponent<Inventory>(transform);
+                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
             }
 
             /// <summary>
@@ -137,21 +140,38 @@ namespace PCG
             /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
 
-            public Tilemap GetOwnerTilemap()
-            {
-                SetBaseMembers();
-                return ownerTilemap;
-            }
+            public Tilemap GetOwnerTilemap() { return ownerTilemap; }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="owner"></param>
+            /// <returns></returns>
+            public void SetOwnerTilemap(Tilemap owner) => ownerTilemap = owner;
 
             /// <summary>
             ///
             /// </summary>
             /// <returns></returns>
-            public Vector3Int GetTilePosition()
-            {
-                SetBaseMembers();
-                return tilePosition;
-            }
+            public Vector3Int GetTilePosition() { return tilePosition; }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="position"></param>
+            public void SetTilePosition(Vector3Int position) => tilePosition = position;
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <returns></returns>
+            public MLAgent GetPlayer() { return player; }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="agent"></param>
+            public void SetPlayer(MLAgent agent) => player = agent;
         }
     }
 }

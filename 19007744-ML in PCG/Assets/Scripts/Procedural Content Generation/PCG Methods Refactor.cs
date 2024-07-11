@@ -43,6 +43,47 @@ namespace PCG
 
 
         /// <summary>
+        ///
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="direction"></param>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <returns></returns>
+        public static RoomData AssignDoor(RoomData data, DoorDirection direction, int x, int y)
+        {
+            switch (direction)
+            {
+                case DoorDirection.TOP:
+                {
+                    data.TopDoor = (x, y);
+                    break;
+                }
+                case DoorDirection.BOTTOM:
+                {
+                    data.BottomDoor = (x, y);
+                    break;
+                }
+                case DoorDirection.LEFT:
+                {
+                    data.LeftDoor = (x, y);
+                    break;
+                }
+                case DoorDirection.RIGHT:
+                {
+                    data.RightDoor = (x, y);
+                    break;
+                }
+                default:
+                {
+                    break;
+                }
+            }
+
+            return data;
+        }
+
+        /// <summary>
         /// Generate a door tile facing the provided direction.
         /// </summary>
         /// <param name="x">X position of the tile on map.</param>
@@ -116,6 +157,70 @@ namespace PCG
             }
 
             Debug.LogError("FLOOR TILE COULD NOT BE FOUND IN TILEMAPDATA!");
+            return null;
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="x"></param>
+        /// <param name="y"></param>
+        /// <param name="map"></param>
+        /// <param name="tilemapData"></param>
+        /// <returns></returns>
+        public static Tile GeneratePit(int x, int y, Tile[,] map, TilemapData tilemapData)
+        {
+            foreach (var tile in tilemapData.tiles)
+            {
+                if (tile is TilePit pit)
+                {
+                    return pit;
+                }
+            }
+
+            Debug.LogError("PIT TILE COULD NOT BE FOUND IN TILEMAPDATA!");
+            return null;
+        }
+
+        public static Tile GenerateCoin(int x, int y, Tile[,] map, TilemapData tilemapData)
+        {
+            foreach (var tile in tilemapData.tiles)
+            {
+                if (tile is ItemCoin coin)
+                {
+                    return coin;
+                }
+            }
+
+            Debug.LogError("COIN ITEM COULD NOT BE FOUND IN TILEMAPDATA!");
+            return null;
+        }
+
+        public static Tile GenerateKey(int x, int y, Tile[,] map, TilemapData tilemapData)
+        {
+            foreach (var tile in tilemapData.tiles)
+            {
+                if (tile is ItemKey key)
+                {
+                    return key;
+                }
+            }
+
+            Debug.LogError("KEY ITEM COULD NOT BE FOUND IN TILEMAPDATA!");
+            return null;
+        }
+
+        public static Tile GenerateBomb(int x, int y, Tile[,] map, TilemapData tilemapData)
+        {
+            foreach (var tile in tilemapData.tiles)
+            {
+                if (tile is ItemBomb bomb)
+                {
+                    return bomb;
+                }
+            }
+
+            Debug.LogError("BOMB ITEM COULD NOT BE FOUND IN TILEMAPDATA!");
             return null;
         }
 
@@ -301,13 +406,16 @@ namespace PCG
         /// <param name="map">2D array representing map to be generated.</param>
         /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
         /// <param name="offset">Optional offset to apply to the tile positions from game space.</param>
-        public static Tile[,] GenerateRoom(Tile[,] map, TilemapData tilemapData, Vector2Int offset = default)
+        public static RoomData GenerateRoom(RoomData roomData, TilemapData tilemapData, Vector2Int offset = default)
         {
             // Clear current tiles when generating room.
             foreach (var tilemap in tilemapData.allTilemaps)
             {
                 tilemap.ClearAllTiles();
             }
+
+            List<Vector3Int> doorPositions = new List<Vector3Int>();
+            List<Vector3Int> wallPositions = new List<Vector3Int>();
 
             // NOTE: In a 2D map, the below are the positions for min and max
             //                 MaxY
@@ -319,10 +427,10 @@ namespace PCG
             //                 MinY
 
             // Loop through the width of the map
-            for (int x = 0; x < map.GetUpperBound(0); ++x)
+            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {
                 // Loop through the height of the map
-                for (int y = 0; y < map.GetUpperBound(1); ++y)
+                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
                 {
                     int xOffset = x + offset.x;
                     int yOffset = y + offset.y;
@@ -331,42 +439,137 @@ namespace PCG
                     Tile tile;
 
                     // Check map position for door.
-                    var doorResult = CheckDoors(x, y, map);
+                    var doorResult = CheckDoors(x, y, roomData.tilemap);
                     // Check map position for wall.
-                    var wallResult = CheckWalls(x, y, map);
+                    var wallResult = CheckWalls(x, y, roomData.tilemap);
 
                     // If map position was a door.
                     if (doorResult.Item1)
                     {
                         tilemapData.trigger.SetTile(new Vector3Int(xOffset , yOffset, 0),
-                            GenerateDoors(x, y, map, tilemapData, doorResult.Item2).GetTileBase());
+                            GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2).GetTileBase());
 
-                        map[x, y] = GenerateDoors(x, y, map, tilemapData, doorResult.Item2);
+                        roomData.tilemap[x, y] = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
+
+                        roomData = AssignDoor(roomData, doorResult.Item2, x, y);
+
+                        doorPositions.Add(new Vector3Int(x, y, 0));
                     }
 
                     // If map position was a wall.
                     else if (wallResult.Item1)
                     {
                         tilemapData.collidable.SetTile(new Vector3Int(xOffset, yOffset, 0),
-                            GenerateWalls(x, y, map, tilemapData, wallResult.Item2).GetTileBase());
+                            GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2).GetTileBase());
 
-                        map[x, y] = GenerateWalls(x, y, map, tilemapData, wallResult.Item2);
+                        roomData.tilemap[x, y] = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
 
+                        wallPositions.Add(new Vector3Int(x, y, 0));
                     }
+
 
                     // If map position was not a boundary (door or wall).
                     else
                     {
                         // TODO
                         tilemapData.floor.SetTile(new Vector3Int(xOffset, yOffset, 0),
-                            GenerateFloor(x, y, map, tilemapData).GetTileBase());
+                            GenerateFloor(x, y, roomData.tilemap, tilemapData).GetTileBase());
 
-                        map[x, y] = GenerateFloor(x, y, map, tilemapData);
+                        tilemapData.trigger.SetTile(new Vector3Int(xOffset, yOffset, 0),
+                            GenerateCoin(x, y, roomData.tilemap, tilemapData).GetTileBase());
+
+                        roomData.tilemap[x, y] = GenerateCoin(x, y, roomData.tilemap, tilemapData);
                     }
                 }
             }
 
-            return map;
+            /*// Second pass: Generate floors ensuring paths to all doors
+            List<Vector3Int> floorPositions = GeneratePathsToDoors(roomData.tilemap, doorPositions);
+            Debug.Log($"Floor Positions: {floorPositions}");
+
+            for (int x = 0; x < roomData.RoomWidth; ++x)
+            {
+                for (int y = 0; y < roomData.RoomHeight; ++y)
+                {
+                    int xOffset = x + offset.x;
+                    int yOffset = y + offset.y;
+                    Vector3Int position = new Vector3Int(xOffset, yOffset, 0);
+
+                    if (roomData.tilemap[x, y] is TileDoor || roomData.tilemap[x, y] is TileWall)
+                    {
+                        continue; // Skip already placed doors and walls
+                    }
+
+                    if (floorPositions.Contains(new Vector3Int(x, y, 0)))
+                    {
+                        Debug.Log($"Generating floor at: {x} {y}");
+
+                        Tile floorTile = GenerateFloor(x, y, roomData.tilemap, tilemapData);
+                        tilemapData.floor.SetTile(position, floorTile.GetTileBase());
+                        roomData.tilemap[x, y] = floorTile;
+                    }
+                    else
+                    {
+                        Debug.Log($"Generating pit at: {x} {y}");
+
+                        Tile pit = GeneratePit(x, y, roomData.tilemap, tilemapData);
+                        tilemapData.collidable.SetTile(position, pit.GetTileBase());
+                        roomData.tilemap[x, y] = pit;
+                    }
+                }
+            }*/
+
+            return roomData;
+        }
+
+        /// <summary>
+        /// Generates paths to all doors using a simple pathfinding algorithm.
+        /// </summary>
+        /// <param name="map">2D array representing map to be generated.</param>
+        /// <param name="doorPositions">List of door positions.</param>
+        /// <returns>List of floor positions ensuring paths to all doors.</returns>
+        private static List<Vector3Int> GeneratePathsToDoors(Tile[,] map, List<Vector3Int> doorPositions)
+        {
+            List<Vector3Int> floorPositions = new List<Vector3Int>();
+
+            if (doorPositions.Count == 0)
+            {
+                return floorPositions;
+            }
+
+            Vector3Int start = doorPositions[0];
+            Queue<Vector3Int> queue = new Queue<Vector3Int>();
+            queue.Enqueue(start);
+            HashSet<Vector3Int> visited = new HashSet<Vector3Int> { start };
+
+            while (queue.Count > 0)
+            {
+                Vector3Int current = queue.Dequeue();
+
+                foreach (Vector3Int direction in new Vector3Int[] {
+                    Vector3Int.up, Vector3Int.down, Vector3Int.left, Vector3Int.right })
+                {
+                    Vector3Int neighbor = current + direction;
+                    if (!visited.Contains(neighbor) &&
+                        neighbor.x >= 0 && neighbor.x < map.GetLength(0) &&
+                        neighbor.y >= 0 && neighbor.y < map.GetLength(1) &&
+                        !(map[neighbor.x, neighbor.y] is TileWall))
+                    {
+                        visited.Add(neighbor);
+                        queue.Enqueue(neighbor);
+                        floorPositions.Add(neighbor);
+
+                        if (doorPositions.Contains(neighbor))
+                        {
+                            doorPositions.Remove(neighbor);
+                            if (doorPositions.Count == 0)
+                                return floorPositions;
+                        }
+                    }
+                }
+            }
+
+            return floorPositions;
         }
 
         /// <summary>

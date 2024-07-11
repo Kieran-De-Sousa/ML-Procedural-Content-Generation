@@ -4,6 +4,7 @@ using System.Linq;
 
 // Unity
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 // Root namespace for all helper classes/methods.
 namespace Utilities
@@ -72,6 +73,24 @@ namespace Utilities
 
             // Return center coordinates as a tuple
             return (centerRow, centerColumn);
+        }
+
+        /// <summary>
+        /// Gets the center tile position in the given tilemap.
+        /// </summary>
+        /// <param name="tilemap">The Tilemap to find the center position in.</param>
+        /// <returns>The cell position of the center tile.</returns>
+        public static Vector3Int GetCenterTilePosition(Tilemap tilemap)
+        {
+            // Get the bounds of the tilemap
+            BoundsInt bounds = tilemap.cellBounds;
+
+            // Calculate the center position
+            int centerX = bounds.xMin + (bounds.size.x / 2);
+            int centerY = bounds.yMin + (bounds.size.y / 2);
+
+            // Create and return the center cell position
+            return new Vector3Int(centerX, centerY, 0);
         }
     }
 
