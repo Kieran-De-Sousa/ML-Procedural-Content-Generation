@@ -17,6 +17,9 @@ namespace PCG.Tilemaps
 
         protected TileInteractable()
         {
+            IsInteractable = true;
+            IsInteracted = false;
+
             tileType = TileType.ENTITY;
         }
 

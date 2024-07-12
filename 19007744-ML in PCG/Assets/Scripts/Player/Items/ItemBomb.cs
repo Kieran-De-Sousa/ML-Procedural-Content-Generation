@@ -14,7 +14,8 @@ public class ItemBomb : Item
     /// </summary>
     public override void Interact()
     {
-        player.GetPlayerInventory().AddCoin(value);
+        // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items.
+        player.GetPlayerInventory().AddBomb(value);
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

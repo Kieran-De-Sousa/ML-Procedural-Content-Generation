@@ -22,7 +22,7 @@ namespace PCG
     /// <summary>
     ///
     /// </summary>
-    public class PCGSystemRefactor : Singleton<PCGSystemRefactor>
+    public class PCGSystemRefactor : ManagerSystem
     {
         [SerializeField] private TilemapSystem tilemapSystem;
 
@@ -41,10 +41,8 @@ namespace PCG
 
         private InputScheme _inputScheme;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             roomData = RoomData.GenerateRoom(width, height);
         }
 
@@ -92,6 +90,15 @@ namespace PCG
             }
         }
 
+        public override void ResetSystem()
+        {
+            roomData = RoomData.GenerateRoom(width, height);
+
+            ClearRoom();
+            GenerateRoom();
+            SpawnPlayer();
+        }
+
         /// <summary>
         /// Generate room level based on:
         /// - Seed (Current time).
@@ -131,13 +138,13 @@ namespace PCG
                 case GenerationMethod.ASTAR:
                 {
                     roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
-
-                    // TODO
                     roomData = PCGMethodsRefactor.GenerateRoom(roomData, tilemapSystem.tilemapData, default);
+
                     foreach (Tilemap tilemap in tilemapSystem.tilemapData.allTilemaps)
                     {
                         tilemap.RefreshAllTiles();
                     }
+
                     break;
                 }
 
@@ -172,8 +179,9 @@ namespace PCG
         public void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
-            var origin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
 
+            // Find centre tile in tilemap, then get the centre position of that centre tile found.
+            var origin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
             player.transform.position = new Vector3(origin.x, origin.y, player.transform.position.z);
         }
     }

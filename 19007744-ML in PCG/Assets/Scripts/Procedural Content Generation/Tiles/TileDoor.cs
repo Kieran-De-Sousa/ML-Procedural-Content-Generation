@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Helper
+using Utilities;
+
 // Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
@@ -24,6 +27,7 @@ namespace PCG.Tilemaps
         [Header("Tile Door Properties")]
         [SerializeField] private TileBase doorOpen;
         [SerializeField] private DoorDirection doorDirection = DoorDirection.TOP;
+        [SerializeField] private float doorReward = 10.0f;
         private bool isDoorOpen = true;
 
         // IInteractable Interface implementation
@@ -33,8 +37,15 @@ namespace PCG.Tilemaps
 
             if (isDoorOpen)
             {
+                // Reward Agent for interacting with door.
+                player.RewardPlayer(doorReward);
 
-                // TODO: GO THROUGH DOOR / END SIMULATION
+                IsInteracted = true;
+                IsInteractable = false;
+
+                // End this simulation / episode.
+                Simulation simulation = HelperUtilities.FindParentOrChildWithComponent<Simulation>(ownerTilemap.transform);
+                simulation.ResetSimulation();
             }
         }
 

@@ -168,6 +168,18 @@ namespace ML
         /// <summary>
         ///
         /// </summary>
+        /// <param name="reward"></param>
+        public void RewardPlayer(float reward)
+        {
+            if (trainingMode)
+            {
+                AddReward(reward);
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
         /// <returns></returns>
         public Inventory GetPlayerInventory() { return inventory; }
     }
