@@ -1,4 +1,5 @@
 // Base
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -14,11 +15,25 @@ using PCG.Tilemaps;
 /// <summary>
 /// Singleton that overviews all systems present in each room simulation.
 /// </summary>
-public class Simulation : Singleton<Simulation>
+public class Simulation : MonoBehaviour
 {
     public MLSystem mlSystem;
+    [Space]
+
     public PCGSystemRefactor pcgSystemRefactor;
+    [Space]
+
     public TilemapSystem tilemapSystem;
+    [Space]
+    [Space]
 
     public PCGSystem pcgSystem;
+
+    public void ResetSimulation()
+    {
+        Debug.Log($"Simulation Ending: {this}");
+
+        pcgSystemRefactor.ResetSystem();
+        mlSystem.ResetSystem();
+    }
 }

@@ -41,14 +41,18 @@ namespace PCG.Tilemaps
 
             // Get the position of the collision
             Vector3 collisionPosition = other.transform.position;
+            //Debug.Log($"Player collided at: {collisionPosition}");
 
             // Convert the collision position to cell position in the Unity Tilemap
             Vector3Int cellPosition = tilemap.WorldToCell(collisionPosition);
+            //Debug.Log($"Cell position at: {cellPosition}");
 
             // Adjust the cell position to match your tilemap array coordinates
             // Assumes tilemap array starts at (0,0) and matches Unity Tilemap coordinates
             int x = cellPosition.x - tilemap.cellBounds.xMin;
             int y = cellPosition.y - tilemap.cellBounds.yMin;
+
+            //Debug.Log($"Player collided with trigger tile at array position: ({x}, {y})");
 
             // Check bounds to avoid index out of range errors
             if (x >= 0 && x < tilemapCoordinates.GetLength(0) &&
@@ -59,9 +63,11 @@ namespace PCG.Tilemaps
                 if (collidedTile != null && collidedTile is IInteractable)
                 {
                     TileInteractable interactable = (TileInteractable) collidedTile;
+                    //Debug.Log($"Player collided with trigger tile: {interactable.name} at array position: ({x}, {y})");
+                    Debug.Log($"{interactable.name} is {interactable.IsInteractable}");
 
                     // Check if the interactable object can be interacted with.
-                    if (!interactable.IsInteractable) return;
+                    //if (!interactable.IsInteractable) return;
 
                     // Possible null reference exception handling...
                     interactable.SetOwnerTilemap(tilemap);

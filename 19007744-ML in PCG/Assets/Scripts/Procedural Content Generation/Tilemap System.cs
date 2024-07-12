@@ -13,7 +13,7 @@ namespace PCG.Tilemaps
     /// <summary>
     ///
     /// </summary>
-    public class TilemapSystem : Singleton<TilemapSystem>
+    public class TilemapSystem : ManagerSystem
     {
         public TilemapData tilemapData;
 
@@ -35,10 +35,8 @@ namespace PCG.Tilemaps
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
         public Tilemap entities;
 
-        protected override void Awake()
+        protected void Awake()
         {
-            base.Awake();
-
             // NOTE
             tilemapData.floor = tilemap;
             tilemapData.collidable = collidable;
@@ -70,6 +68,8 @@ namespace PCG.Tilemaps
                 tilemaps.Add(tilemapToAdd);
             }
         }
+
+        public override void ResetSystem() { }
     }
 
     [Serializable]
