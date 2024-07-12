@@ -11,15 +11,12 @@ namespace PCG.Tilemaps
     public abstract class TileInteractable : Tile, IInteractable
     {
         // IInteractable Interface implementation
-        public bool IsInteractable { get; set; } = true;
+        public bool IsInteractable { get; protected set; } = true;
         public bool IsInteracted { get; protected set; } = false;
         public abstract void Interact();
 
         protected TileInteractable()
         {
-            IsInteractable = true;
-            IsInteracted = false;
-
             tileType = TileType.ENTITY;
         }
 

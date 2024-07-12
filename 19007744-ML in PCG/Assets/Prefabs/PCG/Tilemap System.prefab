@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4825110122034099654
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1732624771403221291}
+  m_Layer: 0
+  m_Name: Tiles
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1732624771403221291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4825110122034099654}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6767198268305342585}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4927189265461442394
 GameObject:
   m_ObjectHideFlags: 0
@@ -31,6 +62,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1793933802397744926}
+  - {fileID: 1732624771403221291}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1116434330479921558
@@ -45,6 +77,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e07d82b38480e3b4da2bb7377d872226, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  tilemapData:
+    allTilemaps:
+    - {fileID: 0}
+    - {fileID: 0}
+    - {fileID: 0}
+    floor: {fileID: 4151118335714593534}
+    collidable: {fileID: 204036613352869184}
+    trigger: {fileID: 4988761447878669256}
+    tiles: []
   tilemaps:
   - {fileID: 4151118335714593534}
   - {fileID: 204036613352869184}
@@ -52,18 +93,7 @@ MonoBehaviour:
   tilemap: {fileID: 4151118335714593534}
   collidable: {fileID: 204036613352869184}
   entities: {fileID: 4988761447878669256}
-  tileFloors:
-  - {fileID: 0}
-  tilePits: []
-  tileWalls:
-  - {fileID: 6347008004295223929, guid: f7ffabb04ced8e6418cf0685733105c0, type: 3}
-  - {fileID: 6347008004295223929, guid: 41b3dfe5b40232e45b52ab8e8f1112a1, type: 3}
-  - {fileID: 6347008004295223929, guid: 725eaee0001fe8540a789fc6bbd1b5fa, type: 3}
-  - {fileID: 6347008004295223929, guid: e416b082fb9348943a331777b27b2916, type: 3}
-  tileItems:
-  - {fileID: -8809169992700287116, guid: 7f5502379b5329a409593184410729a4, type: 3}
-  - {fileID: -2030759451461788654, guid: 2ad5b0ab2da34c64f8bb4988b7752052, type: 3}
-  - {fileID: 3077369897342561105, guid: 88abd92243d4fb545818b6523bf73650, type: 3}
+  instantiatedTilesParent: {fileID: 1732624771403221291}
 --- !u!1001 &6120751364652439135
 PrefabInstance:
   m_ObjectHideFlags: 0

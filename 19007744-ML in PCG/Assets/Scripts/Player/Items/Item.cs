@@ -21,7 +21,7 @@ public abstract class Item : TileInteractable
     /// Value of the item picked up.
     public int value;
 
-    protected Item() : base()
+    protected Item()
     {
         tileType = TileType.ITEM;
     }

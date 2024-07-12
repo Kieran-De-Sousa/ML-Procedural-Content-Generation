@@ -140,9 +140,13 @@ namespace PCG
                     roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
                     roomData = PCGMethodsRefactor.GenerateRoom(roomData, tilemapSystem.tilemapData, default);
 
-                    foreach (Tilemap tilemap in tilemapSystem.tilemapData.allTilemaps)
+                    for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
                     {
-                        tilemap.RefreshAllTiles();
+                        // Loop through the height of the map
+                        for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                        {
+                            roomData.tilemap[x,y].gameObject.transform.parent = tilemapSystem.instantiatedTilesParent;
+                        }
                     }
 
                     break;
@@ -170,6 +174,15 @@ namespace PCG
             foreach (var map in tilemapSystem.tilemapData.allTilemaps)
             {
                 map.ClearAllTiles();
+            }
+
+            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+            {
+                // Loop through the height of the map
+                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                {
+                    Destroy(roomData.tilemap[x, y].gameObject);
+                }
             }
         }
 

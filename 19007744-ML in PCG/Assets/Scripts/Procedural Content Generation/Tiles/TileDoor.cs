@@ -33,8 +33,6 @@ namespace PCG.Tilemaps
         // IInteractable Interface implementation
         public override void Interact()
         {
-            Debug.Log($"Door Triggered: {this}");
-
             if (isDoorOpen)
             {
                 // Reward Agent for interacting with door.

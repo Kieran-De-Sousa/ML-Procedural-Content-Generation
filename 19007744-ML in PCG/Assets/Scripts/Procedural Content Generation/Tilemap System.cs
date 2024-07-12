@@ -35,6 +35,8 @@ namespace PCG.Tilemaps
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
         public Tilemap entities;
 
+        public Transform instantiatedTilesParent;
+
         protected void Awake()
         {
             // NOTE

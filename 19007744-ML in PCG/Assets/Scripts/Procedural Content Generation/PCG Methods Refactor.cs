@@ -112,7 +112,7 @@ namespace PCG
                 {
                     if (door.GetDoorDirection() == direction)
                     {
-                        return door;
+                        return Instantiate(door);
                     }
                 }
             }
@@ -140,7 +140,7 @@ namespace PCG
                 {
                     if (wall.GetWallDirection() == direction)
                     {
-                        return wall;
+                        return Instantiate(wall);
                     }
                 }
             }
@@ -163,7 +163,7 @@ namespace PCG
             {
                 if (tile is TileFloor floor)
                 {
-                    return floor;
+                    return Instantiate(floor);
                 }
             }
 
@@ -185,7 +185,7 @@ namespace PCG
             {
                 if (tile is TilePit pit)
                 {
-                    return pit;
+                    return Instantiate(pit);
                 }
             }
 
@@ -199,7 +199,7 @@ namespace PCG
             {
                 if (tile is ItemCoin coin)
                 {
-                    return coin;
+                    return Instantiate(coin);
                 }
             }
 
@@ -213,7 +213,7 @@ namespace PCG
             {
                 if (tile is ItemKey key)
                 {
-                    return key;
+                    return Instantiate(key);
                 }
             }
 
@@ -227,7 +227,7 @@ namespace PCG
             {
                 if (tile is ItemBomb bomb)
                 {
-                    return bomb;
+                    return Instantiate(bomb);
                 }
             }
 
@@ -447,7 +447,7 @@ namespace PCG
                     int yOffset = y + offset.y;
 
                     // TODO
-                    Tile tile;
+                    Tile tile = null;
 
                     // Check map position for door.
                     var doorResult = CheckDoors(x, y, roomData.tilemap);
@@ -457,6 +457,8 @@ namespace PCG
                     // If map position was a door.
                     if (doorResult.Item1)
                     {
+                        //tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
+
                         tilemapData.trigger.SetTile(new Vector3Int(xOffset , yOffset, 0),
                             GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2).GetTileBase());
 
@@ -491,6 +493,14 @@ namespace PCG
 
                         roomData.tilemap[x, y] = GenerateCoin(x, y, roomData.tilemap, tilemapData);
                     }
+
+                    /*if (tile != null)
+                    {
+                        if (tile is IInteractable)
+                        {
+
+                        }
+                    }*/
                 }
             }
 

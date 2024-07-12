@@ -36,11 +36,11 @@ namespace PCG
             protected TileType tileType = TileType.FLOOR;
 
             // Tilemap
-            protected Tilemap ownerTilemap;
-            protected Vector3Int tilePosition;
+            protected Tilemap ownerTilemap = null;
+            protected Vector3Int tilePosition = new();
 
             // Player
-            protected MLAgent player;
+            protected MLAgent player = null;
 
             /// <summary>
             /// Initialise member variables of tile upon simulation start.
