@@ -1,28 +1,21 @@
 // Base
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
 // Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using Random = UnityEngine.Random;
 using Tile = UnityEngine.Tilemaps.Tile;
 
 namespace PCG
 {
     /// <summary>
-    /// The different generation methods of Procedural Content Generation (PCG).
-    /// </summary>
-    public enum GenerationMethod
-    {
-        NONE,
-        RANDOM,
-        PERLINNOISE,
-        ASTAR,
-    }
-
-    /// <summary>
     /// A collection of different methods for Procedural Content Generation (PCG).
     /// </summary>
+    [Obsolete("PCGMethods is deprecated, please use PCGMethods Refactor instead.")]
     public class PCGMethods : MonoBehaviour
     {
         /// <summary>

@@ -10,6 +10,9 @@ using Unity.MLAgents;
 using Unity.MLAgents.Actuators;
 using Unity.MLAgents.Sensors;
 
+// PCG Tilemaps
+using PCG.Tilemaps;
+
 // Root namespace for all Machine Learning-related utilities.
 namespace ML
 {
@@ -33,9 +36,12 @@ namespace ML
 
         private Inventory inventory;
 
+        private Simulation _simulation;
+        private Tile[,] _tilemapCoordinates;
+        private TileDoor _nearestDoor;
+
         // Whether the agent is frozen (intentionally not moving)
         private bool frozen = false;
-
 
         // -------------------- Methods -------------------- //
         private void Awake()
@@ -58,12 +64,25 @@ namespace ML
         /// <summary>
         /// Initialize the agent.
         /// </summary>
-        public override void Initialize() {}
+        public override void Initialize()
+        {
+            _simulation = GetComponentInParent<Simulation>();
+            _tilemapCoordinates = _simulation.pcgSystemRefactor.roomData.tilemap;
+
+            // If not in training mode, no max step, play forever.
+            if (!trainingMode)
+            {
+                MaxStep = 0;
+            }
+        }
 
         /// <summary>
         /// Reset the agent when an episode begins.
         /// </summary>
-        public override void OnEpisodeBegin() {}
+        public override void OnEpisodeBegin()
+        {
+
+        }
 
         /// <summary>
         /// Called when an action is received from either the player input or the neural network.
@@ -92,7 +111,14 @@ namespace ML
         /// Collect vector observations from the environment.
         /// </summary>
         /// <param name="sensor">The vector sensor.</param>
-        public override void CollectObservations(VectorSensor sensor) {}
+        public override void CollectObservations(VectorSensor sensor)
+        {
+            // (3 observations)
+            // Observe the agent's local position.
+            sensor.AddObservation(transform.localPosition.normalized);
+
+            // 3 Total Observations //
+        }
 
         /// <summary>
         /// When Behavior Type is set to "Heuristic Only" on the agent's Behavior Parameters,
@@ -127,6 +153,16 @@ namespace ML
             Debug.Assert(trainingMode == false, "Freeze/Unfreeze not supported in training");
             frozen = false;
             rigidbody.WakeUp();
+        }
+
+        public void ResetAgent()
+        {
+
+        }
+
+        private void UpdateNearestDoor()
+        {
+
         }
 
         /// <summary>

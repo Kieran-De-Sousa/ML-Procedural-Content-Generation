@@ -172,10 +172,9 @@ namespace PCG
         public void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
-            var origin = tilemapSystem.tilemapData.floor.origin;
+            var origin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
 
-            // TODO: Fix this as its using the map position and not the in-game position of the map position.
-            player.transform.position = new Vector3(roomData.RoomCentre.x, roomData.RoomCentre.y, player.transform.position.z);
+            player.transform.position = new Vector3(origin.x, origin.y, player.transform.position.z);
         }
     }
 }

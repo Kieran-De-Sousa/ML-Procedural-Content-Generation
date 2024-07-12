@@ -18,5 +18,6 @@ public class ItemKey : Item
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;
+        IsInteractable = false;
     }
 }

@@ -13,6 +13,17 @@ using Tile = PCG.Tilemaps.Tile;
 namespace PCG
 {
     /// <summary>
+    /// The different generation methods of Procedural Content Generation (PCG).
+    /// </summary>
+    public enum GenerationMethod
+    {
+        NONE,
+        RANDOM,
+        PERLINNOISE,
+        ASTAR,
+    }
+
+    /// <summary>
     /// A collection of different methods for Procedural Content Generation (PCG).
     /// </summary>
     public class PCGMethodsRefactor : MonoBehaviour

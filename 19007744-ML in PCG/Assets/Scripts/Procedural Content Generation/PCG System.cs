@@ -12,6 +12,7 @@ using PCG.Tilemaps;
 
 namespace PCG
 {
+    [Obsolete("PCGSystem is deprecated, please use PCGSystem Refactor instead.")]
     public class PCGSystem : Singleton<PCGSystem>
     {
         [Header("Tilemaps")]

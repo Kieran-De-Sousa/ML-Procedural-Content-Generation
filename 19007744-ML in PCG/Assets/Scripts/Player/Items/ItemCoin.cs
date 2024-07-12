@@ -20,5 +20,6 @@ public class ItemCoin : Item
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;
+        IsInteractable = false;
     }
 }

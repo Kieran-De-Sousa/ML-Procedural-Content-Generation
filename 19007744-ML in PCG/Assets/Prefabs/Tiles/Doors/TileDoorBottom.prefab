@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: -7553357688384655662}
   m_Layer: 0
   m_Name: TileDoorBottom
-  m_TagString: Untagged
+  m_TagString: Door
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -45,4 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tileBase: {fileID: 11400000, guid: 94f8e2fa6501c5f4e9a2f7d9154f3089, type: 2}
+  doorOpen: {fileID: 0}
   doorDirection: 1
