@@ -57,6 +57,26 @@ namespace Utilities
         }
 
         /// <summary>
+        /// Delete all child GameObjects of parent GameObject.
+        /// </summary>
+        /// <param name="parent">Parent GameObject.</param>
+        public static void DestroyAllChildren(GameObject parent)
+        {
+            // Get the number of children
+            int childCount = parent.transform.childCount;
+
+            // Loop through each child and destroy it
+            for (int i = childCount - 1; i >= 0; i--)
+            {
+                // Get the child at the current index
+                Transform child = parent.transform.GetChild(i);
+
+                // Destroy the child gameObject
+                GameObject.Destroy(child.gameObject);
+            }
+        }
+
+        /// <summary>
         /// Finds the center coordinates of a 2D map represented as a two-dimensional array.
         /// </summary>
         /// <param name="map">2D array map.</param>

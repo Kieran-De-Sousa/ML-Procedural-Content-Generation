@@ -195,9 +195,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2359821566272047397}
     m_Modifications:
+    - target: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      propertyPath: m_TagString
+      value: Floor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2096900847007464501, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      propertyPath: m_TagString
+      value: Collidables
+      objectReference: {fileID: 0}
     - target: {fileID: 2316771691849956850, guid: c70626450812146438f291fa3efc9e75, type: 3}
       propertyPath: m_Name
       value: PCG System Refactor
+      objectReference: {fileID: 0}
+    - target: {fileID: 2393762055947942757, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      propertyPath: m_TagString
+      value: Triggers
       objectReference: {fileID: 0}
     - target: {fileID: 3578952889861511933, guid: c70626450812146438f291fa3efc9e75, type: 3}
       propertyPath: m_SortingOrder
@@ -206,6 +218,14 @@ PrefabInstance:
     - target: {fileID: 4025178882882030803, guid: c70626450812146438f291fa3efc9e75, type: 3}
       propertyPath: m_SortingOrder
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506604278788436622, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4506604278788436622, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      propertyPath: m_UseFullKinematicContacts
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9019335531828728677, guid: c70626450812146438f291fa3efc9e75, type: 3}
       propertyPath: m_LocalPosition.x

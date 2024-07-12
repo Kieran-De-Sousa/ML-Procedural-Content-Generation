@@ -9,6 +9,7 @@ using UnityEngine.Tilemaps;
 
 // PCG
 using PCG.Tilemaps;
+using UnityEditor;
 
 // Helper
 using Utilities;
@@ -33,6 +34,7 @@ namespace PCG
         public int height = 9;
 
         public RoomData roomData;
+        public Vector3 roomOrigin;
 
         [Space]
 
@@ -90,6 +92,9 @@ namespace PCG
             }
         }
 
+        /// <summary>
+        /// Regenerate roomData, clear room, generate new room, and move player and camera.
+        /// </summary>
         public override void ResetSystem()
         {
             roomData = RoomData.GenerateRoom(width, height);
@@ -97,6 +102,7 @@ namespace PCG
             ClearRoom();
             GenerateRoom();
             SpawnPlayer();
+            MoveCamera();
         }
 
         /// <summary>
@@ -158,7 +164,11 @@ namespace PCG
                 }
             }
 
+            // Find centre tile in tilemap, then get the centre position of that centre tile found.
+            roomOrigin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
+
             SpawnPlayer();
+            MoveCamera();
 
             // TODO
             /*PCGMethods.RenderRoomOffset(map, tilemapSystem.tilemap,
@@ -176,14 +186,23 @@ namespace PCG
                 map.ClearAllTiles();
             }
 
-            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+            if (roomData.tilemap != null)
             {
-                // Loop through the height of the map
-                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
                 {
-                    Destroy(roomData.tilemap[x, y].gameObject);
+                    // Loop through the height of the map
+                    for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                    {
+                        if (roomData.tilemap[x, y] != null)
+                        {
+                            Destroy(roomData.tilemap[x, y].gameObject);
+                        }
+                    }
                 }
             }
+
+            // Clear all instantiated tiles from parent empty.
+            HelperUtilities.DestroyAllChildren(tilemapSystem.instantiatedTilesParent.gameObject);
         }
 
         /// <summary>
@@ -192,10 +211,16 @@ namespace PCG
         public void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
+            player.transform.position = new Vector3(roomOrigin.x, roomOrigin.y, player.transform.position.z);
+        }
 
-            // Find centre tile in tilemap, then get the centre position of that centre tile found.
-            var origin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
-            player.transform.position = new Vector3(origin.x, origin.y, player.transform.position.z);
+        /// <summary>
+        /// Move the camera to look at the centre of room.
+        /// </summary>
+        public void MoveCamera()
+        {
+            Camera camera = HelperUtilities.FindParentOrChildWithComponent<Camera>(transform);
+            camera.transform.position = new Vector3(roomOrigin.x, roomOrigin.y, camera.transform.position.z);
         }
     }
 }

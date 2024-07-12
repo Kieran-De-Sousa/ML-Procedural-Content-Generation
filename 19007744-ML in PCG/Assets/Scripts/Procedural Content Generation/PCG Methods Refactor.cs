@@ -446,7 +446,6 @@ namespace PCG
                     int xOffset = x + offset.x;
                     int yOffset = y + offset.y;
 
-                    // TODO
                     Tile tile = null;
 
                     // Check map position for door.
@@ -457,50 +456,49 @@ namespace PCG
                     // If map position was a door.
                     if (doorResult.Item1)
                     {
-                        //tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
-
-                        tilemapData.trigger.SetTile(new Vector3Int(xOffset , yOffset, 0),
-                            GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2).GetTileBase());
-
-                        roomData.tilemap[x, y] = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
+                        tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
 
                         roomData = AssignDoor(roomData, doorResult.Item2, x, y);
-
                         doorPositions.Add(new Vector3Int(x, y, 0));
                     }
 
                     // If map position was a wall.
                     else if (wallResult.Item1)
                     {
-                        tilemapData.collidable.SetTile(new Vector3Int(xOffset, yOffset, 0),
-                            GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2).GetTileBase());
-
-                        roomData.tilemap[x, y] = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
-
+                        tile = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
                         wallPositions.Add(new Vector3Int(x, y, 0));
                     }
-
 
                     // If map position was not a boundary (door or wall).
                     else
                     {
-                        // TODO
-                        tilemapData.floor.SetTile(new Vector3Int(xOffset, yOffset, 0),
-                            GenerateFloor(x, y, roomData.tilemap, tilemapData).GetTileBase());
-
-                        tilemapData.trigger.SetTile(new Vector3Int(xOffset, yOffset, 0),
-                            GenerateCoin(x, y, roomData.tilemap, tilemapData).GetTileBase());
-
-                        roomData.tilemap[x, y] = GenerateCoin(x, y, roomData.tilemap, tilemapData);
+                        // TODO: A* PATHFINDING / RANDOM ITEM GENERATION / PITS
+                        // ENSURING A VALID PATH TO A DOOR
+                        tile = GenerateCoin(x, y, roomData.tilemap, tilemapData);
                     }
 
-                    /*if (tile != null)
+                    // Create the floor as a background for the tilemap...
+                    Vector3Int position = new Vector3Int(xOffset, yOffset, 0);
+                    Tile floor = GenerateFloor(x, y, roomData.tilemap, tilemapData);
+                    tilemapData.floor.SetTile(position, floor.GetTileBase());
+
+                    // NOTE: For implementation that would reward "exploration", this would need to be changed.
+                    // as all tiles would need to have a tracker for "ifExplored"
+                    Destroy(floor.gameObject);
+
+                    if (tile != null)
                     {
+                        roomData.tilemap[x, y] = tile;
                         if (tile is IInteractable)
                         {
-
+                            tilemapData.trigger.SetTile(position, roomData.tilemap[x, y].GetTileBase());
                         }
-                    }*/
+
+                        if (tile is ICollidable)
+                        {
+                            tilemapData.collidable.SetTile(position, roomData.tilemap[x, y].GetTileBase());
+                        }
+                    }
                 }
             }
 
