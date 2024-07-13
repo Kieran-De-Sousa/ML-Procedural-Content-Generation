@@ -33,13 +33,13 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
-        public RoomData roomData;
-        public Vector3 roomOrigin;
+        [HideInInspector] public RoomData roomData;
+        [HideInInspector] public Vector3 roomOrigin;
 
         [Space]
 
         [Header("PCG Generation Method")]
-        public GenerationMethod generation = GenerationMethod.NONE;
+        public GenerationMethod generation = GenerationMethod.ASTAR;
 
         private InputScheme _inputScheme;
 
@@ -144,16 +144,9 @@ namespace PCG
                 case GenerationMethod.ASTAR:
                 {
                     roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
-                    roomData = PCGMethodsRefactor.GenerateRoom(roomData, tilemapSystem.tilemapData, default);
+                    roomData = PCGMethodsRefactor.AStarPathFindingGeneration(roomData, tilemapSystem.tilemapData, default, seed);
 
-                    for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
-                    {
-                        // Loop through the height of the map
-                        for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
-                        {
-                            roomData.tilemap[x,y].gameObject.transform.parent = tilemapSystem.instantiatedTilesParent;
-                        }
-                    }
+                    PCGMethodsRefactor.RenderRoom(roomData, tilemapSystem.tilemapData, default);
 
                     break;
                 }
@@ -164,16 +157,12 @@ namespace PCG
                 }
             }
 
+            AssignTileMapMembers();
+
             // Find centre tile in tilemap, then get the centre position of that centre tile found.
             roomOrigin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
-
             SpawnPlayer();
             MoveCamera();
-
-            // TODO
-            /*PCGMethods.RenderRoomOffset(map, tilemapSystem.tilemap,
-                tilemapSystem.collidable,
-                tilemapSystem.bases, tilemapSystem.pit, offset);*/
         }
 
         /// <summary>
@@ -188,6 +177,7 @@ namespace PCG
 
             if (roomData.tilemap != null)
             {
+                // Loop through width of map
                 for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
                 {
                     // Loop through the height of the map
@@ -221,6 +211,37 @@ namespace PCG
         {
             Camera camera = HelperUtilities.FindParentOrChildWithComponent<Camera>(transform);
             camera.transform.position = new Vector3(roomOrigin.x, roomOrigin.y, camera.transform.position.z);
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        private void AssignTileMapMembers()
+        {
+            if (roomData.tilemap != null)
+            {
+                // Loop through width of map
+                for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+                {
+                    // Loop through the height of the map
+                    for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                    {
+                        if (roomData.tilemap[x, y] != null)
+                        {
+                            var tile = roomData.tilemap[x, y];
+                            tile.gameObject.GetComponent<Tile>().SetBaseMembers();
+
+                            // Set GameObject parent to empty transform.
+                            tile.gameObject.transform.parent = tilemapSystem.instantiatedTilesParent;
+
+                            // TODO: FIX THIS
+                            // Set Tile's GameObject position to the tile position it occupies in world space from the grid.
+                            //tile.gameObject.transform.position = tile.GetOwnerTilemap()
+                            //.GetCellCenterWorld(tile.GetTileBase().GetTileData());
+                        }
+                    }
+                }
+            }
         }
     }
 }

@@ -37,7 +37,7 @@ namespace ML
         private Inventory inventory;
 
         private Simulation _simulation;
-        private Tile[,] _tilemapCoordinates;
+        private Tile[,] _tilemapCoordinates; // TODO: IF CORRECT POSITION CAN BE FOUND, WE CAN USE IT TO FIND TILEMAP POSITION.
         private TileDoor _nearestDoor;
 
         // Whether the agent is frozen (intentionally not moving)
@@ -114,8 +114,18 @@ namespace ML
         public override void CollectObservations(VectorSensor sensor)
         {
             // (3 observations)
-            // Observe the agent's local position.
+            // Observe the agent's local position (X, Y, Z) normalized.
             sensor.AddObservation(transform.localPosition.normalized);
+
+            // TODO: POSITION ON TILEMAP
+
+            // TODO: NEAREST ITEM
+
+            // TODO: NEAREST OBSTACLE
+
+            // TODO: NEAREST DOOR
+
+            //var number = sensor.ObservationSize();
 
             // 3 Total Observations //
         }
