@@ -228,16 +228,13 @@ namespace PCG
                     {
                         if (roomData.tilemap[x, y] != null)
                         {
-                            var tile = roomData.tilemap[x, y];
-                            tile.gameObject.GetComponent<Tile>().SetBaseMembers();
+                            Tile tile = roomData.tilemap[x, y];
+                            tile.SetPlayer(HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform));
 
                             // Set GameObject parent to empty transform.
                             tile.gameObject.transform.parent = tilemapSystem.instantiatedTilesParent;
-
-                            // TODO: FIX THIS
-                            // Set Tile's GameObject position to the tile position it occupies in world space from the grid.
-                            //tile.gameObject.transform.position = tile.GetOwnerTilemap()
-                            //.GetCellCenterWorld(tile.GetTileBase().GetTileData());
+                            // Set GameObject position to tile's centre position.
+                            tile.gameObject.transform.position = tile.GetTileWorldPosition();
                         }
                     }
                 }

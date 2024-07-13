@@ -38,6 +38,7 @@ namespace PCG
             // Tilemap
             protected Tilemap ownerTilemap = null;
             protected Vector3Int tilePosition = new();
+            protected Vector3 tileWorldPosition = new();
 
             // Player
             protected MLAgent player = null;
@@ -91,29 +92,41 @@ namespace PCG
                 return tileObject;
             }
 
+            /// <summary>
+            /// TODO: FIX THIS METHOD
+            /// </summary>
             public void SetBaseMembers()
             {
-                // Find the owner tilemap of this tile, and its position in that tilemap.
-                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
-                foreach (Tilemap tilemap in tilemaps)
-                {
-                    // Iterate through all the positions in the tilemap
-                    BoundsInt bounds = tilemap.cellBounds;
-                    foreach (Vector3Int pos in bounds.allPositionsWithin)
-                    {
-                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
-                        {
-                            // If the tile is found, set protected variables
-                            ownerTilemap = tilemap;
-                            tilePosition = pos;
+                // Find player inventory starting from root parent (the simulation).
+                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
 
-                            return;
+                if (ownerTilemap != null)
+                {
+
+                }
+                else
+                {
+                    // Find the owner tilemap of this tile, and its position in that tilemap.
+                    Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
+                    foreach (Tilemap tilemap in tilemaps)
+                    {
+                        // Iterate through all the positions in the tilemap
+                        BoundsInt bounds = tilemap.cellBounds;
+                        foreach (Vector3Int pos in bounds.allPositionsWithin)
+                        {
+                            // TODO: FIX THIS, AS ALL TILES ARE GONNA SHARE THE SAME TILEBASE
+                            if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
+                            {
+                                // If the tile is found, set protected variables
+                                ownerTilemap = tilemap;
+                                tilePosition = pos;
+                                tileWorldPosition = ownerTilemap.GetCellCenterWorld(pos);
+
+                                return;
+                            }
                         }
                     }
                 }
-
-                // Find player inventory starting from root parent (the simulation).
-                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
             }
 
             /// <summary>
@@ -160,6 +173,18 @@ namespace PCG
             /// </summary>
             /// <param name="position"></param>
             public void SetTilePosition(Vector3Int position) => tilePosition = position;
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <returns></returns>
+            public Vector3 GetTileWorldPosition() { return tileWorldPosition; }
+
+            /// <summary>
+            ///
+            /// </summary>
+            /// <param name="position"></param>
+            public void SetTileWorldPosition(Vector3 position) => tileWorldPosition = position;
 
             /// <summary>
             ///

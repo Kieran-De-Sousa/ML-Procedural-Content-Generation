@@ -468,11 +468,7 @@ namespace PCG
             {
                 for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
                 {
-                    int xOffset = x + offset.x;
-                    int yOffset = y + offset.y;
-
                     Tile tile = null;
-                    Vector3Int position = new Vector3Int(xOffset, yOffset, 0);
 
                     if (roomData.tilemap[x, y] is TileDoor || roomData.tilemap[x, y] is TileWall)
                     {
@@ -486,7 +482,10 @@ namespace PCG
 
                     else
                     {
-                        tile = GeneratePit(x, y, roomData.tilemap, tilemapData);
+                        int random = Random.Range(0, 2);
+                        tile = random == 1 ? GenerateCoin(x, y, roomData.tilemap, tilemapData) :
+                                             GeneratePit(x, y, roomData.tilemap, tilemapData);
+                        //tile = GeneratePit(x, y, roomData.tilemap, tilemapData);
                     }
 
                     roomData.tilemap[x, y] = tile;
@@ -505,15 +504,6 @@ namespace PCG
         public static void RenderRoom(RoomData roomData, TilemapData tilemapData,
             Vector2Int offset = default)
         {
-            // Create the floor as a background for the tilemap...
-            //Vector3Int position = new Vector3Int(xOffset, yOffset, 0);
-            //Tile floor = GenerateFloor(x, y, roomData.tilemap, tilemapData);
-            //tilemapData.floor.SetTile(position, floor.GetTileBase());
-
-            // NOTE: For implementation that would reward "exploration", this would need to be changed.
-            // as all tiles would need to have a tracker for "ifExplored"
-            //Destroy(floor.gameObject);
-
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {
                 for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
@@ -532,19 +522,36 @@ namespace PCG
                         if (tile is not IInteractable && tile is not ICollidable)
                         {
                             tilemapData.floor.SetTile(position, roomData.tilemap[x, y].GetTileBase());
+                            tile.SetOwnerTilemap(tilemapData.floor);
+                        }
+                        // Create the floor as a background for items (since they don't have backgrounds)...
+                        else if (tile is Item)
+                        {
+                            Tile floor = GenerateFloor(x, y, roomData.tilemap, tilemapData);
+                            tilemapData.floor.SetTile(position, floor.GetTileBase());
+
+                            // NOTE: For implementation that would reward "exploration", this would need to be changed.
+                            // as all tiles would need to have a tracker for "ifExplored"
+                            Destroy(floor.gameObject);
                         }
 
                         // Trigger tiles (e.g. doors, items)
                         if (tile is IInteractable)
                         {
                             tilemapData.trigger.SetTile(position, roomData.tilemap[x, y].GetTileBase());
+                            tile.SetOwnerTilemap(tilemapData.trigger);
                         }
 
                         // Collidable tiles (e.g. pits, walls)
                         if (tile is ICollidable)
                         {
                             tilemapData.collidable.SetTile(position, roomData.tilemap[x, y].GetTileBase());
+                            tile.SetOwnerTilemap(tilemapData.collidable);
                         }
+
+                        tile.SetTilePosition(new Vector3Int(x, y));
+                        tile.SetTileWorldPosition(tile.GetOwnerTilemap().GetCellCenterWorld(new Vector3Int(x, y)));
+                        roomData.tilemap[x, y] = tile;
                     }
                 }
             }

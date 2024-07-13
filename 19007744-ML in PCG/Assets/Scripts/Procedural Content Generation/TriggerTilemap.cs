@@ -66,6 +66,7 @@ namespace PCG.Tilemaps
                     // Possible null reference exception handling...
                     interactable.SetOwnerTilemap(tilemap);
                     interactable.SetTilePosition(cellPosition);
+                    interactable.SetTileWorldPosition(tilemap.GetCellCenterWorld(cellPosition));
                     interactable.SetPlayer(HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform));
 
                     // Call interact method in interactable.

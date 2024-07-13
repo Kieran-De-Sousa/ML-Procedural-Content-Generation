@@ -72,8 +72,11 @@ namespace PCG.Methods.AStarPathfinding
         /// <returns>List of positions for the path.</returns>
         private static List<Vector3Int> FindPathAStar(Tile[,] map, Vector3Int start, Vector3Int end)
         {
-            List<Node> openList = new List<Node>();         // Nodes to be checked.
-            HashSet<Node> closedList = new HashSet<Node>(); // Nodes already checked.
+            // Nodes to be checked.
+            List<Node> openList = new List<Node>();
+
+            // Nodes already checked.
+            HashSet<Node> closedList = new HashSet<Node>();
 
             Node startNode = new Node(start);
             Node endNode = new Node(end);
@@ -95,8 +98,10 @@ namespace PCG.Methods.AStarPathfinding
                     }
                 }
 
-                openList.Remove(currentNode); // Remove the current node from "To Check" list.
-                closedList.Add(currentNode);  // Add current node to "Checked" list.
+                // Remove the current node from "To Check" list.
+                openList.Remove(currentNode);
+                // Add current node to "Checked" list.
+                closedList.Add(currentNode);
 
                 if (currentNode.Position == end)
                 {
@@ -109,7 +114,8 @@ namespace PCG.Methods.AStarPathfinding
                 {
                     if (closedList.Contains(neighbour))
                     {
-                        continue; // Skip this neighbour if it has already checked.
+                        // Skip this neighbour if it has already checked.
+                        continue;
                     }
 
                     int newMovementCostToNeighbour = currentNode.GCost + GetDistanceBetweenNodes(currentNode, neighbour);
@@ -152,7 +158,8 @@ namespace PCG.Methods.AStarPathfinding
                 currentNode = currentNode.Parent;
             }
 
-            path.Reverse(); // Reverse the path to return the order to "Start-->End"
+            // Reverse the path to return the order to "Start-->End"
+            path.Reverse();
             return path;
         }
 
