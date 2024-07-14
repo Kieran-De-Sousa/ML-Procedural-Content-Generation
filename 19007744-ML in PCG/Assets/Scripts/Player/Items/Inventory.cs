@@ -13,6 +13,15 @@ public class Inventory : MonoBehaviour
 {
     public Items inventory = new();
 
+    public float coinRewardValue = 1;
+    public float bombRewardValue = 1;
+    public float keyRewardValue = 1;
+
+    /// <summary>
+    /// Reset the players inventory by creating a new, empty one.
+    /// </summary>
+    public void ResetInventory() => inventory = new Items();
+
     /// <summary>
     /// Adds value to inventory coin count.
     /// </summary>
@@ -50,17 +59,17 @@ public class Inventory : MonoBehaviour
     /// Get the ML Agent reward value for getting a coin.
     /// </summary>
     /// <returns></returns>
-    public int GetCoinRewardValue() { return 1; }
+    public float GetCoinRewardValue() { return coinRewardValue; }
     /// <summary>
     /// Get the ML Agent reward value for getting a bomb.
     /// </summary>
     /// <returns></returns>
-    public int GetBombRewardValue() { return 1; }
+    public float GetBombRewardValue() { return bombRewardValue; }
     /// <summary>
     /// Get the ML Agent reward value for getting a key.
     /// </summary>
     /// <returns></returns>
-    public int GetKeyRewardValue() { return 1; }
+    public float GetKeyRewardValue() { return keyRewardValue; }
 }
 
 /// <summary>

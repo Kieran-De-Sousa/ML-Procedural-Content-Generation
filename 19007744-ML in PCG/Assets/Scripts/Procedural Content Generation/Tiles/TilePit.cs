@@ -1,13 +1,15 @@
+using UnityEngine;
+
 // Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
     /// <summary>
     /// Pit tiles that can be collided with (<c>ICollidable</c>).
     /// </summary>
-    public class TilePit : Tile, ICollidable
+    public class TilePit : TileCollidable
     {
-        // ICollidable Interface implementation
-        public bool IsCollidable { get; protected set; } = true;
+        [Tooltip("Ideally make this a minus number as we want to negatively reward agents for hitting obstacles.")]
+        [SerializeField] private float reward = -1;
 
         public TilePit()
         {
@@ -19,6 +21,14 @@ namespace PCG.Tilemaps
         {
             // Call base implementation of start...
             base.Start();
+        }
+
+        public override void Collide()
+        {
+            // TODO: COLLISION WITH PIT HAPPENED! NEGATIVE REWARD PLAYER!
+            player.AddReward(reward);
+
+            IsCollided = true;
         }
     }
 }

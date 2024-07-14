@@ -12,6 +12,7 @@ using Unity.MLAgents.Sensors;
 
 // PCG Tilemaps
 using PCG.Tilemaps;
+using Utilities;
 
 // Root namespace for all Machine Learning-related utilities.
 namespace ML
@@ -30,15 +31,21 @@ namespace ML
         new public Rigidbody2D rigidbody;
 
         [Header("Movement")]
-        public Vector2 movementSpeed = new(5.0f, 5.0f);
+        public Vector2 movementSpeed = new(3.5f, 3.5f);
         private Vector2 _inputVector = Vector2.zero;
         private InputScheme _inputScheme;
 
         private Inventory inventory;
-
         private Simulation _simulation;
-        private Tile[,] _tilemapCoordinates; // TODO: IF CORRECT POSITION CAN BE FOUND, WE CAN USE IT TO FIND TILEMAP POSITION.
-        private TileDoor _nearestDoor;
+
+        // TILEMAP ARRAY MEMBERS
+        private Tile[,] _tilemapCoordinates => _simulation.pcgSystemRefactor.roomData.tilemap;
+        private Vector3Int _cellPosition => GetAgentCellPosition();
+
+        // NEAREST TILES MEMBERS //
+        private Item _nearestItem => UpdateNearestItem();
+        private TileDoor _nearestDoor => UpdateNearestDoor();
+        private TileCollidable _nearestObstacle => UpdateNearestObstacle();
 
         // Whether the agent is frozen (intentionally not moving)
         private bool frozen = false;
@@ -67,12 +74,11 @@ namespace ML
         public override void Initialize()
         {
             _simulation = GetComponentInParent<Simulation>();
-            _tilemapCoordinates = _simulation.pcgSystemRefactor.roomData.tilemap;
 
             // If not in training mode, no max step, play forever.
             if (!trainingMode)
             {
-                MaxStep = 0;
+                //MaxStep = 0;
             }
         }
 
@@ -81,7 +87,7 @@ namespace ML
         /// </summary>
         public override void OnEpisodeBegin()
         {
-
+            ResetAgent();
         }
 
         /// <summary>
@@ -108,7 +114,7 @@ namespace ML
         }
 
         /// <summary>
-        /// Collect vector observations from the environment.
+        /// Collect vector observations from the environment. Called every step.
         /// </summary>
         /// <param name="sensor">The vector sensor.</param>
         public override void CollectObservations(VectorSensor sensor)
@@ -117,17 +123,42 @@ namespace ML
             // Observe the agent's local position (X, Y, Z) normalized.
             sensor.AddObservation(transform.localPosition.normalized);
 
-            // TODO: POSITION ON TILEMAP
+            // (2 observations)
+            // Observe the agent's tilemap position (X, Y)
+            sensor.AddObservation(_cellPosition.x);
+            sensor.AddObservation(_cellPosition.y);
 
-            // TODO: NEAREST ITEM
+            // (1 observation)
+            // Observe the distance between the agent and the nearest item.
+            float itemDistance = _nearestItem != null ? Vector3.Distance(transform.position, _nearestItem.transform.position) : -1f;
+            sensor.AddObservation(itemDistance);
 
-            // TODO: NEAREST OBSTACLE
+            // (2 observations)
+            // Observe the nearest items tilemap position (X, Y)
+            sensor.AddObservation(_nearestItem != null ? _nearestItem.GetTilePosition().x : -1f);
+            sensor.AddObservation(_nearestItem != null ? _nearestItem.GetTilePosition().y : -1f);
 
-            // TODO: NEAREST DOOR
+            // (1 observation)
+            // Observe the distance between the agent and the nearest door.
+            float doorDistance = _nearestDoor != null ? Vector3.Distance(transform.position, _nearestDoor.transform.position) : -1f;
+            sensor.AddObservation(doorDistance);
 
-            //var number = sensor.ObservationSize();
+            // (2 observations)
+            // Observe the nearest doors tilemap position (X, Y)
+            sensor.AddObservation(_nearestDoor != null ? _nearestDoor.GetTilePosition().x : -1f);
+            sensor.AddObservation(_nearestDoor != null ? _nearestDoor.GetTilePosition().y : -1f);
 
-            // 3 Total Observations //
+            // (1 observation)
+            // Observe the distance between the agent and the nearest obstacle.
+            float obstacleDistance = _nearestObstacle != null ? Vector3.Distance(transform.position, _nearestObstacle.transform.position) : -1f;
+            sensor.AddObservation(obstacleDistance);
+
+            // (2 observations)
+            // Observe the nearest obstacles tilemap position (X, Y)
+            sensor.AddObservation(_nearestObstacle != null ? _nearestObstacle.GetTilePosition().x : -1f);
+            sensor.AddObservation(_nearestObstacle != null ? _nearestObstacle.GetTilePosition().y : -1f);
+
+            // 14 Total Observations //
         }
 
         /// <summary>
@@ -165,15 +196,27 @@ namespace ML
             rigidbody.WakeUp();
         }
 
-        public void ResetAgent()
+        private void ResetAgent()
         {
+            // Stop the agent moving.
+            rigidbody.velocity = Vector3.zero;
 
+            // Reset the agents inventory.
+            inventory.ResetInventory();
         }
 
-        private void UpdateNearestDoor()
-        {
+        private Vector3Int GetAgentCellPosition()
+        { return _simulation.tilemapSystem.tilemapData.floor.WorldToCell(transform.position); }
 
-        }
+        private Item UpdateNearestItem()
+        { return HelperUtilities.FindNearestTileInMap<Item>(gameObject, _tilemapCoordinates); }
+
+        private TileDoor UpdateNearestDoor()
+        { return HelperUtilities.FindNearestTileInMap<TileDoor>(gameObject, _tilemapCoordinates); }
+
+        private TileCollidable UpdateNearestObstacle()
+        { return HelperUtilities.FindNearestTileInMap<TileCollidable>(gameObject, _tilemapCoordinates); }
+
 
         /// <summary>
         ///
@@ -184,6 +227,10 @@ namespace ML
             if (trainingMode)
             {
                 AddReward(reward);
+            }
+            else
+            {
+
             }
         }
 

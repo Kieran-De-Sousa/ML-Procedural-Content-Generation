@@ -112,6 +112,42 @@ namespace Utilities
             // Create and return the center cell position
             return new Vector3Int(centerX, centerY, 0);
         }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="gameObject"></param>
+        /// <param name="map"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static T FindNearestTileInMap<T>(GameObject gameObject, PCG.Tilemaps.Tile[,] map) where T : PCG.Tilemaps.Tile
+        {
+            if (map == null || gameObject == null) return null;
+
+            Vector3 gameObjectPosition = gameObject.transform.position;
+            T nearestTile = null;
+            float nearestDistance = float.MaxValue;
+
+            for (int x = 0; x < map.GetLength(0); x++)
+            {
+                for (int y = 0; y < map.GetLength(1); y++)
+                {
+                    var tile = map[x, y];
+
+                    if (tile != null && tile is T && tile.gameObject != null)
+                    {
+                        float distance = Vector3.Distance(gameObjectPosition, tile.gameObject.transform.position);
+                        if (distance < nearestDistance)
+                        {
+                            nearestTile = tile as T;
+                            nearestDistance = distance;
+                        }
+                    }
+                }
+            }
+
+            return nearestTile;
+        }
     }
 
     /// <summary>

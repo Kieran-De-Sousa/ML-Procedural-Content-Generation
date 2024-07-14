@@ -77,11 +77,11 @@ namespace PCG.Tilemaps
     [Serializable]
     public class TilemapData
     {
-        public List<Tilemap> allTilemaps = new();
+        [HideInInspector] public List<Tilemap> allTilemaps = new();
 
-        public Tilemap floor = new();
-        public Tilemap collidable = new();
-        public Tilemap trigger = new();
+        [HideInInspector] public Tilemap floor = new();
+        [HideInInspector] public Tilemap collidable = new();
+        [HideInInspector] public Tilemap trigger = new();
 
         public List<Tile> tiles = new();
 

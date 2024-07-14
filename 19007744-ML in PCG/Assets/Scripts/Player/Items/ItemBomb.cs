@@ -16,6 +16,7 @@ public class ItemBomb : Item
     {
         // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items.
         player.GetPlayerInventory().AddBomb(value);
+        player.AddReward(player.GetPlayerInventory().GetBombRewardValue());
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

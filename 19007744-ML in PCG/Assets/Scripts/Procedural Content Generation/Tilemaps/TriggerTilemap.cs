@@ -1,12 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
+// Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Machine Learning
 using ML;
 
+// Helper
 using Utilities;
 
 namespace PCG.Tilemaps
@@ -45,8 +44,7 @@ namespace PCG.Tilemaps
             // Convert the collision position to cell position in the Unity Tilemap
             Vector3Int cellPosition = tilemap.WorldToCell(collisionPosition);
 
-            // Adjust the cell position to match your tilemap array coordinates
-            // Assumes tilemap array starts at (0,0) and matches Unity Tilemap coordinates
+            // Adjust the cell position to match the tilemap array coordinates
             int x = cellPosition.x - tilemap.cellBounds.xMin;
             int y = cellPosition.y - tilemap.cellBounds.yMin;
 
@@ -71,6 +69,11 @@ namespace PCG.Tilemaps
 
                     // Call interact method in interactable.
                     interactable.Interact();
+
+                    if (interactable is Item)
+                    {
+                        Destroy(interactable.gameObject);
+                    }
                 }
             }
         }

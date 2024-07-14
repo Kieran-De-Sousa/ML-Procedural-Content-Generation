@@ -10,6 +10,13 @@ namespace PCG.Tilemaps
         /// Is the tile collidable.
         /// </summary>
         public bool IsCollidable { get; }
+
+        public bool IsCollided { get; }
+
+        /// <summary>
+        /// Abstract overridable method implemented by tiles that have "Colliders".
+        /// </summary>
+        public abstract void Collide();
     }
 
     /// <summary>

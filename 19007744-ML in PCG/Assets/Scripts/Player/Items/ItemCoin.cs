@@ -18,6 +18,7 @@ public class ItemCoin : Item
     {
         // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items.
         player.GetPlayerInventory().AddCoin(value);
+        player.AddReward(player.GetPlayerInventory().GetCoinRewardValue());
         ownerTilemap.SetTile(tilePosition, null);
 
         IsInteracted = true;

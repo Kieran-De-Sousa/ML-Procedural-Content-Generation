@@ -131,14 +131,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 845244741995566855, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_TagString
-      value: Collidables
-      objectReference: {fileID: 0}
-    - target: {fileID: 1438446455111782056, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_TagString
-      value: Floor
-      objectReference: {fileID: 0}
     - target: {fileID: 2359821566272047397, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -178,30 +170,6 @@ PrefabInstance:
     - target: {fileID: 2359821566272047397, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2894113746328836540, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_BodyType
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 2894113746328836540, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_CollisionDetection
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 2894113746328836540, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_UseFullKinematicContacts
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3506611995398645026, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_RayLength
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_BrainParameters.VectorObservationSize
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 4006796570709463127, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_TagString
-      value: Triggers
       objectReference: {fileID: 0}
     - target: {fileID: 7159705601459200568, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_Name

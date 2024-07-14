@@ -29,6 +29,11 @@ public class Simulation : MonoBehaviour
 
     public PCGSystem pcgSystem;
 
+    private void Awake()
+    {
+        ResetSimulation();
+    }
+
     public void ResetSimulation()
     {
         Debug.Log($"Simulation Ending: {this}");
