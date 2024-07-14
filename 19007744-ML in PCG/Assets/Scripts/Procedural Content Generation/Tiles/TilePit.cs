@@ -9,7 +9,7 @@ namespace PCG.Tilemaps
     public class TilePit : TileCollidable
     {
         [Tooltip("Ideally make this a minus number as we want to negatively reward agents for hitting obstacles.")]
-        [SerializeField] private float reward = -1;
+        [SerializeField] private float reward = -0.25f;
 
         public TilePit()
         {

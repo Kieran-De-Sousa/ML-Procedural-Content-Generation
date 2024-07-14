@@ -13,9 +13,9 @@ public class Inventory : MonoBehaviour
 {
     public Items inventory = new();
 
-    public float coinRewardValue = 1;
-    public float bombRewardValue = 1;
-    public float keyRewardValue = 1;
+    public float coinRewardValue = 3;
+    public float bombRewardValue = 6;
+    public float keyRewardValue = 6;
 
     /// <summary>
     /// Reset the players inventory by creating a new, empty one.

@@ -78,7 +78,7 @@ namespace ML
             // If not in training mode, no max step, play forever.
             if (!trainingMode)
             {
-                //MaxStep = 0;
+                MaxStep = 0;
             }
         }
 
@@ -87,6 +87,7 @@ namespace ML
         /// </summary>
         public override void OnEpisodeBegin()
         {
+            _simulation.pcgSystemRefactor.ResetSystem();
             ResetAgent();
         }
 

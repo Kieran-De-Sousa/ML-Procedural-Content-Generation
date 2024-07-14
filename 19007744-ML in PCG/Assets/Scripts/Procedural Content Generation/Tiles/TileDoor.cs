@@ -27,7 +27,7 @@ namespace PCG.Tilemaps
         [Header("Tile Door Properties")]
         [SerializeField] private TileBase doorOpen;
         [SerializeField] private DoorDirection doorDirection = DoorDirection.TOP;
-        [SerializeField] private float doorReward = 10.0f;
+        [SerializeField] private float doorReward = 15f;
         private bool isDoorOpen = true;
 
         // IInteractable Interface implementation
