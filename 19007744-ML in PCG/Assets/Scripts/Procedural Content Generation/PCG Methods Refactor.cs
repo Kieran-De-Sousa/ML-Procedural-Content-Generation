@@ -61,7 +61,7 @@ namespace PCG
         /// <param name="x"></param>
         /// <param name="y"></param>
         /// <returns></returns>
-        public static RoomData AssignDoor(RoomData data, DoorDirection direction, int x, int y)
+        private static RoomData AssignDoor(RoomData data, DoorDirection direction, int x, int y)
         {
             switch (direction)
             {
@@ -103,7 +103,7 @@ namespace PCG
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <param name="direction">Direction the door will face.</param>
         /// <returns>Generated door tile, otherwise, <c>null</c></returns>
-        public static Tile GenerateDoors(int x, int y, Tile[,] map,
+        private static Tile GenerateDoors(int x, int y, Tile[,] map,
             TilemapData tilemapData, DoorDirection direction)
         {
             foreach (var tile in tilemapData.tiles)
@@ -131,7 +131,7 @@ namespace PCG
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <param name="direction">Direction the wall will face.</param>
         /// <returns>Generated wall tile, otherwise, <c>null</c></returns>
-        public static Tile GenerateWalls(int x, int y, Tile[,] map,
+        private static Tile GenerateWalls(int x, int y, Tile[,] map,
             TilemapData tilemapData, WallDirection direction)
         {
             foreach (var tile in tilemapData.tiles)
@@ -157,7 +157,7 @@ namespace PCG
         /// <param name="map">2D tile array representing map.</param>
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <returns>Generated floor tile, otherwise, <c>null</c></returns>
-        public static Tile GenerateFloor(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateFloor(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -179,7 +179,7 @@ namespace PCG
         /// <param name="map"></param>
         /// <param name="tilemapData"></param>
         /// <returns></returns>
-        public static Tile GeneratePit(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GeneratePit(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -193,7 +193,7 @@ namespace PCG
             return null;
         }
 
-        public static Tile GenerateCoin(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateCoin(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -207,7 +207,7 @@ namespace PCG
             return null;
         }
 
-        public static Tile GenerateKey(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateKey(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -221,7 +221,7 @@ namespace PCG
             return null;
         }
 
-        public static Tile GenerateBomb(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateBomb(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -242,7 +242,7 @@ namespace PCG
         /// <param name="y">Y position of tile.</param>
         /// <param name="map">2D int array representing the map.</param>
         /// <returns><c>true</c> if the position is a door location, otherwise; <c>false</c>.</returns>
-        public static (bool, DoorDirection) CheckDoors(int x, int y, Tile[,] map)
+        private static (bool, DoorDirection) CheckDoors(int x, int y, Tile[,] map)
         {
             int minX = map.GetLowerBound(0);
             int minY = map.GetLowerBound(1);
@@ -284,7 +284,7 @@ namespace PCG
         /// <param name="y">Y position of tile.</param>
         /// <param name="map">2D tile array representing the map.</param>
         /// <returns><c>true</c> if the position is a wall location, otherwise; <c>false</c>.</returns>
-        public static (bool, WallDirection) CheckWalls(int x, int y, Tile[,] map)
+        private static (bool, WallDirection) CheckWalls(int x, int y, Tile[,] map)
         {
             // Map boundaries.
             int minX = map.GetLowerBound(0);

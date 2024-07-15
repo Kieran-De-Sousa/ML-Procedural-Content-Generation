@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+[Obsolete("Movement is deprecated and is implemented in MLAgent, " +
+          "please use MLAgent set to 'Heuristic' to allow player movement behaviour.")]
 public class Movement : MonoBehaviour
 {
     public Vector2 movementSpeed = Vector2.one;

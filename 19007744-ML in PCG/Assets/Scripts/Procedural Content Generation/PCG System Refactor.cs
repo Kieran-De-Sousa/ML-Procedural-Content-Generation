@@ -33,6 +33,7 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
+        // TODO: PUT THESE IN TILEMAP SYSTEM, SINCE PCG SHOULD NOT STORE THIS TYPE OF DATA
         [HideInInspector] public RoomData roomData;
         [HideInInspector] public Vector3 roomOrigin;
 
@@ -111,7 +112,7 @@ namespace PCG
         /// - Room width and height.
         /// - Selected generation method.
         /// </summary>
-        public void GenerateRoom()
+        private void GenerateRoom()
         {
             ClearRoom();
 
@@ -168,7 +169,7 @@ namespace PCG
         /// <summary>
         /// Clear all tiles in all tilemaps.
         /// </summary>
-        public void ClearRoom()
+        private void ClearRoom()
         {
             foreach (var map in tilemapSystem.tilemapData.allTilemaps)
             {
@@ -198,7 +199,7 @@ namespace PCG
         /// <summary>
         /// Move player position to centre of room.
         /// </summary>
-        public void SpawnPlayer()
+        private void SpawnPlayer()
         {
             ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
             player.transform.position = new Vector3(roomOrigin.x, roomOrigin.y, player.transform.position.z);
@@ -207,7 +208,7 @@ namespace PCG
         /// <summary>
         /// Move the camera to look at the centre of room.
         /// </summary>
-        public void MoveCamera()
+        private void MoveCamera()
         {
             Camera camera = HelperUtilities.FindParentOrChildWithComponent<Camera>(transform);
             camera.transform.position = new Vector3(roomOrigin.x, roomOrigin.y, camera.transform.position.z);
