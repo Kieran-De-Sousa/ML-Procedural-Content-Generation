@@ -17,6 +17,8 @@ using PCG.Tilemaps;
 /// </summary>
 public class Simulation : MonoBehaviour
 {
+    private List<ManagerSystem> managerSystems;
+
     public MLSystem mlSystem;
     [Space]
 
@@ -27,7 +29,18 @@ public class Simulation : MonoBehaviour
     [Space]
     [Space]
 
+    [Obsolete("pcgSystem is obsolete and has been replaced by pcgSystemRefactor.")]
     public PCGSystem pcgSystem;
+
+    /*private void OnValidate()
+    {
+        managerSystems.AddRange(new List<ManagerSystem>
+        {
+            mlSystem,
+            pcgSystemRefactor,
+            tilemapSystem
+        });
+    }*/
 
     private void Awake()
     {
@@ -38,7 +51,7 @@ public class Simulation : MonoBehaviour
     {
         Debug.Log($"Simulation Ending: {this}");
 
-        pcgSystemRefactor.ResetSystem();
         mlSystem.ResetSystem();
+        pcgSystemRefactor.ResetSystem();
     }
 }

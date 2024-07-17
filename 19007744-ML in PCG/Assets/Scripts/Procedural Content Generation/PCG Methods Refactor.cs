@@ -52,6 +52,63 @@ namespace PCG
             return map;
         }
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="roomData"></param>
+        /// <param name="tilemapData"></param>
+        /// <returns></returns>
+        private static (RoomData, List<Vector3Int>, List<Vector3Int>) GenerateTileMapDoorsAndWalls(RoomData roomData, TilemapData tilemapData)
+        {
+            List<Vector3Int> doorPositions = new List<Vector3Int>();
+            List<Vector3Int> wallPositions = new List<Vector3Int>();
+
+            // NOTE: In a 2D map, the below are the positions for min and max
+            //                 MaxY
+            // (MaxY,0) |-----------------| (MaxX,MaxY)
+            //          |                 |
+            //     MinX |                 | MaxX
+            //          |                 |
+            //    (0,0) |-----------------| (MaxX,0)
+            //                 MinY
+
+            // Loop through the width of the map
+            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+            {
+                // Loop through the height of the map
+                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                {
+                    Tile tile = null;
+
+                    // Check map position for door.
+                    var doorResult = CheckDoors(x, y, roomData.tilemap);
+                    // Check map position for wall.
+                    var wallResult = CheckWalls(x, y, roomData.tilemap);
+
+                    // If map position was a door.
+                    if (doorResult.Item1)
+                    {
+                        tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
+                        roomData = AssignDoor(roomData, doorResult.Item2, x, y);
+                        doorPositions.Add(new Vector3Int(x, y, 0));
+                    }
+                    // If map position was a wall.
+                    else if (wallResult.Item1)
+                    {
+                        tile = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
+                        wallPositions.Add(new Vector3Int(x, y, 0));
+                    }
+
+                    if (tile != null)
+                    {
+                        roomData.tilemap[x, y] = tile;
+                    }
+                }
+            }
+
+            return (roomData, doorPositions, wallPositions);
+        }
+
 
         /// <summary>
         ///
@@ -235,6 +292,12 @@ namespace PCG
             return null;
         }
 
+        private static Tile GenerateRandomTileFromWeighting(int x, int y, Tile[,] tilemap, TilemapData tilemapData)
+        {
+
+            return null;
+        }
+
         /// <summary>
         /// Checks if the position on the map is the location of a door.
         /// </summary>
@@ -367,18 +430,58 @@ namespace PCG
             return map;
         }
 
+        public static RoomData RandomGeneration(RoomData roomData, TilemapData tilemapData,
+            Vector2Int offset = default, float seed = default)
+        {
+            // Set the random number generator with seed
+            Random.InitState((int) seed);
+
+            // Clear current tiles when generating room.
+            foreach (var tilemap in tilemapData.allTilemaps)
+            {
+                tilemap.ClearAllTiles();
+            }
+
+            // Generate the walls and doors of the room, and save their positions for the A* pathfinding algorithm to use.
+            var roomBase = GenerateTileMapDoorsAndWalls(roomData, tilemapData);
+            roomData = roomBase.Item1;
+            List<Vector3Int> doorPositions = roomBase.Item2;
+            List<Vector3Int> wallPositions = roomBase.Item3;
+
+            // Loop through the tilemap coordinates and start assignment of tiles.
+            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+            {
+                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                {
+                    // Only generate on unset tiles (e.g. non-wall/door tiles)
+                    if (roomData.tilemap[x, y] == null)
+                    {
+                        Tile tile = null;
+
+                        // TODO: RANDOM GENERATION HERE.
+                        roomData.tilemap[x, y] = tile;
+
+                    }
+                }
+            }
+
+            return roomData;
+        }
+
         /// <summary>
         /// Generates a map using perlin noise based on provided seed.
         /// </summary>
         /// <param name="map">2D int array representing the map.</param>
         /// <param name="seed">Seed value for RNG.</param>
         /// <returns>Generated int map with perlin noise.</returns>
+        /// <reference></reference>
         public static int[,] PerlinNoise(int[,] map, float seed)
         {
             int newPoint;
 
             // Used to reduce the position of the perlin point
             float reduction = 0.5f;
+
             // Create the perlin
             for (int x = 0; x < map.GetUpperBound(0); x++)
             {
@@ -406,6 +509,7 @@ namespace PCG
         public static RoomData AStarPathFindingGeneration(RoomData roomData, TilemapData tilemapData,
             Vector2Int offset = default, float seed = default)
         {
+            // Set the random number generator with seed
             Random.InitState((int) seed);
 
             // Clear current tiles when generating room.
@@ -414,55 +518,19 @@ namespace PCG
                 tilemap.ClearAllTiles();
             }
 
-            List<Vector3Int> doorPositions = new List<Vector3Int>();
-            List<Vector3Int> wallPositions = new List<Vector3Int>();
-
-            // NOTE: In a 2D map, the below are the positions for min and max
-            //                 MaxY
-            // (MaxY,0) |-----------------| (MaxX,MaxY)
-            //          |                 |
-            //     MinX |                 | MaxX
-            //          |                 |
-            //    (0,0) |-----------------| (MaxX,0)
-            //                 MinY
-
-            // Loop through the width of the map
-            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
-            {
-                // Loop through the height of the map
-                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
-                {
-                    Tile tile = null;
-
-                    // Check map position for door.
-                    var doorResult = CheckDoors(x, y, roomData.tilemap);
-                    // Check map position for wall.
-                    var wallResult = CheckWalls(x, y, roomData.tilemap);
-
-                    // If map position was a door.
-                    if (doorResult.Item1)
-                    {
-                        tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
-                        roomData = AssignDoor(roomData, doorResult.Item2, x, y);
-                        doorPositions.Add(new Vector3Int(x, y, 0));
-                    }
-                    // If map position was a wall.
-                    else if (wallResult.Item1)
-                    {
-                        tile = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
-                        wallPositions.Add(new Vector3Int(x, y, 0));
-                    }
-
-                    if (tile != null)
-                    {
-                        roomData.tilemap[x, y] = tile;
-                    }
-                }
-            }
+            // Generate the walls and doors of the room, and save their positions for the A* pathfinding algorithm to use.
+            var roomBase = GenerateTileMapDoorsAndWalls(roomData, tilemapData);
+            roomData = roomBase.Item1;
+            List<Vector3Int> doorPositions = roomBase.Item2;
+            List<Vector3Int> wallPositions = roomBase.Item3;
 
             // Generate paths to doors using A* Pathfinding
             List<Vector3Int> floorPositions = Methods.AStarPathfinding.AStarPathfinding
                 .GeneratePathsToDoors(roomData.tilemap, doorPositions);
+
+            float totalEngagement = roomData.engagementPreviousRoom.EngagementScore;
+            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups / totalEngagement, 0.1f, 0.9f);
+            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration / totalEngagement, 0.1f, 0.9f);
 
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {

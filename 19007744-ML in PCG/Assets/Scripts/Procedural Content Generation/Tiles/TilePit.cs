@@ -9,7 +9,7 @@ namespace PCG.Tilemaps
     public class TilePit : TileCollidable
     {
         [Tooltip("Ideally make this a minus number as we want to negatively reward agents for hitting obstacles.")]
-        [SerializeField] private float reward = -0.25f;
+        [SerializeField] private float reward = -1f;
 
         public TilePit()
         {
@@ -25,9 +25,7 @@ namespace PCG.Tilemaps
 
         public override void Collide()
         {
-            // TODO: COLLISION WITH PIT HAPPENED! NEGATIVE REWARD PLAYER!
             player.AddReward(reward);
-
             IsCollided = true;
         }
     }

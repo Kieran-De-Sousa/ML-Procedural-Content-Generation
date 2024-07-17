@@ -33,9 +33,9 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
-        // TODO: PUT THESE IN TILEMAP SYSTEM, SINCE PCG SHOULD NOT STORE THIS TYPE OF DATA
         [HideInInspector] public RoomData roomData;
         [HideInInspector] public Vector3 roomOrigin;
+        public EngagementMetrics engagement;
 
         [Space]
 
@@ -99,6 +99,7 @@ namespace PCG
         public override void ResetSystem()
         {
             roomData = RoomData.GenerateRoom(width, height);
+            roomData.engagementPreviousRoom = engagement;
 
             ClearRoom();
             GenerateRoom();

@@ -1,4 +1,6 @@
 // Base
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,8 +26,12 @@ namespace ML
     public class MLAgent : Agent
     {
         // -------------------- Member Variables -------------------- //
+        [Header("Agent")]
         [Tooltip("Whether this is training mode or gameplay mode")]
         public bool trainingMode;
+        public int maxSteps = 5000;
+        public EngagementMetrics engagement = new EngagementMetrics(0, 0,0 );
+        public float currentReward => GetCumulativeReward();
 
         // The rigidbody of the agent
         new public Rigidbody2D rigidbody;
@@ -76,10 +82,8 @@ namespace ML
             _simulation = GetComponentInParent<Simulation>();
 
             // If not in training mode, no max step, play forever.
-            if (!trainingMode)
-            {
-                MaxStep = 0;
-            }
+            MaxStep = trainingMode ? maxSteps : 0;
+
         }
 
         /// <summary>
@@ -87,7 +91,6 @@ namespace ML
         /// </summary>
         public override void OnEpisodeBegin()
         {
-            _simulation.pcgSystemRefactor.ResetSystem();
             ResetAgent();
         }
 
@@ -204,20 +207,11 @@ namespace ML
 
             // Reset the agents inventory.
             inventory.ResetInventory();
+
+            // Pass engagement of previous episode before resetting
+            _simulation.pcgSystemRefactor.engagement = engagement;
+            engagement.ResetEngagement();
         }
-
-        private Vector3Int GetAgentCellPosition()
-        { return _simulation.tilemapSystem.tilemapData.floor.WorldToCell(transform.position); }
-
-        private Item UpdateNearestItem()
-        { return HelperUtilities.FindNearestTileInMap<Item>(gameObject, _tilemapCoordinates); }
-
-        private TileDoor UpdateNearestDoor()
-        { return HelperUtilities.FindNearestTileInMap<TileDoor>(gameObject, _tilemapCoordinates); }
-
-        private TileCollidable UpdateNearestObstacle()
-        { return HelperUtilities.FindNearestTileInMap<TileCollidable>(gameObject, _tilemapCoordinates); }
-
 
         /// <summary>
         ///
@@ -225,14 +219,8 @@ namespace ML
         /// <param name="reward"></param>
         public void RewardPlayer(float reward)
         {
-            if (trainingMode)
-            {
-                AddReward(reward);
-            }
-            else
-            {
-
-            }
+            AddReward(reward);
+            engagement.SetRewardScore(currentReward);
         }
 
         /// <summary>
@@ -240,5 +228,39 @@ namespace ML
         /// </summary>
         /// <returns></returns>
         public Inventory GetPlayerInventory() { return inventory; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        public EngagementMetrics GetAgentEngagement() { return engagement; }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        private Vector3Int GetAgentCellPosition()
+        { return _simulation.tilemapSystem.tilemapData.floor.WorldToCell(transform.position); }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        private Item UpdateNearestItem()
+        { return HelperUtilities.FindNearestTileInMap<Item>(gameObject, _tilemapCoordinates); }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        private TileDoor UpdateNearestDoor()
+        { return HelperUtilities.FindNearestTileInMap<TileDoor>(gameObject, _tilemapCoordinates); }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <returns></returns>
+        private TileCollidable UpdateNearestObstacle()
+        { return HelperUtilities.FindNearestTileInMap<TileCollidable>(gameObject, _tilemapCoordinates); }
     }
 }

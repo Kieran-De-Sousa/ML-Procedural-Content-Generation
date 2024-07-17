@@ -108,8 +108,9 @@ namespace PCG.Tilemaps
     {
         public Tile[,] tilemap;
 
-        public int RoomWidth;
-        public int RoomHeight;
+        [HideInInspector] public int RoomWidth;
+        [HideInInspector] public int RoomHeight;
+        [HideInInspector] public EngagementMetrics engagementPreviousRoom;
 
         public (int x, int y) RoomCentre;
 
@@ -139,5 +140,33 @@ namespace PCG.Tilemaps
 
             return roomData;
         }
+    }
+
+    [Serializable]
+    public struct EngagementMetrics
+    {
+        public float EngagementScore => itemPickups + exploration;
+        public float RewardScore;
+        public int itemPickups;
+        public float exploration;
+
+        public EngagementMetrics(float reward, int items, float exploring)
+        {
+            this.RewardScore = reward;
+            this.itemPickups = items;
+            this.exploration = exploring;
+        }
+
+        public void ResetEngagement()
+        {
+            this.RewardScore = default;
+            this.itemPickups = default;
+            this.exploration = default;
+        }
+
+        public void SetRewardScore(float reward) => this.RewardScore = reward;
+        public void AddRewardScore(float reward) => this.RewardScore += reward;
+        public void AddItemPickup(int item) => this.itemPickups += item;
+        public void AddExploration(float explore) => this.exploration += explore;
     }
 }
