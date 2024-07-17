@@ -9,6 +9,8 @@ using UnityEngine.Tilemaps;
 
 // PCG
 using PCG.Tilemaps;
+using Unity.MLAgents.Policies;
+using Unity.VisualScripting;
 using UnityEditor;
 
 // Helper
@@ -33,9 +35,12 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
+        public bool preGenerated = false;
         [HideInInspector] public RoomData roomData;
         [HideInInspector] public Vector3 roomOrigin;
-        public EngagementMetrics engagement;
+
+        [HideInInspector] public EngagementMetrics previousEngagement;
+        [HideInInspector] public EngagementMetrics highestEngagement;
 
         [Space]
 
@@ -98,11 +103,42 @@ namespace PCG
         /// </summary>
         public override void ResetSystem()
         {
-            roomData = RoomData.GenerateRoom(width, height);
-            roomData.engagementPreviousRoom = engagement;
+            if (preGenerated)
+            {
+                ClearRoom();
+                GeneratePremade();
 
-            ClearRoom();
-            GenerateRoom();
+                AssignTileMapMembers();
+                // Find centre tile in tilemap, then get the centre position of that centre tile found.
+                roomOrigin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
+            }
+            else
+            {
+                // Evaluate if engagement improved from previous iteration...
+                if (previousEngagement.EngagementScore > highestEngagement.EngagementScore)
+                {
+                    // Set new highest engagement data and keep a copy of the room layout which generated it in tilemap data.
+                    highestEngagement = previousEngagement;
+                    tilemapSystem.highestEngagementRoom = roomData;
+
+                    // Check if an agent is controlling the player, if so, start saving data...
+                    ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
+                    if (player.GetComponent<BehaviorParameters>().BehaviorType != BehaviorType.HeuristicOnly)
+                    {
+                        Simulation simulation = HelperUtilities.FindParentOrChildWithComponent<Simulation>(transform);
+                        if (simulation.generateEngagementPrefabs)
+                        {
+                            StartCoroutine(simulation.SaveRoomPrefab(highestEngagement.EngagementScore));
+                        }
+                    }
+                }
+
+                roomData = RoomData.GenerateRoom(width, height);
+                roomData.engagementPreviousRoom = previousEngagement;
+
+                ClearRoom();
+                GenerateRoom();
+            }
             SpawnPlayer();
             MoveCamera();
         }
@@ -167,11 +203,34 @@ namespace PCG
             MoveCamera();
         }
 
+        public void GeneratePremade()
+        {
+            roomData.tilemap = tilemapSystem.highestEngagementRoom.tilemap;
+
+            Debug.Log(roomData.tilemap.GetUpperBound(0));
+            Debug.Log(roomData.tilemap.GetUpperBound(1));
+            for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
+            {
+                for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
+                {
+                    Debug.Log(roomData.tilemap[x,y]);
+                }
+            }
+            Debug.Log(tilemapSystem);
+            Debug.Log(tilemapSystem.tilemapData.allTilemaps.Count);
+            PCGMethodsRefactor.RenderRoom(roomData, tilemapSystem.tilemapData, default);
+        }
+
         /// <summary>
         /// Clear all tiles in all tilemaps.
         /// </summary>
-        private void ClearRoom()
+        public void ClearRoom()
         {
+            if (preGenerated)
+            {
+
+            }
+
             foreach (var map in tilemapSystem.tilemapData.allTilemaps)
             {
                 map.ClearAllTiles();

@@ -17,6 +17,8 @@ namespace PCG.Tilemaps
     {
         // Data structure holding data related to the tilemaps, and tiles, which is accessed by other systems.
         public TilemapData tilemapData;
+        // Store the highest engagement room generated so far...
+        public RoomData highestEngagementRoom;
 
         [Header("All Tilemaps")]
         public List<Tilemap> tilemaps;
@@ -81,11 +83,11 @@ namespace PCG.Tilemaps
     [Serializable]
     public class TilemapData
     {
-        [HideInInspector] public List<Tilemap> allTilemaps = new();
+        /*[HideInInspector]*/ public List<Tilemap> allTilemaps = new();
 
-        [HideInInspector] public Tilemap floor = new();
-        [HideInInspector] public Tilemap collidable = new();
-        [HideInInspector] public Tilemap trigger = new();
+        /*[HideInInspector]*/ public Tilemap floor = new();
+        /*[HideInInspector]*/ public Tilemap collidable = new();
+        /*[HideInInspector]*/ public Tilemap trigger = new();
 
         public List<Tile> tiles = new();
 

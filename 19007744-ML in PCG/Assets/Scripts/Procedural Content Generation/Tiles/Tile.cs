@@ -1,4 +1,6 @@
 // Unity
+
+using System;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -29,6 +31,7 @@ namespace PCG
         /// <summary>
         /// Extended implementation of Unity's <c>TileBase</c> class providing additional properties and methods.
         /// </summary>
+        [Serializable]
         public abstract class Tile : MonoBehaviour
         {
             [Header("Base Properties")]

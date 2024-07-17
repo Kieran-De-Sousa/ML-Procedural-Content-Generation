@@ -209,7 +209,7 @@ namespace ML
             inventory.ResetInventory();
 
             // Pass engagement of previous episode before resetting
-            _simulation.pcgSystemRefactor.engagement = engagement;
+            _simulation.pcgSystemRefactor.previousEngagement = engagement;
             engagement.ResetEngagement();
         }
 

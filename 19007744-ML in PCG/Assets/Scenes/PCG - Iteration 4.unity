@@ -497,7 +497,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3231581624024079428, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: trainingMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3231581624024079428, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: movementSpeed.x
@@ -508,6 +508,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
+      propertyPath: m_Model
+      value: 
+      objectReference: {fileID: 5022602860645237092, guid: b981485326b120e4392108d937ca87ba, type: 3}
+    - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_BehaviorType
       value: 0
       objectReference: {fileID: 0}
@@ -517,7 +521,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4670026335506279776, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7159705601459200568, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_Name
@@ -627,7 +631,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1504985167
 MonoBehaviour:
   m_ObjectHideFlags: 0
