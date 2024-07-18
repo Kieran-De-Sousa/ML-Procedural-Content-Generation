@@ -91,6 +91,7 @@ namespace ML
         /// </summary>
         public override void OnEpisodeBegin()
         {
+            _simulation.pcgSystemRefactor.ResetSystem();
             ResetAgent();
         }
 
