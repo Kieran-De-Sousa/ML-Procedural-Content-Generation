@@ -8,18 +8,22 @@ using ML;
 // Helper
 using Utilities;
 
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
+    /// <summary>
+    /// Manages collidable (pits, walls) tilemap, detects the agent's location when colliding with whole tilemap
+    /// and negatively rewards if pit/wall is collided with.
+    /// </summary>
     public class CollidableTilemap : MonoBehaviour
     {
         [Tooltip("This will move the cell position correctly if the collision was just outside of" +
                  "the tile cell position. WorldToCell will always round down, so this alleviates that.")]
         public Vector2 collisionBuffer = new(0.02f, 0.02f);
-
         private Tilemap tilemap;
 
         // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             // Get the Tilemap component attached to the same GameObject
             tilemap = GetComponent<Tilemap>();
@@ -32,10 +36,10 @@ namespace PCG.Tilemaps
             // Make sure collision is with the player / ml agent
             if (!other.gameObject.CompareTag("Player")) return;
 
-            PCGSystemRefactor PCGSystem = HelperUtilities.FindParentOrChildWithComponent<PCGSystemRefactor>(transform);
-            if (PCGSystem == null) return;
+            PCGSystemRefactor pcgSystem = HelperUtilities.FindParentOrChildWithComponent<PCGSystemRefactor>(transform);
+            if (pcgSystem == null) return;
 
-            Tile[,] tilemapCoordinates = PCGSystem.roomData.tilemap;
+            Tile[,] tilemapCoordinates = pcgSystem.roomData.tilemap;
             if (tilemapCoordinates == null) return;
 
             // Get the position of the collision

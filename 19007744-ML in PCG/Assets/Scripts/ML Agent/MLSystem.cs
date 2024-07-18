@@ -1,7 +1,4 @@
 // Root namespace for all Machine Learning-related utilities.
-
-using UnityEngine;
-
 namespace ML
 {
     /// <summary>
@@ -11,6 +8,9 @@ namespace ML
     {
         public MLAgent mlAgent;
 
+        /// <summary>
+        /// Reset the system by ending the agents current episode.
+        /// </summary>
         public override void ResetSystem()
         {
             mlAgent.EndEpisode();

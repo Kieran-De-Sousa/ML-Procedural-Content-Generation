@@ -1,15 +1,16 @@
 // Base
-using System.Collections;
 using System.Collections.Generic;
-using PCG.Tilemaps;
 
 // Unity
 using UnityEngine;
-using UnityEngine.Tilemaps;
+
+// Procedural Content Generation
+using PCG.Tilemaps;
 
 // Ambiguous reference prevention (shares name with UnityEngine.Tilemaps.)
 using Tile = PCG.Tilemaps.Tile;
 
+// Root namespace for all Procedural Content Generation-related utilities.
 namespace PCG
 {
     /// <summary>
@@ -21,6 +22,7 @@ namespace PCG
         RANDOM,
         PERLINNOISE,
         ASTAR,
+        WFC,
     }
 
     /// <summary>
@@ -53,12 +55,13 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generate a 2D Tile array with doors and walls.
         /// </summary>
-        /// <param name="roomData"></param>
-        /// <param name="tilemapData"></param>
-        /// <returns></returns>
-        private static (RoomData, List<Vector3Int>, List<Vector3Int>) GenerateTileMapDoorsAndWalls(RoomData roomData, TilemapData tilemapData)
+        /// <param name="roomData">Data of tile coordinates on 2D array, and important tile positions (doors).</param>
+        /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
+        /// <returns>Tuple containing updated room data, positions of doors, and position of walls.</returns>
+        private static (RoomData, List<Vector3Int>, List<Vector3Int>) GenerateTileMapDoorsAndWalls(RoomData roomData,
+            TilemapData tilemapData)
         {
             List<Vector3Int> doorPositions = new List<Vector3Int>();
             List<Vector3Int> wallPositions = new List<Vector3Int>();
@@ -88,14 +91,14 @@ namespace PCG
                     // If map position was a door.
                     if (doorResult.Item1)
                     {
-                        tile = GenerateDoors(x, y, roomData.tilemap, tilemapData, doorResult.Item2);
+                        tile = GenerateDoors(tilemapData, doorResult.Item2);
                         roomData = AssignDoor(roomData, doorResult.Item2, x, y);
                         doorPositions.Add(new Vector3Int(x, y, 0));
                     }
                     // If map position was a wall.
                     else if (wallResult.Item1)
                     {
-                        tile = GenerateWalls(x, y, roomData.tilemap, tilemapData, wallResult.Item2);
+                        tile = GenerateWalls(tilemapData, wallResult.Item2);
                         wallPositions.Add(new Vector3Int(x, y, 0));
                     }
 
@@ -111,13 +114,13 @@ namespace PCG
 
 
         /// <summary>
-        ///
+        /// Assigns a door to the RoomData based on its direction.
         /// </summary>
-        /// <param name="data"></param>
-        /// <param name="direction"></param>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <returns></returns>
+        /// <param name="data">RoomData to update.</param>
+        /// <param name="direction">Direction of door.</param>
+        /// <param name="x">X position of door.</param>
+        /// <param name="y">Y position of door.</param>
+        /// <returns>Updated room data with door position assigned.</returns>
         private static RoomData AssignDoor(RoomData data, DoorDirection direction, int x, int y)
         {
             switch (direction)
@@ -142,10 +145,6 @@ namespace PCG
                     data.RightDoor = (x, y);
                     break;
                 }
-                default:
-                {
-                    break;
-                }
             }
 
             return data;
@@ -154,14 +153,10 @@ namespace PCG
         /// <summary>
         /// Generate a door tile facing the provided direction.
         /// </summary>
-        /// <param name="x">X position of the tile on map.</param>
-        /// <param name="y">Y position of the tile on map.</param>
-        /// <param name="map">2D tile array representing map.</param>
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <param name="direction">Direction the door will face.</param>
         /// <returns>Generated door tile, otherwise, <c>null</c></returns>
-        private static Tile GenerateDoors(int x, int y, Tile[,] map,
-            TilemapData tilemapData, DoorDirection direction)
+        private static Tile GenerateDoors(TilemapData tilemapData, DoorDirection direction)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -182,14 +177,10 @@ namespace PCG
         /// <summary>
         /// Generate a wall tile facing the provided direction.
         /// </summary>
-        /// <param name="x">X position of the tile on map.</param>
-        /// <param name="y">Y position of the tile on map.</param>
-        /// <param name="map">2D tile array representing map.</param>
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <param name="direction">Direction the wall will face.</param>
         /// <returns>Generated wall tile, otherwise, <c>null</c></returns>
-        private static Tile GenerateWalls(int x, int y, Tile[,] map,
-            TilemapData tilemapData, WallDirection direction)
+        private static Tile GenerateWalls(TilemapData tilemapData, WallDirection direction)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -209,12 +200,9 @@ namespace PCG
         /// <summary>
         /// Generate a floor tile.
         /// </summary>
-        /// <param name="x">X position of the tile on map.</param>
-        /// <param name="y">Y position of the tile on map.</param>
-        /// <param name="map">2D tile array representing map.</param>
         /// <param name="tilemapData">Data of available tiles.</param>
         /// <returns>Generated floor tile, otherwise, <c>null</c></returns>
-        private static Tile GenerateFloor(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateFloor(TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -229,14 +217,11 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Generate a pit tile.
         /// </summary>
-        /// <param name="x"></param>
-        /// <param name="y"></param>
-        /// <param name="map"></param>
-        /// <param name="tilemapData"></param>
-        /// <returns></returns>
-        private static Tile GeneratePit(int x, int y, Tile[,] map, TilemapData tilemapData)
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <returns>Generated pit tile, otherwise, <c>null</c></returns>
+        private static Tile GeneratePit(TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -250,27 +235,32 @@ namespace PCG
             return null;
         }
 
-        private static Tile GenerateRandomItem(int x, int y, Tile[,] map, TilemapData tilemapData)
+        private static Tile GenerateRandomItem(TilemapData tilemapData)
         {
             float randomValue = Random.value;
 
             if (randomValue < 0.33f)
             {
-                return GenerateCoin(x, y, map, tilemapData);
+                return GenerateCoin(tilemapData);
             }
 
             else if (randomValue is >= 0.33f and < 0.66f)
             {
-                return GenerateKey(x, y, map, tilemapData);
+                return GenerateKey(tilemapData);
             }
 
             else
             {
-                return GenerateBomb(x, y, map, tilemapData);
+                return GenerateBomb(tilemapData);
             }
         }
 
-        private static Tile GenerateCoin(int x, int y, Tile[,] map, TilemapData tilemapData)
+        /// <summary>
+        /// Generate a coin tile.
+        /// </summary>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <returns>Generated coin tile, otherwise, <c>null</c></returns>
+        private static Tile GenerateCoin(TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -284,7 +274,12 @@ namespace PCG
             return null;
         }
 
-        private static Tile GenerateKey(int x, int y, Tile[,] map, TilemapData tilemapData)
+        /// <summary>
+        /// Generate a key tile.
+        /// </summary>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <returns>Generated key tile, otherwise, <c>null</c></returns>
+        private static Tile GenerateKey(TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -298,7 +293,12 @@ namespace PCG
             return null;
         }
 
-        private static Tile GenerateBomb(int x, int y, Tile[,] map, TilemapData tilemapData)
+        /// <summary>
+        /// Generate a bomb tile.
+        /// </summary>
+        /// <param name="tilemapData">Data of available tiles.</param>
+        /// <returns>Generated bomb tile, otherwise, <c>null</c></returns>
+        private static Tile GenerateBomb(TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
             {
@@ -312,25 +312,30 @@ namespace PCG
             return null;
         }
 
-        private static Tile GenerateRandomTileFromWeighting(int x, int y, Tile[,] tilemap, TilemapData tilemapData,
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="tilemapData"></param>
+        /// <param name="itemWeight"></param>
+        /// <param name="pitWeight"></param>
+        /// <returns></returns>
+        private static Tile GenerateRandomTileFromWeighting(TilemapData tilemapData,
             float itemWeight, float pitWeight)
         {
             float randomValue = Random.value;
 
             if (randomValue < itemWeight)
             {
-                return GenerateRandomItem(x, y, tilemap, tilemapData);
+                return GenerateRandomItem(tilemapData);
             }
 
-            else if (randomValue < itemWeight + pitWeight)
+            if (randomValue < itemWeight + pitWeight)
             {
-                return GeneratePit(x, y, tilemap, tilemapData);
+                return GeneratePit(tilemapData);
             }
 
-            else
-            {
-                return GenerateFloor(x, y, tilemap, tilemapData);
-            }
+            // If neither, generate a floor.
+            return GenerateFloor(tilemapData);
         }
 
         /// <summary>
@@ -442,6 +447,15 @@ namespace PCG
             return (false, default);
         }
 
+        /// <summary>
+        /// Generates a room in the map by setting tileBases on corresponding tilemaps through assigned tile in map position.
+        /// This is done through a random algorithm, where the PCG result is not guaranteed to be a "completable" level.
+        /// </summary>
+        /// <param name="roomData">Data of tile coordinates on 2D array, and important tile positions (doors).</param>
+        /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
+        /// <param name="offset">Optional offset to apply to the tile positions from game space.</param>
+        /// <param name="seed">Seed value for RNG.</param>
+        /// <returns>Data of generated room.</returns>
         public static RoomData RandomGeneration(RoomData roomData, TilemapData tilemapData,
             Vector2Int offset = default, float seed = default)
         {
@@ -472,7 +486,6 @@ namespace PCG
 
                         // TODO: RANDOM GENERATION HERE.
                         roomData.tilemap[x, y] = tile;
-
                     }
                 }
             }
@@ -481,37 +494,8 @@ namespace PCG
         }
 
         /// <summary>
-        /// Generates a map using perlin noise based on provided seed.
-        /// </summary>
-        /// <param name="map">2D int array representing the map.</param>
-        /// <param name="seed">Seed value for RNG.</param>
-        /// <returns>Generated int map with perlin noise.</returns>
-        /// <reference></reference>
-        public static int[,] PerlinNoise(int[,] map, float seed)
-        {
-            int newPoint;
-
-            // Used to reduce the position of the perlin point
-            float reduction = 0.5f;
-
-            // Create the perlin
-            for (int x = 0; x < map.GetUpperBound(0); x++)
-            {
-                newPoint = Mathf.FloorToInt((Mathf.PerlinNoise(x, seed) - reduction) * map.GetUpperBound(1));
-
-                // Make sure the noise starts near the halfway point of the height
-                newPoint += (map.GetUpperBound(1) / 2);
-                for (int y = newPoint; y >= 0; y--)
-                {
-                    map[x, y] = 1;
-                }
-            }
-
-            return map;
-        }
-
-        /// <summary>
         /// Generates a room in the map by setting tileBases on corresponding tilemaps through assigned tile in map position.
+        /// This is done through an A* pathfinding algorithm, ensuring the PCG result is a "completable" level.
         /// </summary>
         /// <param name="roomData">Data of tile coordinates on 2D array, and important tile positions (doors).</param>
         /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
@@ -542,9 +526,11 @@ namespace PCG
 
             // Based on engagement from previous room, weight the random generation elements of this room...
             float totalEngagement = roomData.engagementPreviousRoom.EngagementScore;
-            Debug.Log($"Previous Room Engagement: {totalEngagement}");
-            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups / totalEngagement, 0.1f, 0.3f);
-            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration / totalEngagement, 0.1f, 0.5f);
+            // TODO: Tweak a bit...
+            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups
+                / totalEngagement, 0.1f, 0.3f);
+            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration
+                / totalEngagement, 0.1f, 0.7f);
 
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {
@@ -559,7 +545,7 @@ namespace PCG
 
                     else if (floorPositions.Contains(new Vector3Int(x, y, 0)))
                     {
-                        tile = GenerateFloor(x, y, roomData.tilemap, tilemapData);
+                        tile = GenerateFloor(tilemapData);
                     }
 
                     else
@@ -567,18 +553,14 @@ namespace PCG
                         if (totalEngagement == 0)
                         {
                             int random = Random.Range(0, 2);
-                            tile = random == 1 ? GenerateCoin(x, y, roomData.tilemap, tilemapData) :
-                                                GeneratePit(x, y, roomData.tilemap, tilemapData);
-                        //tile = GeneratePit(x, y, roomData.tilemap, tilemapData);
+                            tile = random == 1
+                                ? GenerateRandomItem(tilemapData)
+                                : GeneratePit(tilemapData);
                         }
                         else
                         {
                             float floorWeight = 1 - (itemWeight + pitWeight);
-                            Debug.Log($"Floor Weight: {floorWeight}");
-                            Debug.Log($"Item Weight: {itemWeight}");
-                            Debug.Log($"Pit Weight: {pitWeight}");
-
-                            tile = GenerateRandomTileFromWeighting(x, y, roomData.tilemap, tilemapData,
+                            tile = GenerateRandomTileFromWeighting(tilemapData,
                                 itemWeight, pitWeight);
                         }
                     }
@@ -591,14 +573,18 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Renders the room based on the 2D Tile array coordinates, tilemap data, and optional offset.
         /// </summary>
-        /// <param name="roomData"></param>
-        /// <param name="tilemapData"></param>
-        /// <param name="offset"></param>
+        /// <param name="roomData">Data of tile coordinates on 2D array, and important tile positions (doors).</param>
+        /// <param name="tilemapData">Data of tilemaps and available tiles.</param>
+        /// <param name="offset">Optional offset to apply to the tile positions from game space.</param>
         public static void RenderRoom(RoomData roomData, TilemapData tilemapData,
             Vector2Int offset = default)
         {
+            // Early out if tilemap is null.
+            if (roomData.tilemap == null) return;
+
+            // Loop through size of map to start setting Tilemap tileBases to coordinates.
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {
                 for (int y = 0; y < roomData.tilemap.GetUpperBound(1); ++y)
@@ -622,11 +608,11 @@ namespace PCG
                         // Create the floor as a background for items (since they don't have backgrounds)...
                         else if (tile is Item)
                         {
-                            Tile floor = GenerateFloor(x, y, roomData.tilemap, tilemapData);
+                            Tile floor = GenerateFloor(tilemapData);
                             tilemapData.floor.SetTile(position, floor.GetTileBase());
 
-                            // NOTE: For implementation that would reward "exploration", this would need to be changed.
-                            // as all tiles would need to have a tracker for "ifExplored"
+                            // Destroy the GameObject part of the tile, as we don't reward exploration on item spaces,
+                            // and we have just created our background.
                             Destroy(floor.gameObject);
                         }
 

@@ -1,17 +1,9 @@
-// Base
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 // Unity
 using UnityEngine;
-using UnityEngine.Tilemaps;
 
 // PCG
 using PCG.Tilemaps;
 using Unity.MLAgents.Policies;
-using Unity.VisualScripting;
-using UnityEditor;
 
 // Helper
 using Utilities;
@@ -23,10 +15,12 @@ using Tile = PCG.Tilemaps.Tile;
 namespace PCG
 {
     /// <summary>
-    ///
+    /// Manager of Procedural Content Generation (PCG) system, pulls data from <c>TilemapSystem</c> to generate
+    /// 2D tile array that are mapped to tilemaps of simulation.
     /// </summary>
     public class PCGSystemRefactor : ManagerSystem
     {
+        // TilemapSystem in the same simulation.
         [SerializeField] private TilemapSystem tilemapSystem;
 
         [Header("Tilemap Size")]
@@ -35,12 +29,18 @@ namespace PCG
         [Range(7, 100)]
         public int height = 9;
 
-        public bool preGenerated = false;
+        // If the room has already been generated (cloned from a high engagement simulation).
+        private bool preGenerated = false;
         [HideInInspector] public RoomData roomData;
         [HideInInspector] public Vector3 roomOrigin;
 
+        // Engagement information from the previous created room and highest created room.
         [HideInInspector] public EngagementMetrics previousEngagement;
         [HideInInspector] public EngagementMetrics highestEngagement;
+        [Tooltip("To ensure we don't constantly save new simulations every time a small increase happens, apply a percentage " +
+                 "increase required for a save to happen.")]
+        [Range(1.0f, 3.0f)]
+        public float engagementIncreaseBuffer = 1.5f;
 
         [Space]
 
@@ -54,7 +54,6 @@ namespace PCG
             roomData = RoomData.GenerateRoom(width, height);
         }
 
-        /// Start is called before the first frame update
         private void Start()
         {
             InitialiseInput();
@@ -69,7 +68,6 @@ namespace PCG
             _inputScheme.PCG.Enable();
         }
 
-        /// Update is called once per frame
         private void Update()
         {
             PollInputs();
@@ -103,6 +101,7 @@ namespace PCG
         /// </summary>
         public override void ResetSystem()
         {
+            // TODO: Needs tweaking...
             if (preGenerated)
             {
                 ClearRoom();
@@ -112,10 +111,12 @@ namespace PCG
                 // Find centre tile in tilemap, then get the centre position of that centre tile found.
                 roomOrigin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
             }
+
+            // If room is not pre-generated (active simulation), check for engagement metrics to know if the room layout is worth keeping.
             else
             {
                 // Evaluate if engagement improved from previous iteration...
-                if (previousEngagement.EngagementScore > highestEngagement.EngagementScore)
+                if (previousEngagement.EngagementScore > highestEngagement.EngagementScore * engagementIncreaseBuffer)
                 {
                     // Set new highest engagement data and keep a copy of the room layout which generated it in tilemap data.
                     highestEngagement = previousEngagement;
@@ -123,7 +124,8 @@ namespace PCG
 
                     // Check if an agent is controlling the player, if so, start saving data...
                     ML.MLAgent player = HelperUtilities.FindParentOrChildWithComponent<ML.MLAgent>(transform);
-                    if (player.GetComponent<BehaviorParameters>().BehaviorType != BehaviorType.HeuristicOnly)
+                    if (player.GetComponent<BehaviorParameters>().BehaviorType != BehaviorType.HeuristicOnly ||
+                        !player.trainingMode)
                     {
                         Simulation simulation = HelperUtilities.FindParentOrChildWithComponent<Simulation>(transform);
                         if (simulation.generateEngagementPrefabs)
@@ -133,12 +135,14 @@ namespace PCG
                     }
                 }
 
-                roomData = RoomData.GenerateRoom(width, height);
                 roomData.engagementPreviousRoom = previousEngagement;
+                // Null reference exception handling...
+                roomData = RoomData.GenerateRoom(width, height);
 
                 ClearRoom();
                 GenerateRoom();
             }
+
             SpawnPlayer();
             MoveCamera();
         }
@@ -152,30 +156,15 @@ namespace PCG
         private void GenerateRoom()
         {
             ClearRoom();
-
-            int[,] map = new int[width, height];
             float seed = Time.time;
-            Vector2Int offset = new Vector2Int((width / 2) * -1, (height / 2) * -1);
 
             switch (generation)
             {
-                case GenerationMethod.NONE:
-                {
-                    break;
-                }
-
                 case GenerationMethod.RANDOM:
                 {
-                    map = PCGMethods.GenerateMap(width, height);
-                    map = PCGMethods.RandomGeneration(map, seed);
-                    break;
-                }
-
-                case GenerationMethod.PERLINNOISE:
-                {
-                    map = PCGMethods.GenerateMap(width, height);
-                    map = PCGMethods.PerlinNoise(map, seed);
-
+                    roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
+                    roomData = PCGMethodsRefactor.RandomGeneration(roomData, tilemapSystem.tilemapData, default, seed);
+                    Debug.Log("Fully random Room Generation is currently unimplemented in new Tile system.");
                     break;
                 }
 
@@ -183,27 +172,35 @@ namespace PCG
                 {
                     roomData.tilemap = PCGMethodsRefactor.GenerateTileMap(width, height);
                     roomData = PCGMethodsRefactor.AStarPathFindingGeneration(roomData, tilemapSystem.tilemapData, default, seed);
-
-                    PCGMethodsRefactor.RenderRoom(roomData, tilemapSystem.tilemapData, default);
-
                     break;
                 }
 
                 default:
                 {
+                    Debug.LogError($"{generation} TYPE OF PCG GENERATION IS NOT SUPPORTED!");
                     break;
                 }
             }
+
+            PCGMethodsRefactor.RenderRoom(roomData, tilemapSystem.tilemapData);
 
             AssignTileMapMembers();
 
             // Find centre tile in tilemap, then get the centre position of that centre tile found.
             roomOrigin = tilemapSystem.tilemapData.collidable.GetCellCenterWorld(HelperUtilities.GetCenterTilePosition(tilemapSystem.tilemapData.collidable));
+
             SpawnPlayer();
             MoveCamera();
         }
 
-        public void GeneratePremade()
+        /// <summary>
+        /// Generate a pre-made room layout.
+        /// </summary>
+        /// <important>
+        /// PLEASE NOTE: THE FOLLOWING METHOD RECIEVES NULL REFERENCE EXCEPTION ERRORS AS 2D ARRAY DATA (e.g.
+        /// roomData.tilemap) IS NOT SERIALIZED AND PASSED THROUGH WHEN COPIED FROM A GAMEOBJECT!
+        /// </important>
+        private void GeneratePremade()
         {
             roomData.tilemap = tilemapSystem.highestEngagementRoom.tilemap;
 
@@ -224,13 +221,8 @@ namespace PCG
         /// <summary>
         /// Clear all tiles in all tilemaps.
         /// </summary>
-        public void ClearRoom()
+        private void ClearRoom()
         {
-            if (preGenerated)
-            {
-
-            }
-
             foreach (var map in tilemapSystem.tilemapData.allTilemaps)
             {
                 map.ClearAllTiles();
@@ -275,7 +267,7 @@ namespace PCG
         }
 
         /// <summary>
-        ///
+        /// Map GameObject instances of tiles from 2D tile array to their member data variables (e.g. MLAgent, tile position in world space).
         /// </summary>
         private void AssignTileMapMembers()
         {
@@ -301,5 +293,17 @@ namespace PCG
                 }
             }
         }
+
+        /// <summary>
+        /// Set if the room layout is pre-generated.
+        /// </summary>
+        /// <param name="pregenerated">Pregeneration state.</param>
+        public void SetPreGenerated(bool pregenerated) => preGenerated = pregenerated;
+
+        /// <summary>
+        /// Get if the room layout was pre-generated from previous room layout.
+        /// </summary>
+        /// <returns>If room is pre-generated.</returns>
+        public bool GetPreGenerated() { return preGenerated; }
     }
 }

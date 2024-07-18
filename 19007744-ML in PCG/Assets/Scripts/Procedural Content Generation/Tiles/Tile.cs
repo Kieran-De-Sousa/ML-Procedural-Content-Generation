@@ -1,6 +1,7 @@
-// Unity
-
+// Base
 using System;
+
+// Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
@@ -55,6 +56,41 @@ namespace PCG
             }
 
             /// <summary>
+            /// Set base members of this tile.
+            /// </summary>
+            /// <note>
+            /// This method does not correctly update tilemap and positional data (everything except MLAgent).
+            /// However, this is okay as this data is correctly updated whenever appropriate in other systems.
+            /// A TODO has been left where the error occurs.
+            /// </note>
+            public void SetBaseMembers()
+            {
+                // Find player inventory starting from root parent (the simulation).
+                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
+
+                // Find the owner tilemap of this tile, and its position in that tilemap.
+                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
+                foreach (Tilemap tilemap in tilemaps)
+                {
+                    // Iterate through all the positions in the tilemap
+                    BoundsInt bounds = tilemap.cellBounds;
+                    foreach (Vector3Int pos in bounds.allPositionsWithin)
+                    {
+                        // TODO: FIX THIS, AS ALL TILES ARE GONNA SHARE THE SAME TILEBASE
+                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
+                        {
+                            // If the tile is found, set protected variables
+                            ownerTilemap = tilemap;
+                            tilePosition = pos;
+                            tileWorldPosition = ownerTilemap.GetCellCenterWorld(pos);
+
+                            return;
+                        }
+                    }
+                }
+            }
+
+            /// <summary>
             /// Creates a new GameObject with an extended functionality <c>tile</c> component.
             /// </summary>
             /// <param name="type">The tile type to create.</param>
@@ -96,43 +132,6 @@ namespace PCG
             }
 
             /// <summary>
-            /// TODO: FIX THIS METHOD
-            /// </summary>
-            public void SetBaseMembers()
-            {
-                // Find player inventory starting from root parent (the simulation).
-                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
-
-                if (ownerTilemap != null)
-                {
-
-                }
-                else
-                {
-                    // Find the owner tilemap of this tile, and its position in that tilemap.
-                    Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
-                    foreach (Tilemap tilemap in tilemaps)
-                    {
-                        // Iterate through all the positions in the tilemap
-                        BoundsInt bounds = tilemap.cellBounds;
-                        foreach (Vector3Int pos in bounds.allPositionsWithin)
-                        {
-                            // TODO: FIX THIS, AS ALL TILES ARE GONNA SHARE THE SAME TILEBASE
-                            if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
-                            {
-                                // If the tile is found, set protected variables
-                                ownerTilemap = tilemap;
-                                tilePosition = pos;
-                                tileWorldPosition = ownerTilemap.GetCellCenterWorld(pos);
-
-                                return;
-                            }
-                        }
-                    }
-                }
-            }
-
-            /// <summary>
             /// Gets the tile asset of this tile.
             /// </summary>
             /// <returns>Tile base asset.</returns>
@@ -156,49 +155,53 @@ namespace PCG
             /// <param name="type">The type of tile to set.</param>
             public void SetTileType(TileType type) => tileType = type;
 
+            /// <summary>
+            /// Gets the owner tilemap of this tile.
+            /// </summary>
+            /// <returns>Owner tilemap</returns>
             public Tilemap GetOwnerTilemap() { return ownerTilemap; }
 
             /// <summary>
-            ///
+            /// Sets the owner tilemap of this tile.
             /// </summary>
-            /// <param name="owner"></param>
+            /// <param name="owner">The owner tilemap to set.</param>
             /// <returns></returns>
             public void SetOwnerTilemap(Tilemap owner) => ownerTilemap = owner;
 
             /// <summary>
-            ///
+            /// Gets the tile position in the tilemap of this tile.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>Tile Vector3Int position.</returns>
             public Vector3Int GetTilePosition() { return tilePosition; }
 
             /// <summary>
-            ///
+            /// Sets the tile position in the tilemap of this tile.
             /// </summary>
-            /// <param name="position"></param>
+            /// <param name="position">Tile position in the tilemap.</param>
             public void SetTilePosition(Vector3Int position) => tilePosition = position;
 
             /// <summary>
-            ///
+            /// Gets the tile position in world space of this tile.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>World space position.</returns>
             public Vector3 GetTileWorldPosition() { return tileWorldPosition; }
 
             /// <summary>
-            ///
+            /// Sets the tile position in world space of this tile.
             /// </summary>
-            /// <param name="position"></param>
+            /// <param name="position">World space position of tile.</param>
             public void SetTileWorldPosition(Vector3 position) => tileWorldPosition = position;
 
             /// <summary>
-            ///
+            /// Gets the MLAgent in the simulation of this tile.
             /// </summary>
-            /// <returns></returns>
+            /// <returns>Agent of simulation.</returns>
             public MLAgent GetPlayer() { return player; }
 
             /// <summary>
-            ///
+            /// Sets the MLAgent in the simulation of this tile.
             /// </summary>
-            /// <param name="agent"></param>
+            /// <param name="agent">Agent to set.</param>
             public void SetPlayer(MLAgent agent) => player = agent;
         }
     }

@@ -1,6 +1,5 @@
 // Base
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 // Unity
@@ -25,19 +24,16 @@ namespace PCG.Tilemaps
 
         [Header("Decoration Tilemap")]
         public Tilemap tilemap;
-
         [Space]
-
         [Header("Collidable Tilemap")]
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (NOT TRIGGERS)")]
         public Tilemap collidable;
-
         [Space]
-
         [Header("Trigger Tilemap")]
         [Tooltip("Tilemap Contains Rigidbody, Composite collider, tilemap collider (TRIGGERS)")]
         public Tilemap entities;
 
+        // Empty GameObject for tiles GameObjects generated to be parented to.
         public Transform instantiatedTilesParent;
 
         protected void Awake()
@@ -57,6 +53,7 @@ namespace PCG.Tilemaps
             AddTilemapToList(collidable);
             AddTilemapToList(entities);
 
+            // Initialise tilemap data references
             tilemapData.floor = tilemap;
             tilemapData.collidable = collidable;
             tilemapData.trigger = entities;
@@ -74,6 +71,9 @@ namespace PCG.Tilemaps
             }
         }
 
+        /// <summary>
+        /// Reset the <c>TilemapSystem</c>.
+        /// </summary>
         public override void ResetSystem() { }
     }
 
@@ -144,31 +144,63 @@ namespace PCG.Tilemaps
         }
     }
 
+    /// <summary>
+    /// Data container for an agents engagement with a room. Engagement is measured in the number of
+    /// items picked up and the amount of exploring the agent did. Internally tracks these along with agents reward in
+    /// this episode.
+    /// </summary>
     [Serializable]
     public struct EngagementMetrics
     {
         public float EngagementScore => itemPickups + exploration;
-        public float RewardScore;
         public int itemPickups;
         public float exploration;
 
-        public EngagementMetrics(float reward, int items, float exploring)
+        public float RewardScore;
+
+        /// <summary>
+        /// Generate a new EngagementMetrics with parameters.
+        /// </summary>
+        /// <param name="items">itemPickups</param>
+        /// <param name="exploring">exploration</param>
+        /// <param name="reward">RewardScore</param>
+        public EngagementMetrics(int items, float exploring, float reward)
         {
-            this.RewardScore = reward;
-            this.itemPickups = items;
-            this.exploration = exploring;
+            itemPickups = items;
+            exploration = exploring;
+            RewardScore = reward;
         }
 
+        /// <summary>
+        /// Reset the engagement data stored to default.
+        /// </summary>
         public void ResetEngagement()
         {
-            this.RewardScore = default;
-            this.itemPickups = default;
-            this.exploration = default;
+            RewardScore = default;
+            itemPickups = default;
+            exploration = default;
         }
 
-        public void SetRewardScore(float reward) => this.RewardScore = reward;
-        public void AddRewardScore(float reward) => this.RewardScore += reward;
-        public void AddItemPickup(int item) => this.itemPickups += item;
-        public void AddExploration(float explore) => this.exploration += explore;
+        /// <summary>
+        /// Set reward value to reward engagement metric.
+        /// </summary>
+        /// <param name="reward">Reward value to set.</param>
+        public void SetRewardScore(float reward) => RewardScore = reward;
+        /// <summary>
+        /// Add reward value to reward engagement metric.
+        /// </summary>
+        /// <param name="reward">Reward value to add.</param>
+        public void AddRewardScore(float reward) => RewardScore += reward;
+
+        /// <summary>
+        /// Add item value to item pickup engagement metric.
+        /// </summary>
+        /// <param name="item">Item value to add.</param>
+        public void AddItemPickup(int item) => itemPickups += item;
+        /// <summary>
+        /// Add exploration value to exploration engagement metric.
+        /// </summary>
+        /// <param name="explore">Exploring value to add.</param>
+        public void AddExploration(float explore) => exploration += explore;
     }
 }

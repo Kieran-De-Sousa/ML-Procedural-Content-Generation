@@ -8,14 +8,18 @@ using ML;
 // Helper
 using Utilities;
 
+// Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {
+    /// <summary>
+    /// Manages trigger (item/door) tilemap, detects the agent's location when hitting a trigger
+    /// and rewards if item/door is interacted with.
+    /// </summary>
     public class TriggerTilemap : MonoBehaviour
     {
         private Tilemap tilemap;
 
-        // Start is called before the first frame update
-        void Start()
+        private void Start()
         {
             // Get the Tilemap component attached to the same GameObject
             tilemap = GetComponent<Tilemap>();
@@ -32,10 +36,10 @@ namespace PCG.Tilemaps
             // position coordinates to cell position coordinates)
             if (!other.isTrigger) return;
 
-            PCGSystemRefactor PCGSystem = HelperUtilities.FindParentOrChildWithComponent<PCGSystemRefactor>(transform);
-            if (PCGSystem == null) return;
+            PCGSystemRefactor pcgSystem = HelperUtilities.FindParentOrChildWithComponent<PCGSystemRefactor>(transform);
+            if (pcgSystem == null) return;
 
-            Tile[,] tilemapCoordinates = PCGSystem.roomData.tilemap;
+            Tile[,] tilemapCoordinates = pcgSystem.roomData.tilemap;
             if (tilemapCoordinates == null) return;
 
             // Get the position of the collision

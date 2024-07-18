@@ -186,6 +186,9 @@ MonoBehaviour:
   mlSystem: {fileID: 7632385662479059182}
   pcgSystemRefactor: {fileID: 3875620610158250691}
   tilemapSystem: {fileID: 4622841913339396266}
+  generateEngagementPrefabs: 0
+  simulationToClone: {fileID: 7159705601459200568}
+  savePath: Assets/Prefabs/Rooms/
   pcgSystem: {fileID: 0}
 --- !u!1001 &1631246071113050930
 PrefabInstance:
@@ -273,8 +276,157 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 4692735146391313680, guid: c70626450812146438f291fa3efc9e75, type: 3}
       insertIndex: 0
       addedObject: {fileID: 3638655570446582845}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7260232797003082761}
+    - targetCorrespondingSourceObject: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3381092699672248100}
+    - targetCorrespondingSourceObject: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7796306466829717703}
+    - targetCorrespondingSourceObject: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 376876755420309685}
   m_SourcePrefab: {fileID: 100100000, guid: c70626450812146438f291fa3efc9e75, type: 3}
+--- !u!1 &1438446455111782056 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 384277968251938202, guid: c70626450812146438f291fa3efc9e75, type: 3}
+  m_PrefabInstance: {fileID: 1631246071113050930}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7260232797003082761
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438446455111782056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b09dcd95a824e499e811c42eaff73ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!19719996 &3381092699672248100
+TilemapCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438446455111782056}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 1
+  m_Offset: {x: 0, y: 0}
+  m_MaximumTileChangeCount: 1000
+  m_ExtrusionFactor: 0
+  m_UseDelaunayMesh: 0
+--- !u!50 &7796306466829717703
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438446455111782056}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
+--- !u!66 &376876755420309685
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1438446455111782056}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0
+  m_ColliderPaths:
+  - m_Collider: {fileID: 3381092699672248100}
+    m_ColliderPaths:
+    - - X: 80000000
+        Y: 40000000
+      - X: -70000000
+        Y: 40000000
+      - X: -70000000
+        Y: -30000000
+      - X: 80000000
+        Y: -30000000
+  m_CompositePaths:
+    m_Paths:
+    - - {x: 7.9999704, y: -3}
+      - {x: 7.9999704, y: 4}
+      - {x: -7, y: 3.999971}
+      - {x: -6.9999704, y: -3}
+  m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
+  m_UseDelaunayMesh: 0
+  m_CompositeGameObject: {fileID: 1438446455111782056}
 --- !u!114 &3875620610158250691 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2552311466440761841, guid: c70626450812146438f291fa3efc9e75, type: 3}
@@ -315,6 +467,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2359821566272047397}
     m_Modifications:
+    - target: {fileID: 4295191888480999561, guid: 3f7e6bd0cddcc8544bfb8abf3aea0297, type: 3}
+      propertyPath: trainingMode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295191888480999561, guid: 3f7e6bd0cddcc8544bfb8abf3aea0297, type: 3}
+      propertyPath: movementSpeed.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4295191888480999561, guid: 3f7e6bd0cddcc8544bfb8abf3aea0297, type: 3}
+      propertyPath: movementSpeed.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4393833447088691036, guid: 3f7e6bd0cddcc8544bfb8abf3aea0297, type: 3}
       propertyPath: m_Name
       value: ML System

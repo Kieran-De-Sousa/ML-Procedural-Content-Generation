@@ -1,7 +1,7 @@
-using System.Collections;
-using System.Collections.Generic;
-
+// Unity
 using UnityEngine;
+
+/// NOTE: THIS CODE GOES UNUSED IN THE MAIN ARTIFACT!
 
 /// <summary>
 /// The singleton instance overrides the current instance instead of destroying any new ones.
@@ -24,7 +24,6 @@ public abstract class SingletonInstance<T> : MonoBehaviour where T : MonoBehavio
         Destroy(gameObject);
     }
 }
-
 
 /// <summary>
 /// Basic singleton.

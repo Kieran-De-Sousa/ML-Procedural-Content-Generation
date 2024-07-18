@@ -1,7 +1,5 @@
 // Base
 using System;
-using System.Collections;
-using System.Collections.Generic;
 
 // Unity
 using UnityEngine;
@@ -11,8 +9,10 @@ using UnityEngine;
 /// </summary>
 public class Inventory : MonoBehaviour
 {
+    [Header("Inventory")]
     public Items inventory = new();
 
+    [Header("Agent Reward Values")]
     public float coinRewardValue = 3;
     public float bombRewardValue = 5;
     public float keyRewardValue = 5;
@@ -58,17 +58,17 @@ public class Inventory : MonoBehaviour
     /// <summary>
     /// Get the ML Agent reward value for getting a coin.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Coin reward value for collecting a coin.</returns>
     public float GetCoinRewardValue() { return coinRewardValue; }
     /// <summary>
     /// Get the ML Agent reward value for getting a bomb.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Bomb reward value for collecting a bomb.</returns>
     public float GetBombRewardValue() { return bombRewardValue; }
     /// <summary>
     /// Get the ML Agent reward value for getting a key.
     /// </summary>
-    /// <returns></returns>
+    /// <returns>Key reward value for collecting a key.</returns>
     public float GetKeyRewardValue() { return keyRewardValue; }
 }
 

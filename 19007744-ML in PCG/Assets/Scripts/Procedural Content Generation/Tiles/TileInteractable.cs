@@ -1,6 +1,3 @@
-// Unity
-using UnityEngine;
-
 // Sub-namespace for tilemap-related utilities.
 namespace PCG.Tilemaps
 {

@@ -23,6 +23,7 @@ public abstract class Item : TileInteractable
 
     protected Item()
     {
+        // Set base class properties...
         tileType = TileType.ITEM;
     }
 }

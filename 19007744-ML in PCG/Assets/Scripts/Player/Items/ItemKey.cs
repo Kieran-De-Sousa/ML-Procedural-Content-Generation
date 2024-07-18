@@ -14,7 +14,7 @@ public class ItemKey : Item
     /// </summary>
     public override void Interact()
     {
-        // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items.
+        // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items...
         player.GetPlayerInventory().AddKey(value);
         player.RewardPlayer(player.GetPlayerInventory().GetKeyRewardValue());
         player.engagement.AddItemPickup(value);

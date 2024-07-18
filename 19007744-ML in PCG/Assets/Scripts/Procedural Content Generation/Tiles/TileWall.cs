@@ -47,9 +47,7 @@ namespace PCG.Tilemaps
 
         public override void Collide()
         {
-            // TODO: COLLISION WITH PIT HAPPENED! NEGATIVE REWARD PLAYER!
             player.AddReward(reward);
-
             IsCollided = true;
         }
 

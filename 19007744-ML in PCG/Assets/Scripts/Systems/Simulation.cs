@@ -5,13 +5,14 @@ using System.Collections.Generic;
 
 // Unity
 using UnityEngine;
+using UnityEditor;
 
 // Machine Learning
 using ML;
+
 // Procedural Content Generation
 using PCG;
 using PCG.Tilemaps;
-using UnityEditor;
 
 /// <summary>
 /// Singleton that overviews all systems present in each room simulation.
@@ -53,6 +54,9 @@ public class Simulation : MonoBehaviour
         ResetSimulation();
     }
 
+    /// <summary>
+    /// Reset all systems in the simulation and take a copy of the Simulation if it was more engaging.
+    /// </summary>
     public void ResetSimulation()
     {
         Debug.Log($"Simulation Ending: {this}");
@@ -91,6 +95,10 @@ public class Simulation : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Save the simulation as a prefab if its engagement was better than the previous engagement.
+    /// </summary>
+    /// <param name="engagementScore">Engagement score of the simulation</param>
     public IEnumerator SaveRoomPrefab(float engagementScore)
     {
         // Ensure the save path exists.
@@ -112,7 +120,7 @@ public class Simulation : MonoBehaviour
 
         // Tag to be created prefabs that they will use the pre-generated room they started with.
         var simulationCopyComponent = simulationCopy.GetComponent<Simulation>();
-        simulationCopyComponent.pcgSystemRefactor.preGenerated = true;
+        simulationCopyComponent.pcgSystemRefactor.SetPreGenerated(true);
 
         // Save the clone as a prefab.
 #if UNITY_EDITOR

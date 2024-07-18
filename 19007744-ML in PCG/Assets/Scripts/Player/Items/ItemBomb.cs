@@ -14,7 +14,7 @@ public class ItemBomb : Item
     /// </summary>
     public override void Interact()
     {
-        // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items.
+        // This could be a dictionary entry, so interact doesn't need to be declared in all 3 items...
         player.GetPlayerInventory().AddBomb(value);
         player.RewardPlayer(player.GetPlayerInventory().GetBombRewardValue());
         player.engagement.AddItemPickup(value);

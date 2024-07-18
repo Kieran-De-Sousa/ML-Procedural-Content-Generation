@@ -114,20 +114,22 @@ namespace Utilities
         }
 
         /// <summary>
-        ///
+        /// Find nearest tile of provided type in the Tilemap coordinates array relative to the GameObject's position.
         /// </summary>
-        /// <param name="gameObject"></param>
-        /// <param name="map"></param>
-        /// <typeparam name="T"></typeparam>
-        /// <returns></returns>
+        /// <typeparam name="T">Type of tile to search for, that has to be a class or derived class of <c>Tile</c>.</typeparam>
+        /// <param name="gameObject">GameObject to find nearest tile to.</param>
+        /// <param name="map">2D Tile array coordinates to search in.</param>
+        /// <returns>Nearest tile of type T found, otherwise, <c>Null</c>.</returns>
         public static T FindNearestTileInMap<T>(GameObject gameObject, PCG.Tilemaps.Tile[,] map) where T : PCG.Tilemaps.Tile
         {
+            // Null check for empty map or GameObject.
             if (map == null || gameObject == null) return null;
 
             Vector3 gameObjectPosition = gameObject.transform.position;
             T nearestTile = null;
             float nearestDistance = float.MaxValue;
 
+            // Loop through 2D array and cast to tile.
             for (int x = 0; x < map.GetLength(0); x++)
             {
                 for (int y = 0; y < map.GetLength(1); y++)

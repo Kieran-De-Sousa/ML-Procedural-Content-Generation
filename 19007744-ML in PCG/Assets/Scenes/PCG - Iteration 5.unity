@@ -123,11 +123,6 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
---- !u!1 &462074749 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7159705601459200568, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-  m_PrefabInstance: {fileID: 1197599733}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1197599733
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -176,42 +171,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 3231581624024079428, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: trainingMode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3231581624024079428, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: movementSpeed.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3231581624024079428, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: movementSpeed.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_Model
-      value: 
-      objectReference: {fileID: 5022602860645237092, guid: b981485326b120e4392108d937ca87ba, type: 3}
-    - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_BehaviorType
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_InferenceDevice
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4670026335506279776, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: m_Enabled
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6875141661142903326, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: savePath
-      value: Assets/Prefabs/Rooms/
-      objectReference: {fileID: 0}
-    - target: {fileID: 6875141661142903326, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
-      propertyPath: simulationToClone
-      value: 
-      objectReference: {fileID: 462074749}
     - target: {fileID: 7159705601459200568, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_Name
       value: Simulation

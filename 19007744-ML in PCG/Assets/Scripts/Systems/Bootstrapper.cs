@@ -1,3 +1,9 @@
+/// NOTE: THIS CODE GOES UNUSED IN THE MAIN ARTIFACT AND HAS BEEN COMMENTED OUT AS A RESULT!
+/// FOR THE REFERENCE OF THIS WORK, PLEASE SEE THE BELOW REFERENCE:
+/// <reference>
+/// Code used in Module "Commercial Games Development" from video game "Project: Zip Zap".
+/// </reference>
+
 /*
 // Unity
 using UnityEngine;

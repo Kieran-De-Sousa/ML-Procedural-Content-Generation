@@ -13,7 +13,8 @@ namespace PCG.Methods.AStarPathfinding
     /// <summary>
     /// PCG Methods for an A* pathfinding algorithm generation.
     /// </summary>
-    /// <reference>https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/#how-a-star-algorithm-works-the-basics</reference>
+    /// <references>https://pavcreations.com/tilemap-based-a-star-algorithm-implementation-in-unity-game/#how-a-star-algorithm-works-the-basics</references>
+    /// <references>https://www.youtube.com/watch?v=alU04hvz6L4</references>
     public static class AStarPathfinding
     {
         /// <summary>

@@ -1,9 +1,3 @@
-// Base
-
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 // Unity
 using UnityEngine;
 
@@ -26,7 +20,7 @@ namespace ML
     public class MLAgent : Agent
     {
         // -------------------- Member Variables -------------------- //
-        [Header("Agent")]
+        [Header("Agent Parameters")]
         [Tooltip("Whether this is training mode or gameplay mode")]
         public bool trainingMode;
         public int maxSteps = 5000;
@@ -41,10 +35,11 @@ namespace ML
         private Vector2 _inputVector = Vector2.zero;
         private InputScheme _inputScheme;
 
+        // Private members tracking the agents own inventory and simulation.
         private Inventory inventory;
         private Simulation _simulation;
 
-        // TILEMAP ARRAY MEMBERS
+        // TILEMAP ARRAY MEMBERS //
         private Tile[,] _tilemapCoordinates => _simulation.pcgSystemRefactor.roomData.tilemap;
         private Vector3Int _cellPosition => GetAgentCellPosition();
 
@@ -52,6 +47,7 @@ namespace ML
         private Item _nearestItem => UpdateNearestItem();
         private TileDoor _nearestDoor => UpdateNearestDoor();
         private TileCollidable _nearestObstacle => UpdateNearestObstacle();
+        private TileFloor _nearestUnexploredFloor => UpdateNearestFloor();
 
         // Whether the agent is frozen (intentionally not moving)
         private bool frozen = false;
@@ -63,6 +59,9 @@ namespace ML
             InitialiseInput();
         }
 
+        /// <summary>
+        /// Initialise new Unity Input System scheme for the agent.
+        /// </summary>
         private void InitialiseInput()
         {
             _inputScheme = new InputScheme();
@@ -71,6 +70,7 @@ namespace ML
 
         private void OnDestroy()
         {
+            // Prevent possible memory leaks by disposing newly created scheme.
             _inputScheme.Dispose();
         }
 
@@ -200,6 +200,9 @@ namespace ML
             rigidbody.WakeUp();
         }
 
+        /// <summary>
+        /// Reset the agents state and relevant members. Called <c>OnEpisodeBegin</c>.
+        /// </summary>
         private void ResetAgent()
         {
             // Stop the agent moving.
@@ -214,58 +217,72 @@ namespace ML
         }
 
         /// <summary>
-        ///
+        /// Reward / punish agent with reward passed.
         /// </summary>
-        /// <param name="reward"></param>
+        /// <param name="reward">Reward to be added the agent's cumulative reward and reward metric in engagement.</param>
         public void RewardPlayer(float reward)
         {
             AddReward(reward);
             engagement.SetRewardScore(currentReward);
         }
 
+        /// <summary>
+        /// Reward agent for exploring / not exploring the room.
+        /// </summary>
+        /// <param name="reward">Reward to be added the the agent's exploration metric in engagement.</param>
         public void RewardExploration(float reward)
         {
             engagement.AddExploration(reward);
         }
 
         /// <summary>
-        ///
+        /// Get the agent's owned inventory.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Agent inventory.</returns>
         public Inventory GetPlayerInventory() { return inventory; }
 
         /// <summary>
-        ///
+        /// Get the agent's engagement metrics data.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Agent engagement data.</returns>
         public EngagementMetrics GetAgentEngagement() { return engagement; }
 
         /// <summary>
-        ///
+        /// Get the agent's current position in the cell grid.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Cell position on the grid, returned as <c>Vector3Int</c>.</returns>
         private Vector3Int GetAgentCellPosition()
         { return _simulation.tilemapSystem.tilemapData.floor.WorldToCell(transform.position); }
 
         /// <summary>
-        ///
+        /// Finds and updates the nearest item to the agent on the grid.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Nearest item instance to the agent on the grid.</returns>
         private Item UpdateNearestItem()
         { return HelperUtilities.FindNearestTileInMap<Item>(gameObject, _tilemapCoordinates); }
 
         /// <summary>
-        ///
+        /// Finds and updates the nearest door to the agent on the grid.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Nearest door instance to the agent on the grid.</returns>
         private TileDoor UpdateNearestDoor()
         { return HelperUtilities.FindNearestTileInMap<TileDoor>(gameObject, _tilemapCoordinates); }
 
         /// <summary>
-        ///
+        /// Finds and updates the nearest obstacle to the agent on the grid.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Nearest obstacle instance to the agent on the grid.</returns>
         private TileCollidable UpdateNearestObstacle()
         { return HelperUtilities.FindNearestTileInMap<TileCollidable>(gameObject, _tilemapCoordinates); }
+
+        /// <summary>
+        /// Finds and updates the nearest floor to the agent on the grid.
+        /// </summary>
+        /// <returns>Nearest floor instance to the agent on the grid.</returns>
+        private TileFloor UpdateNearestFloor()
+        {
+            TileFloor floor = HelperUtilities.FindNearestTileInMap<TileFloor>(gameObject, _tilemapCoordinates);
+            return floor;
+        }
     }
 }
