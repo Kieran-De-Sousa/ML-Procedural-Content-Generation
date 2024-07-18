@@ -48,7 +48,7 @@ public class Simulation : MonoBehaviour
         });
     }*/
 
-    private void Awake()
+    private void Start()
     {
         ResetSimulation();
     }
@@ -61,6 +61,7 @@ public class Simulation : MonoBehaviour
         tilemapSystem.ResetSystem();
         pcgSystemRefactor.ResetSystem();
 
+        // TODO: RoomData 2D array is not being saved / created...
         // Check if this simulation wants to create prefabs of engaging room layouts
         if (generateEngagementPrefabs)
         {

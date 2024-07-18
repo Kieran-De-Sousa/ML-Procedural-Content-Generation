@@ -223,6 +223,11 @@ namespace ML
             engagement.SetRewardScore(currentReward);
         }
 
+        public void RewardExploration(float reward)
+        {
+            engagement.AddExploration(reward);
+        }
+
         /// <summary>
         ///
         /// </summary>

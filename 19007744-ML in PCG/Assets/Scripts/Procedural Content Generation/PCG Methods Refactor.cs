@@ -250,6 +250,26 @@ namespace PCG
             return null;
         }
 
+        private static Tile GenerateRandomItem(int x, int y, Tile[,] map, TilemapData tilemapData)
+        {
+            float randomValue = Random.value;
+
+            if (randomValue < 0.33f)
+            {
+                return GenerateCoin(x, y, map, tilemapData);
+            }
+
+            else if (randomValue is >= 0.33f and < 0.66f)
+            {
+                return GenerateKey(x, y, map, tilemapData);
+            }
+
+            else
+            {
+                return GenerateBomb(x, y, map, tilemapData);
+            }
+        }
+
         private static Tile GenerateCoin(int x, int y, Tile[,] map, TilemapData tilemapData)
         {
             foreach (var tile in tilemapData.tiles)
@@ -292,10 +312,25 @@ namespace PCG
             return null;
         }
 
-        private static Tile GenerateRandomTileFromWeighting(int x, int y, Tile[,] tilemap, TilemapData tilemapData)
+        private static Tile GenerateRandomTileFromWeighting(int x, int y, Tile[,] tilemap, TilemapData tilemapData,
+            float itemWeight, float pitWeight)
         {
-            // TODO
-            return null;
+            float randomValue = Random.value;
+
+            if (randomValue < itemWeight)
+            {
+                return GenerateRandomItem(x, y, tilemap, tilemapData);
+            }
+
+            else if (randomValue < itemWeight + pitWeight)
+            {
+                return GeneratePit(x, y, tilemap, tilemapData);
+            }
+
+            else
+            {
+                return GenerateFloor(x, y, tilemap, tilemapData);
+            }
         }
 
         /// <summary>
@@ -407,29 +442,6 @@ namespace PCG
             return (false, default);
         }
 
-        /// <summary>
-        /// Generate a random map based on seed.
-        /// </summary>
-        /// <param name="map">2D int array representing the map.</param>
-        /// <param name="seed">Seed value for RNG.</param>
-        /// <returns>Randomly generated int map.</returns>
-        public static int[,] RandomGeneration(int[,] map, float seed)
-        {
-            // Set the random number generator with seed
-            Random.InitState((int) seed);
-
-            for (int x = 0; x < map.GetUpperBound(0); x++)
-            {
-                for (int y = 0; y < map.GetUpperBound(1); y++)
-                {
-                    // TODO: Use enum upperbound / lowerbound here...
-                    map[x, y] = Random.Range(0, 2);
-                }
-            }
-
-            return map;
-        }
-
         public static RoomData RandomGeneration(RoomData roomData, TilemapData tilemapData,
             Vector2Int offset = default, float seed = default)
         {
@@ -528,9 +540,11 @@ namespace PCG
             List<Vector3Int> floorPositions = Methods.AStarPathfinding.AStarPathfinding
                 .GeneratePathsToDoors(roomData.tilemap, doorPositions);
 
+            // Based on engagement from previous room, weight the random generation elements of this room...
             float totalEngagement = roomData.engagementPreviousRoom.EngagementScore;
-            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups / totalEngagement, 0.1f, 0.9f);
-            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration / totalEngagement, 0.1f, 0.9f);
+            Debug.Log($"Previous Room Engagement: {totalEngagement}");
+            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups / totalEngagement, 0.1f, 0.3f);
+            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration / totalEngagement, 0.1f, 0.5f);
 
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {
@@ -550,10 +564,23 @@ namespace PCG
 
                     else
                     {
-                        int random = Random.Range(0, 2);
-                        tile = random == 1 ? GenerateCoin(x, y, roomData.tilemap, tilemapData) :
-                                             GeneratePit(x, y, roomData.tilemap, tilemapData);
+                        if (totalEngagement == 0)
+                        {
+                            int random = Random.Range(0, 2);
+                            tile = random == 1 ? GenerateCoin(x, y, roomData.tilemap, tilemapData) :
+                                                GeneratePit(x, y, roomData.tilemap, tilemapData);
                         //tile = GeneratePit(x, y, roomData.tilemap, tilemapData);
+                        }
+                        else
+                        {
+                            float floorWeight = 1 - (itemWeight + pitWeight);
+                            Debug.Log($"Floor Weight: {floorWeight}");
+                            Debug.Log($"Item Weight: {itemWeight}");
+                            Debug.Log($"Pit Weight: {pitWeight}");
+
+                            tile = GenerateRandomTileFromWeighting(x, y, roomData.tilemap, tilemapData,
+                                itemWeight, pitWeight);
+                        }
                     }
 
                     roomData.tilemap[x, y] = tile;
