@@ -97,14 +97,14 @@ namespace ML
         /// </summary>
         public override void OnEpisodeBegin()
         {
+            ResetAgent();
+
             _simulation.pcgSystemRefactor.ResetSystem();
 
             if (_simulation.generateEngagementPrefabs)
             {
                 _simulation.UpdateRoomForCloning();
             }
-
-            ResetAgent();
         }
 
         /// <summary>

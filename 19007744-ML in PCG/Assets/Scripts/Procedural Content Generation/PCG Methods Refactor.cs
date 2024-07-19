@@ -514,6 +514,15 @@ namespace PCG
                 tilemap.ClearAllTiles();
             }
 
+            // NOTE: Tweak a bit...
+            // Based on engagement from previous room, weight the random generation elements of this room...
+            float totalEngagement = roomData.engagementPreviousRoom.GetEngagementScore();
+            float itemWeight = Mathf.Clamp(0.75f - roomData.engagementPreviousRoom.itemPickups / ((totalEngagement + 1) * 1.1f), 0.175f, 0.3f);
+            float pitWeight = Mathf.Clamp(roomData.engagementPreviousRoom.exploration / ((totalEngagement + 1) * 1.1f), 0.25f, 0.5f);
+            //Debug.Log($"Total Engagement: {totalEngagement}");
+            //Debug.Log($"Item Weight: {itemWeight}");
+            //Debug.Log($"Pit Weight: {pitWeight}");
+
             // Generate the walls and doors of the room, and save their positions for the A* pathfinding algorithm to use.
             var roomBase = GenerateTileMapDoorsAndWalls(roomData, tilemapData);
             roomData = roomBase.Item1;
@@ -523,14 +532,6 @@ namespace PCG
             // Generate paths to doors using A* Pathfinding
             List<Vector3Int> floorPositions = Methods.AStarPathfinding.AStarPathfinding
                 .GeneratePathsToDoors(roomData.tilemap, doorPositions);
-
-            // Based on engagement from previous room, weight the random generation elements of this room...
-            float totalEngagement = roomData.engagementPreviousRoom.EngagementScore;
-            // TODO: Tweak a bit...
-            float itemWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.itemPickups
-                / totalEngagement, 0.1f, 0.3f);
-            float pitWeight = Mathf.Clamp(1.0f - roomData.engagementPreviousRoom.exploration
-                / totalEngagement, 0.1f, 0.7f);
 
             for (int x = 0; x < roomData.tilemap.GetUpperBound(0); ++x)
             {

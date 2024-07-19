@@ -58,7 +58,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3875620610158250691, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: engagementIncreaseBuffer
-      value: 1.3
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 3934131682204845817, guid: 276cbfedacff9fe489f2904a5ba5a2fd, type: 3}
       propertyPath: m_Model

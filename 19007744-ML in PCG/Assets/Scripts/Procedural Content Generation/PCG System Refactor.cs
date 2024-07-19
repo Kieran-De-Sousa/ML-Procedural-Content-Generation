@@ -35,8 +35,8 @@ namespace PCG
         [HideInInspector] public Vector3 roomOrigin;
 
         // Engagement information from the previous created room and highest created room.
-        [HideInInspector] public EngagementMetrics previousEngagement;
-        [HideInInspector] public EngagementMetrics highestEngagement;
+        public EngagementMetrics previousEngagement;
+        public EngagementMetrics highestEngagement;
         [Tooltip("To ensure we don't constantly save new simulations every time a small increase happens, apply a percentage " +
                  "increase required for a save to happen.")]
         [Range(1.0f, 3.0f)]
@@ -137,7 +137,7 @@ namespace PCG
 
                 roomData.engagementPreviousRoom = previousEngagement;
                 // Null reference exception handling...
-                roomData = RoomData.GenerateRoom(width, height);
+                roomData = RoomData.GenerateRoom(width, height, previousEngagement);
 
                 ClearRoom();
                 GenerateRoom();

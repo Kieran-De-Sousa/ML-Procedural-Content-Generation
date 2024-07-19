@@ -142,6 +142,29 @@ namespace PCG.Tilemaps
 
             return roomData;
         }
+
+        /// <summary>
+        /// Generates a RoomData instance with specified width and height.
+        /// </summary>
+        /// <param name="width">Width of the room.</param>
+        /// <param name="height">Height of the room.</param>
+        /// <returns>RoomData instance with centre and door positions.</returns>
+        public static RoomData GenerateRoom(int width, int height, EngagementMetrics previousEngagement)
+        {
+            RoomData roomData = new RoomData
+            {
+                RoomWidth = width,
+                RoomHeight = height,
+                RoomCentre = (width / 2, height / 2),
+                TopDoor = (width / 2, height - 1),
+                BottomDoor = (width / 2, 0),
+                LeftDoor = (0, height / 2),
+                RightDoor = (width - 1, height / 2),
+                engagementPreviousRoom = previousEngagement
+            };
+
+            return roomData;
+        }
     }
 
     /// <summary>
@@ -180,6 +203,12 @@ namespace PCG.Tilemaps
             itemPickups = default;
             exploration = default;
         }
+
+        /// <summary>
+        /// Get the engagement score. Needed as event cannot be grabbed in static class.
+        /// </summary>
+        /// <returns>Engagement score.</returns>
+        public float GetEngagementScore() { return itemPickups + exploration; }
 
         /// <summary>
         /// Set reward value to reward engagement metric.
