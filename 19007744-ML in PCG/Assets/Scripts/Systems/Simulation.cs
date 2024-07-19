@@ -65,6 +65,14 @@ public class Simulation : MonoBehaviour
         tilemapSystem.ResetSystem();
         pcgSystemRefactor.ResetSystem();
 
+        UpdateRoomForCloning();
+    }
+
+    /// <summary>
+    /// Update the copy of the current room if needed to be cloned and saved as a prefab.
+    /// </summary>
+    public void UpdateRoomForCloning()
+    {
         // TODO: RoomData 2D array is not being saved / created...
         // Check if this simulation wants to create prefabs of engaging room layouts
         if (generateEngagementPrefabs)

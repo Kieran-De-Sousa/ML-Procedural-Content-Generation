@@ -156,7 +156,7 @@ namespace PCG
         private void GenerateRoom()
         {
             ClearRoom();
-            float seed = Time.time;
+            float seed = Random.Range(1, 1000);
 
             switch (generation)
             {

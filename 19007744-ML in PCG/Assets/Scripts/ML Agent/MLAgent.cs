@@ -81,9 +81,15 @@ namespace ML
         {
             _simulation = GetComponentInParent<Simulation>();
 
-            // If not in training mode, no max step, play forever.
-            MaxStep = trainingMode ? maxSteps : 0;
-
+            // If not in training mode or generating engagement data, no max step, play forever.
+            if (_simulation.generateEngagementPrefabs || trainingMode)
+            {
+                MaxStep = maxSteps;
+            }
+            else
+            {
+                MaxStep = 0;
+            }
         }
 
         /// <summary>
@@ -92,6 +98,12 @@ namespace ML
         public override void OnEpisodeBegin()
         {
             _simulation.pcgSystemRefactor.ResetSystem();
+
+            if (_simulation.generateEngagementPrefabs)
+            {
+                _simulation.UpdateRoomForCloning();
+            }
+
             ResetAgent();
         }
 
