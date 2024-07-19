@@ -1,15 +1,20 @@
 // Base
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 
 // Unity
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
+// Machine Learning
+using ML;
+
+// Helper
+using Utilities;
+
+// Root namespace for all Procedural Content Generation-related utilities.
 namespace PCG
 {
+    // Sub-namespace for tilemap-related utilities.
     namespace Tilemaps
     {
         /// <summary>
@@ -17,71 +22,72 @@ namespace PCG
         /// </summary>
         public enum TileType : int
         {
-            FLOOR = 0,
-            PIT   = 1,
-            WALL  = 2,
+            FLOOR  = 0,
+            PIT    = 1,
+            WALL   = 2,
+            ENTITY = 3,
+            ITEM   = 4,
         }
 
         /// <summary>
         /// Extended implementation of Unity's <c>TileBase</c> class providing additional properties and methods.
         /// </summary>
-        [RequireComponent(typeof(Rigidbody2D), typeof(TilemapCollider2D),
-            typeof(CompositeCollider2D))]
-        public class Tile : MonoBehaviour
+        [Serializable]
+        public abstract class Tile : MonoBehaviour
         {
             [Header("Base Properties")]
-            public TileBase tile;
+            public TileBase tileBase;
             protected TileType tileType = TileType.FLOOR;
-            protected bool isCollidable = false;
 
-            protected Rigidbody2D _rigidbody2D;
-            protected TilemapCollider2D _tilemapCollider2D;
-            protected CompositeCollider2D _compositeCollider2D;
+            // Tilemap
+            protected Tilemap ownerTilemap = null;
+            protected Vector3Int tilePosition = new();
+            protected Vector3 tileWorldPosition = new();
+
+            // Player
+            protected MLAgent player = null;
 
             /// <summary>
-            /// Assign components if not already set.
+            /// Initialise member variables of tile upon simulation start.
             /// </summary>
-            protected void OnEnable()
-            {
-                // Add Rigidbody2D component if not attached.
-                if (!_rigidbody2D)
-                {
-                    _rigidbody2D = gameObject.GetComponent<Rigidbody2D>();
-                    if (!_rigidbody2D)
-                    {
-                        _rigidbody2D = gameObject.AddComponent<Rigidbody2D>();
-                        _rigidbody2D.bodyType = RigidbodyType2D.Static;
-                    }
-                }
-
-                // Add TilemapCollider2D component if not attached.
-                if (!_tilemapCollider2D)
-                {
-                    _tilemapCollider2D = gameObject.GetComponent<TilemapCollider2D>();
-                    if (!_tilemapCollider2D)
-                    {
-                        _tilemapCollider2D = gameObject.AddComponent<TilemapCollider2D>();
-                    }
-
-                    // Disable by default
-                    _tilemapCollider2D.enabled = false;
-                }
-
-                // Add CompositeCollider2D component if not attached.
-                if (!_compositeCollider2D)
-                {
-                    _compositeCollider2D = gameObject.GetComponent<CompositeCollider2D>();
-                    if (!_compositeCollider2D)
-                    {
-                        _compositeCollider2D = gameObject.AddComponent<CompositeCollider2D>();
-                    }
-                }
-            }
-
             protected virtual void Start()
             {
-                // Enable / Disable the tilemap collider based on collidable state.
-                _tilemapCollider2D.enabled = isCollidable;
+                SetBaseMembers();
+            }
+
+            /// <summary>
+            /// Set base members of this tile.
+            /// </summary>
+            /// <note>
+            /// This method does not correctly update tilemap and positional data (everything except MLAgent).
+            /// However, this is okay as this data is correctly updated whenever appropriate in other systems.
+            /// A TODO has been left where the error occurs.
+            /// </note>
+            public void SetBaseMembers()
+            {
+                // Find player inventory starting from root parent (the simulation).
+                player = HelperUtilities.FindParentOrChildWithComponent<MLAgent>(transform);
+
+                // Find the owner tilemap of this tile, and its position in that tilemap.
+                Tilemap[] tilemaps = FindObjectsOfType<Tilemap>();
+                foreach (Tilemap tilemap in tilemaps)
+                {
+                    // Iterate through all the positions in the tilemap
+                    BoundsInt bounds = tilemap.cellBounds;
+                    foreach (Vector3Int pos in bounds.allPositionsWithin)
+                    {
+                        // TODO: FIX THIS, AS ALL TILES ARE GONNA SHARE THE SAME TILEBASE
+                        if (tilemap.HasTile(pos) && tilemap.GetTile(pos) == tileBase)
+                        {
+                            // If the tile is found, set protected variables
+                            ownerTilemap = tilemap;
+                            tilePosition = pos;
+                            tileWorldPosition = ownerTilemap.GetCellCenterWorld(pos);
+
+                            return;
+                        }
+                    }
+                }
             }
 
             /// <summary>
@@ -126,10 +132,22 @@ namespace PCG
             }
 
             /// <summary>
+            /// Gets the tile asset of this tile.
+            /// </summary>
+            /// <returns>Tile base asset.</returns>
+            public TileBase GetTileBase() { return tileBase; }
+
+            /// <summary>
             /// Sets the tile asset of this tile.
             /// </summary>
-            /// <param name="tileBase">The TleBase asset to set.</param>
-            public void SetTile(TileBase tileBase) => tile = tileBase;
+            /// <param name="tile">The TileBase asset to set.</param>
+            public void SetTileBase(TileBase tile) => tileBase = tile;
+
+            /// <summary>
+            /// Gets the type of this tile.
+            /// </summary>
+            /// <returns>Tile type</returns>
+            public TileType GetTileType() { return tileType; }
 
             /// <summary>
             /// Sets the type of this tile.
@@ -138,42 +156,53 @@ namespace PCG
             public void SetTileType(TileType type) => tileType = type;
 
             /// <summary>
-            /// Sets whether this tile is collidable.
+            /// Gets the owner tilemap of this tile.
             /// </summary>
-            /// <param name="collidable"><c>true</c> if the tile is collidable, otherwise; <c>false</c>.</param>
-            public void SetIsCollidable(bool collidable)
-            {
-                isCollidable = collidable;
-                _tilemapCollider2D.enabled = true;
-            }
-        }
-    }
-}
+            /// <returns>Owner tilemap</returns>
+            public Tilemap GetOwnerTilemap() { return ownerTilemap; }
 
-/// <summary>
-/// Useful extension method for getting minimum / maximum values from an enum.
-/// </summary>
-/// <reference>https://stackoverflow.com/a/1665930</reference>
-public static class EnumExtension
-{
-    /// <summary>
-    /// Get minimum int value from an enum type.
-    /// </summary>
-    /// <param name="enumType">Enum type to check.</param>
-    /// <returns>Minimum int from enum.</returns>
-    /// <reference>https://stackoverflow.com/a/1665930</reference>
-    public static int Min(this Enum enumType)
-    {
-        return Enum.GetValues(enumType.GetType()).Cast<int>().Min();
-    }
-    /// <summary>
-    /// Get maximum int value from an enum type.
-    /// </summary>
-    /// <param name="enumType">Enum type to check.</param>
-    /// <returns>Maximum int from enum.</returns>
-    /// <reference>https://stackoverflow.com/a/1665930</reference>
-    public static int Max(this Enum enumType)
-    {
-        return Enum.GetValues(enumType.GetType()).Cast<int>().Max();
+            /// <summary>
+            /// Sets the owner tilemap of this tile.
+            /// </summary>
+            /// <param name="owner">The owner tilemap to set.</param>
+            /// <returns></returns>
+            public void SetOwnerTilemap(Tilemap owner) => ownerTilemap = owner;
+
+            /// <summary>
+            /// Gets the tile position in the tilemap of this tile.
+            /// </summary>
+            /// <returns>Tile Vector3Int position.</returns>
+            public Vector3Int GetTilePosition() { return tilePosition; }
+
+            /// <summary>
+            /// Sets the tile position in the tilemap of this tile.
+            /// </summary>
+            /// <param name="position">Tile position in the tilemap.</param>
+            public void SetTilePosition(Vector3Int position) => tilePosition = position;
+
+            /// <summary>
+            /// Gets the tile position in world space of this tile.
+            /// </summary>
+            /// <returns>World space position.</returns>
+            public Vector3 GetTileWorldPosition() { return tileWorldPosition; }
+
+            /// <summary>
+            /// Sets the tile position in world space of this tile.
+            /// </summary>
+            /// <param name="position">World space position of tile.</param>
+            public void SetTileWorldPosition(Vector3 position) => tileWorldPosition = position;
+
+            /// <summary>
+            /// Gets the MLAgent in the simulation of this tile.
+            /// </summary>
+            /// <returns>Agent of simulation.</returns>
+            public MLAgent GetPlayer() { return player; }
+
+            /// <summary>
+            /// Sets the MLAgent in the simulation of this tile.
+            /// </summary>
+            /// <param name="agent">Agent to set.</param>
+            public void SetPlayer(MLAgent agent) => player = agent;
+        }
     }
 }

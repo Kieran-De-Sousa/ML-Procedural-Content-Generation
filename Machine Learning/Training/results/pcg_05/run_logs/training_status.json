@@ -1,0 +1,65 @@
+{
+    "Agent": {
+        "checkpoints": [
+            {
+                "steps": 3499878,
+                "file_path": "results\\pcg_05\\Agent\\Agent-3499878.onnx",
+                "reward": 4.337500123307109,
+                "creation_time": 1721339763.5982075,
+                "auxillary_file_paths": [
+                    "results\\pcg_05\\Agent\\Agent-3499878.pt"
+                ]
+            },
+            {
+                "steps": 3999978,
+                "file_path": "results\\pcg_05\\Agent\\Agent-3999978.onnx",
+                "reward": 4.081818252124569,
+                "creation_time": 1721341761.3981235,
+                "auxillary_file_paths": [
+                    "results\\pcg_05\\Agent\\Agent-3999978.pt"
+                ]
+            },
+            {
+                "steps": 4499898,
+                "file_path": "results\\pcg_05\\Agent\\Agent-4499898.onnx",
+                "reward": 6.8999999538064,
+                "creation_time": 1721343955.1343262,
+                "auxillary_file_paths": [
+                    "results\\pcg_05\\Agent\\Agent-4499898.pt"
+                ]
+            },
+            {
+                "steps": 4999973,
+                "file_path": "results\\pcg_05\\Agent\\Agent-4999973.onnx",
+                "reward": 3.5000000655651093,
+                "creation_time": 1721346041.8445334,
+                "auxillary_file_paths": [
+                    "results\\pcg_05\\Agent\\Agent-4999973.pt"
+                ]
+            },
+            {
+                "steps": 5000101,
+                "file_path": "results\\pcg_05\\Agent\\Agent-5000101.onnx",
+                "reward": 3.5000000655651093,
+                "creation_time": 1721346042.0005305,
+                "auxillary_file_paths": [
+                    "results\\pcg_05\\Agent\\Agent-5000101.pt"
+                ]
+            }
+        ],
+        "final_checkpoint": {
+            "steps": 5000101,
+            "file_path": "results\\pcg_05\\Agent.onnx",
+            "reward": 3.5000000655651093,
+            "creation_time": 1721346042.0005305,
+            "auxillary_file_paths": [
+                "results\\pcg_05\\Agent\\Agent-5000101.pt"
+            ]
+        }
+    },
+    "metadata": {
+        "stats_format_version": "0.3.0",
+        "mlagents_version": "0.29.0",
+        "torch_version": "1.13.1+cpu"
+    }
+}

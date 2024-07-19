@@ -1,0 +1,42 @@
+{
+    "name": "root",
+    "metadata": {
+        "timer_format_version": "0.1.0",
+        "start_time_seconds": "1721322269",
+        "python_version": "3.7.16 (default, Jan 17 2023, 16:06:28) [MSC v.1916 64 bit (AMD64)]",
+        "command_line_arguments": "C:\\Users\\kdsge\\anaconda3\\envs\\ML-in-PCG\\Scripts\\mlagents-learn ./trainer_config.yaml --run-id pcg_03",
+        "mlagents_version": "0.29.0",
+        "mlagents_envs_version": "0.29.0",
+        "communication_protocol_version": "1.5.0",
+        "pytorch_version": "1.13.1+cpu",
+        "numpy_version": "1.21.2",
+        "end_time_seconds": "1721322334"
+    },
+    "total": 65.56144520000001,
+    "count": 1,
+    "self": 0.01278500000000804,
+    "children": {
+        "run_training.setup": {
+            "total": 0.3560211000000004,
+            "count": 1,
+            "self": 0.3560211000000004
+        },
+        "TrainerController.start_learning": {
+            "total": 65.1926391,
+            "count": 1,
+            "self": 0.0004258999999962043,
+            "children": {
+                "TrainerController._reset_env": {
+                    "total": 65.1921949,
+                    "count": 1,
+                    "self": 65.1921949
+                },
+                "TrainerController._save_models": {
+                    "total": 1.8299999993587335e-05,
+                    "count": 1,
+                    "self": 1.8299999993587335e-05
+                }
+            }
+        }
+    }
+}
